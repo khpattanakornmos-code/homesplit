@@ -195,8 +195,9 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
     <div id="aerr" class="emsg" style="margin-bottom:8px;font-size:12px"></div>
     <button class="btn bp" id="abtn" onclick="doAuth()">เข้าสู่ระบบ</button>
     <div class="sw" id="asw">ยังไม่มีบัญชี? <span onclick="togAuth()">สมัครสมาชิก</span></div>
-    <div style="margin-top:12px;text-align:center">
-      <span onclick="resetAll()" style="font-size:10px;color:var(--tx3);cursor:pointer;text-decoration:underline">ล้างข้อมูล / แก้ปัญหา Login ไม่ได้</span>
+    <div style="margin-top:12px;text-align:center;display:flex;gap:12px;justify-content:center">
+      <span onclick="debugLogin()" style="font-size:10px;color:var(--mint);cursor:pointer;text-decoration:underline">🔍 ทดสอบการเชื่อมต่อ</span>
+      <span onclick="resetAll()" style="font-size:10px;color:var(--tx3);cursor:pointer;text-decoration:underline">🗑️ ล้าง Session</span>
     </div>
   </div>
 </div>
@@ -462,12 +463,36 @@ function toast(msg,ms=2600){const t=$('toast');t.textContent=msg;t.classList.add
 // ╚══════════════════════════════════════════════════╝
 let ISREG=false;
 
-// รีเซ็ต session เมื่อ login ไม่ได้ (ไม่ลบข้อมูล DB)
+// รีเซ็ต session
+// encode name สำหรับใช้ใน onclick attribute
+function encNm(s){return (s||'').replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/"/g,'&quot;');}
 function resetAll(){
-  if(!confirm('ล้าง session เพื่อแก้ปัญหา Login?\n(ข้อมูลกลุ่มและรายการยังอยู่)')){ return; }
+  if(!confirm('ล้าง session เพื่อแก้ปัญหา?\n(ข้อมูลกลุ่มและรายการยังอยู่)')){ return; }
   localStorage.removeItem(KSES);
-  alert('ล้าง session แล้ว กรุณา Login ใหม่');
+  alert('ล้าง session แล้ว');
   location.reload();
+}
+
+// ทดสอบการเชื่อมต่อ GAS
+async function debugLogin(){
+  var url=gasUrl();
+  if(!url){
+    alert('⚠️ ยังไม่ได้ตั้งค่า GAS URL\n\nกด 👤 → ตั้งค่า Google Apps Script URL');
+    return;
+  }
+  try{
+    var r=await fetch(url,{method:'POST',mode:'cors',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({action:'ping'})});
+    var j=await r.json();
+    if(j.ok||j.pong){
+      alert('✅ เชื่อมต่อ GAS สำเร็จ!\nVersion: '+j.version+'\n\nกรุณา สมัครสมาชิก หรือ Login ใหม่');
+    }else{
+      alert('⚠️ GAS ตอบกลับแต่มีปัญหา:\n'+JSON.stringify(j));
+    }
+  }catch(e){
+    alert('❌ เชื่อม GAS ไม่ได้:\n'+String(e)+'\n\nตรวจสอบ:\n1. URL ถูกต้องไหม?\n2. Deploy เป็น Anyone?\n3. มีอินเทอร์เน็ตไหม?');
+  }
 }
 function togAuth(){
   ISREG=!ISREG;
@@ -479,105 +504,130 @@ function togAuth(){
   $('aerr').style.display='none';
 }
 async function doAuth(){
-  const email = ($('iemail')?.value||'').trim();
-  const pass  = $('ipass')?.value||'';
-  const errEl = $('aerr');
+  var email = ($('iemail').value||'').trim();
+  var pass  = $('ipass').value||'';
+  var errEl = $('aerr');
   errEl.style.display='none';
 
-  if(!email||!pass){errEl.textContent='กรุณากรอกข้อมูลให้ครบ';errEl.style.display='block';return;}
-  if(pass.length<6){errEl.textContent='รหัสผ่านอย่างน้อย 6 ตัว';errEl.style.display='block';return;}
+  if(!email||!pass){
+    errEl.textContent='กรุณากรอกข้อมูลให้ครบ';
+    errEl.style.display='block';return;
+  }
+  if(pass.length<6){
+    errEl.textContent='รหัสผ่านอย่างน้อย 6 ตัวอักษร';
+    errEl.style.display='block';return;
+  }
 
-  const btn=$('abtn');btn.textContent='⏳...';btn.disabled=true;
-  let res={ok:false,err:'เกิดข้อผิดพลาด'};
+  var btn=$('abtn');
+  btn.textContent='⏳ กำลังดำเนินการ...';
+  btn.disabled=true;
 
-  if(ISREG){
-    const name=($('iname')?.value||'').trim();
-    const conf=$('iconf')?.value||'';
-    if(!name){errEl.textContent='กรุณากรอกชื่อ';errEl.style.display='block';btn.textContent='สมัครสมาชิก';btn.disabled=false;return;}
-    if(pass!==conf){errEl.textContent='รหัสผ่านไม่ตรงกัน';errEl.style.display='block';btn.textContent='สมัครสมาชิก';btn.disabled=false;return;}
+  var res={ok:false,err:'เกิดข้อผิดพลาด'};
+  var url=gasUrl();
 
-    const url=gasUrl();
-    if(url){
-      try{
-        // ส่งไป GAS — GAS hash password เอง
-        const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain'},
-          body:JSON.stringify({action:'register',name,email,password:pass})});
-        const j=await r.json();
+  try{
+    if(ISREG){
+      // ═══ สมัครสมาชิก ═══
+      var name=($('iname').value||'').trim();
+      var conf=$('iconf').value||'';
+      if(!name){
+        errEl.textContent='กรุณากรอกชื่อ';
+        errEl.style.display='block';
+        btn.textContent='สมัครสมาชิก';btn.disabled=false;return;
+      }
+      if(pass!==conf){
+        errEl.textContent='รหัสผ่านไม่ตรงกัน';
+        errEl.style.display='block';
+        btn.textContent='สมัครสมาชิก';btn.disabled=false;return;
+      }
+      if(url){
+        var r=await fetch(url,{method:'POST',mode:'cors',
+          headers:{'Content-Type':'text/plain'},
+          body:JSON.stringify({action:'register',name:name,email:email,password:pass})});
+        var j=await r.json();
         if(j.ok){
-          // บันทึกลง local DB (เก็บ hash จาก GAS)
           dbLoad();
-          if(!DB.members.find(m=>m.email.toLowerCase()===email.toLowerCase())){
-            DB.members.push({...j.user, pwHash:sha(pass)});
+          if(!DB.members.find(function(m){return m.email.toLowerCase()===email.toLowerCase();})){
+            DB.members.push(Object.assign({},j.user,{pwHash:sha(pass)}));
             dbSave();
           }
           res={ok:true,user:j.user};
         }else{
           res={ok:false,err:j.error||'สมัครไม่สำเร็จ'};
         }
-      }catch(e){
-        // ไม่มีเน็ต → ลอง local
+      }else{
+        // ไม่มี GAS → local
         res=authReg(name,email,pass);
       }
-    }else{
-      res=authReg(name,email,pass);
-    }
 
-  }else{
-    const url=gasUrl();
-    if(url){
-      try{
-        // ส่ง password ตรงๆ ไป GAS — GAS hash เปรียบเทียบเอง
-        const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain'},
-          body:JSON.stringify({action:'login',email,password:pass})});
-        const j=await r.json();
-        if(j.ok){
-          // อัปเดต local DB
+    }else{
+      // ═══ เข้าสู่ระบบ ═══
+      if(url){
+        var r2=await fetch(url,{method:'POST',mode:'cors',
+          headers:{'Content-Type':'text/plain'},
+          body:JSON.stringify({action:'login',email:email,password:pass})});
+        var j2=await r2.json();
+        if(j2.ok){
           dbLoad();
-          const idx=DB.members.findIndex(m=>m.id===j.user.id);
-          const withHash={...j.user,pwHash:sha(pass)};
+          var idx=DB.members.findIndex(function(m){return m.id===j2.user.id;});
+          var withHash=Object.assign({},j2.user,{pwHash:sha(pass)});
           if(idx>=0)DB.members[idx]=withHash;
           else DB.members.push(withHash);
           dbSave();
           // sync ข้อมูลทั้งหมด
           try{
-            const rd=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain'},
+            var rd=await fetch(url,{method:'POST',mode:'cors',
+              headers:{'Content-Type':'text/plain'},
               body:JSON.stringify({action:'getData'})});
-            const dd=await rd.json();
+            var dd=await rd.json();
             if(dd.ok){
-              DB.members=dd.members.map(m=>{
-                const loc=DB.members.find(l=>l.id===m.id);
-                return loc?{...m,pwHash:loc.pwHash}:{...m};
+              // คง pwHash ของ local members ไว้
+              var localMems=DB.members;
+              DB.members=dd.members.map(function(m){
+                var loc=localMems.find(function(l){return l.id===m.id;});
+                return loc?Object.assign({},m,{pwHash:loc.pwHash}):m;
               });
-              DB.groups=dd.groups;
-              DB.expenses=dd.expenses;
+              DB.groups=dd.groups||[];
+              DB.expenses=dd.expenses||[];
               dbSave();
             }
-          }catch(e){}
-          res={ok:true,user:j.user};
+          }catch(e2){}
+          res={ok:true,user:j2.user};
         }else{
-          // GAS reject → ลอง local (อาจยังมีใน browser)
-          const localRes=authLogin(email,pass);
-          if(localRes.ok){res=localRes;}
-          else{res={ok:false,err:j.error||'เข้าสู่ระบบไม่สำเร็จ'};}
+          // GAS บอก error → ลอง local ด้วย
+          var lr=authLogin(email,pass);
+          if(lr.ok){
+            res=lr;
+          }else{
+            res={ok:false,err:j2.error||'เข้าสู่ระบบไม่สำเร็จ'};
+          }
         }
-      }catch(e){
-        // ไม่มีเน็ต → ลอง local
+      }else{
+        // ไม่มี GAS → local
         res=authLogin(email,pass);
-        if(res.ok)toast('⚠️ Offline: ใช้ข้อมูลใน Browser');
       }
+    }
+  }catch(fetchErr){
+    // network error
+    if(ISREG){
+      var name2=($('iname').value||'').trim();
+      res=authReg(name2,email,pass);
     }else{
       res=authLogin(email,pass);
     }
+    if(res.ok)toast('⚠️ ไม่มีอินเทอร์เน็ต ใช้ข้อมูลใน Browser');
+    else res.err=(res.err||'')+'\n(Network: '+String(fetchErr).substring(0,80)+')';
   }
 
   btn.textContent=ISREG?'สมัครสมาชิก':'เข้าสู่ระบบ';
   btn.disabled=false;
+
   if(res.ok){
     CU=res.user;
     localStorage.setItem(KSES,JSON.stringify(CU));
     enterApp();
   }else{
-    errEl.textContent=res.err||'เกิดข้อผิดพลาด';
+    errEl.textContent=res.err||'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ';
     errEl.style.display='block';
   }
 }
@@ -739,7 +789,7 @@ function rDash(){
 function initDash(){
   const g=grps().find(g=>g.id===CGRP);if(!g)return;
   const n=new Date(),ms=[],ls=[];
-  for(let i=5;i>=0;i--){const d=new Date(n.getFullYear(),n.getMonth()-i,1);const mk=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');ms.push(mk);ls.push(mk2th(mk).replace(' 25','''));}
+  for(let i=5;i>=0;i--){const d=new Date(n.getFullYear(),n.getMonth()-i,1);const mk=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');ms.push(mk);ls.push(mk2th(mk).substring(0,3));}
   const ts=ms.map(mk=>gexps(g.id,mk).reduce((s,e)=>s+(e.net||e.amount||0),0));
   const me=ms.map(mk=>mshare(gexps(g.id,mk),CU.id));
   const cb=$('cbar');if(cb)CHARTS.bar=new Chart(cb,{type:'bar',data:{labels:ls,datasets:[{label:'รวมกลุ่ม',data:ts,backgroundColor:'rgba(44,198,198,.25)',borderColor:'#2CC6C6',borderWidth:1.5,borderRadius:5},{label:'ของฉัน',data:me,backgroundColor:'rgba(44,198,198,.7)',borderColor:'#18A0A0',borderWidth:1.5,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:10}}},scales:{y:{ticks:{callback:v=>'฿'+v.toLocaleString('th-TH'),font:{size:9}},grid:{color:'#E2F4F4'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
@@ -762,7 +812,7 @@ function rExps(){
     const ms=(e.splits||[]).find(s=>s.uid===CU.id);
     const ma=ms?(e.net||e.amount||0)*ms.pct/100:0;
     const chips=(e.splits||[]).map(s=>{const m=am.find(m=>m.id===s.uid);return m?`<div class="mchip"><div class="av avs ${AVC[m.c??0]}" style="width:18px;height:18px;border-radius:6px;font-size:8px">${ini(m.name)}</div>${m.name} ${s.pct}%</div>`:''}).join('');
-    const nm=e.name.replace(/\/g,'\\').replace(/'/g,"\'");
+    const nm=encNm(e.name);
     return`<div class="icard"><div class="itop"><div class="iinfo"><span style="font-size:22px">${e.icon||'💰'}</span><div><div style="font-size:13px;font-weight:700">${e.name}</div><div style="font-size:10px;color:var(--tx3)">จ่ายโดย ${py?.name||'?'}${e.hasEV?' · ⚡EV':''}</div></div></div><div style="text-align:right"><div style="font-size:18px;font-weight:800;color:var(--mint)">฿${fmt(e.net||e.amount)}</div>${ma?`<div style="font-size:10px;color:var(--tx3)">ฉัน ฿${fmt(ma)}</div>`:''}</div></div><div style="display:flex;flex-wrap:wrap;margin-bottom:8px">${chips}</div>${e.note?`<div style="font-size:11px;color:var(--tx2);margin-bottom:7px">📝 ${e.note}</div>`:''} ${e.hasEV?`<div style="font-size:10px;color:var(--mdk);margin-bottom:7px">⚡ EV หัก ${e.evU}×${e.evR}฿ = ฿${fmt((e.evU||0)*(e.evR||0))}</div>`:''}<div style="display:flex;gap:6px"><button class="btn bg bxs" style="flex:1" onclick="openEditExp('${e.id}')">✏️ แก้ไข</button><button class="btn br bxs" onclick="askDel('expense','${e.id}','${nm}')">🗑️</button></div></div>`;
   }).join('');
   return`<div style="display:flex;gap:7px;margin-bottom:10px;align-items:center">${gsel}</div>
@@ -778,7 +828,7 @@ function rGrps(){
   const am=mems();
   const rows=grps().map(g=>{
     const chips=(g.members||[]).map(uid=>{const m=am.find(m=>m.id===uid);return m?`<div class="mchip"><div class="av avs ${AVC[m.c??0]}" style="width:18px;height:18px;border-radius:6px;font-size:8px">${ini(m.name)}</div><div><div style="font-size:11px;font-weight:600">${m.name}</div><div style="font-size:9px;color:var(--tx3)">${m.email}</div></div></div>`:''}).join('');
-    const nm=g.name.replace(/\/g,'\\').replace(/'/g,"\'");
+    const nm=encNm(g.name);
     return`<div class="icard"><div class="itop"><div class="iinfo"><span style="font-size:22px">${g.icon}</span><div><div style="font-size:13px;font-weight:700">${g.name}</div><div style="font-size:10px;color:var(--tx3)">${g.members?.length||0} สมาชิก</div></div></div><div style="display:flex;gap:5px"><button class="btn bg bxs" onclick="openEditGrp('${g.id}')">✏️</button><button class="btn br bxs" onclick="askDel('group','${g.id}','${nm}')">🗑️</button></div></div><div>${chips}</div></div>`;
   }).join('');
   return`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><div style="font-size:12px;color:var(--tx3);font-weight:700">กลุ่มทั้งหมด ${DB.groups.length} กลุ่ม</div><button class="btn bp bsm" onclick="openAddGrp()">+ สร้างกลุ่ม</button></div>
