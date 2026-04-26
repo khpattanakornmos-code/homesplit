@@ -352,7 +352,7 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
 // ║  ⚙️  ใส่ URL ตรงนี้เพื่อ sync ข้ามเครื่อง       ║
 // ║  วางระหว่าง '' ด้านล่าง                         ║
 // ╚══════════════════════════════════════════════════╝
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbybbqIq_zzpB0Ci-8bU1m8E6zFNcZyx6JQ7t6i_AsyNTqXX7kyVzBFxIdjIZdcr_m2sSw/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUmS0cLnxi5O2b0OeVbK-KjD0XlMgA9uVMMmIK1ROGFerhQL_wQxFr5EiA7YrdMa6J7Q/exec';
 // ตัวอย่าง:
 // const SCRIPT_URL = 'https://script.google.com/macros/s/AKfy.../exec';
 
@@ -411,38 +411,12 @@ function gasUrl(){return SCRIPT_URL||localStorage.getItem(KGAS)||'';}
 // ╔══════════════════════════════════════════════════╗
 // ║  AUTH                                            ║
 // ╚══════════════════════════════════════════════════╝
-// Pure JS SHA-256 — ทำงานได้ทุกที่ (file://, http://, https://)
 function sha(s){
-  function r(n,t){return(n>>>t)|(n<<(32-t));}
-  const K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
-            0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
-            0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
-            0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
-            0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
-            0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
-            0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
-            0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
-  let H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
-  const bytes=Array.from(new TextEncoder().encode(s));
-  const L=bytes.length;
-  bytes.push(0x80);
-  while(bytes.length%64!==56)bytes.push(0);
-  const bits=L*8;
-  for(let i=7;i>=0;i--)bytes.push((bits/Math.pow(2,i*8))&0xff);
-  for(let i=0;i<bytes.length;i+=64){
-    const W=[];
-    for(let j=0;j<16;j++)W[j]=(bytes[i+j*4]<<24)|(bytes[i+j*4+1]<<16)|(bytes[i+j*4+2]<<8)|bytes[i+j*4+3];
-    for(let j=16;j<64;j++){const s0=r(W[j-15],7)^r(W[j-15],18)^(W[j-15]>>>3);const s1=r(W[j-2],17)^r(W[j-2],19)^(W[j-2]>>>10);W[j]=(W[j-16]+s0+W[j-7]+s1)>>>0;}
-    let[a,b,c,d,e,f,g,hh]=[...H];
-    for(let j=0;j<64;j++){
-      const S1=r(e,6)^r(e,11)^r(e,25);const ch=(e&f)^(~e&g);const t1=(hh+S1+ch+K[j]+W[j])>>>0;
-      const S0=r(a,2)^r(a,13)^r(a,22);const maj=(a&b)^(a&c)^(b&c);const t2=(S0+maj)>>>0;
-      hh=g;g=f;f=e;e=(d+t1)>>>0;d=c;c=b;b=a;a=(t1+t2)>>>0;
-    }
-    H[0]=(H[0]+a)>>>0;H[1]=(H[1]+b)>>>0;H[2]=(H[2]+c)>>>0;H[3]=(H[3]+d)>>>0;
-    H[4]=(H[4]+e)>>>0;H[5]=(H[5]+f)>>>0;H[6]=(H[6]+g)>>>0;H[7]=(H[7]+hh)>>>0;
-  }
-  return H.map(v=>v.toString(16).padStart(8,'0')).join('');
+  // Simple local hash — ใช้สำหรับ local storage เท่านั้น
+  // เมื่อเชื่อม GAS จะส่ง password ตรงๆ ไปให้ GAS hash เอง
+  let hash = 5381;
+  for(let i=0;i<s.length;i++){hash=((hash<<5)+hash)+s.charCodeAt(i);hash=hash&hash;}
+  return 'L'+Math.abs(hash).toString(16).padStart(8,'0')+'_'+btoa(s).replace(/=/g,'').substring(0,16);
 }
 function authLogin(email,pw){
   dbLoad();
@@ -505,89 +479,106 @@ function togAuth(){
   $('aerr').style.display='none';
 }
 async function doAuth(){
-  const email=$('iemail').value.trim(),pass=$('ipass').value,err=$('aerr');
-  err.style.display='none';
-  if(!email||!pass){err.textContent='กรุณากรอกข้อมูลให้ครบ';err.style.display='block';return;}
-  if(pass.length<6){err.textContent='รหัสผ่านอย่างน้อย 6 ตัว';err.style.display='block';return;}
-  const btn=$('abtn');btn.textContent='⏳...';btn.disabled=true;
-  let res;
-  const url=gasUrl();
+  const email = ($('iemail')?.value||'').trim();
+  const pass  = $('ipass')?.value||'';
+  const errEl = $('aerr');
+  errEl.style.display='none';
 
-  try{
-    if(ISREG){
-      const name=$('iname').value.trim(),conf=$('iconf').value;
-      if(!name){err.textContent='กรุณากรอกชื่อ';err.style.display='block';btn.textContent='สมัครสมาชิก';btn.disabled=false;return;}
-      if(pass!==conf){err.textContent='รหัสผ่านไม่ตรงกัน';err.style.display='block';btn.textContent='สมัครสมาชิก';btn.disabled=false;return;}
-      if(url){
-        // สมัครผ่าน GAS (ข้ามเครื่อง)
-        const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'register',name,email,password:pass})});
-        const gasRes=await r.json();
-        if(gasRes.ok){
-          // บันทึกลง local DB ด้วย
+  if(!email||!pass){errEl.textContent='กรุณากรอกข้อมูลให้ครบ';errEl.style.display='block';return;}
+  if(pass.length<6){errEl.textContent='รหัสผ่านอย่างน้อย 6 ตัว';errEl.style.display='block';return;}
+
+  const btn=$('abtn');btn.textContent='⏳...';btn.disabled=true;
+  let res={ok:false,err:'เกิดข้อผิดพลาด'};
+
+  if(ISREG){
+    const name=($('iname')?.value||'').trim();
+    const conf=$('iconf')?.value||'';
+    if(!name){errEl.textContent='กรุณากรอกชื่อ';errEl.style.display='block';btn.textContent='สมัครสมาชิก';btn.disabled=false;return;}
+    if(pass!==conf){errEl.textContent='รหัสผ่านไม่ตรงกัน';errEl.style.display='block';btn.textContent='สมัครสมาชิก';btn.disabled=false;return;}
+
+    const url=gasUrl();
+    if(url){
+      try{
+        // ส่งไป GAS — GAS hash password เอง
+        const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain'},
+          body:JSON.stringify({action:'register',name,email,password:pass})});
+        const j=await r.json();
+        if(j.ok){
+          // บันทึกลง local DB (เก็บ hash จาก GAS)
           dbLoad();
-          const h=sha(pass);
           if(!DB.members.find(m=>m.email.toLowerCase()===email.toLowerCase())){
-            DB.members.push({...gasRes.user,pwHash:h});
+            DB.members.push({...j.user, pwHash:sha(pass)});
             dbSave();
           }
-          res={ok:true,user:gasRes.user};
+          res={ok:true,user:j.user};
         }else{
-          res={ok:false,err:gasRes.error||'สมัครไม่สำเร็จ'};
+          res={ok:false,err:j.error||'สมัครไม่สำเร็จ'};
         }
-      }else{
+      }catch(e){
+        // ไม่มีเน็ต → ลอง local
         res=authReg(name,email,pass);
       }
     }else{
-      if(url){
-        // Login ผ่าน GAS ก่อน
-        const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'login',email,password:pass})});
-        const gasRes=await r.json();
-        if(gasRes.ok){
-          // อัปเดต local DB ด้วย
-          dbLoad();
-          const h=sha(pass);
-          const idx=DB.members.findIndex(m=>m.id===gasRes.user.id);
-          if(idx>=0)DB.members[idx]={...gasRes.user,pwHash:h};
-          else DB.members.push({...gasRes.user,pwHash:h});
-          dbSave();
-          res={ok:true,user:gasRes.user};
-        }else{
-          // GAS fail → ลอง local
-          res=authLogin(email,pass);
-          if(!res.ok)res={ok:false,err:gasRes.error||res.err||'เข้าสู่ระบบไม่สำเร็จ'};
-        }
-      }else{
-        res=authLogin(email,pass);
-      }
+      res=authReg(name,email,pass);
     }
-  }catch(fetchErr){
-    // Network error → fallback to local
-    res=ISREG?authReg($('iname').value.trim(),email,pass):authLogin(email,pass);
-    if(res.ok)toast('⚠️ ไม่มีอินเทอร์เน็ต ใช้ข้อมูลใน Browser แทน');
+
+  }else{
+    const url=gasUrl();
+    if(url){
+      try{
+        // ส่ง password ตรงๆ ไป GAS — GAS hash เปรียบเทียบเอง
+        const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain'},
+          body:JSON.stringify({action:'login',email,password:pass})});
+        const j=await r.json();
+        if(j.ok){
+          // อัปเดต local DB
+          dbLoad();
+          const idx=DB.members.findIndex(m=>m.id===j.user.id);
+          const withHash={...j.user,pwHash:sha(pass)};
+          if(idx>=0)DB.members[idx]=withHash;
+          else DB.members.push(withHash);
+          dbSave();
+          // sync ข้อมูลทั้งหมด
+          try{
+            const rd=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain'},
+              body:JSON.stringify({action:'getData'})});
+            const dd=await rd.json();
+            if(dd.ok){
+              DB.members=dd.members.map(m=>{
+                const loc=DB.members.find(l=>l.id===m.id);
+                return loc?{...m,pwHash:loc.pwHash}:{...m};
+              });
+              DB.groups=dd.groups;
+              DB.expenses=dd.expenses;
+              dbSave();
+            }
+          }catch(e){}
+          res={ok:true,user:j.user};
+        }else{
+          // GAS reject → ลอง local (อาจยังมีใน browser)
+          const localRes=authLogin(email,pass);
+          if(localRes.ok){res=localRes;}
+          else{res={ok:false,err:j.error||'เข้าสู่ระบบไม่สำเร็จ'};}
+        }
+      }catch(e){
+        // ไม่มีเน็ต → ลอง local
+        res=authLogin(email,pass);
+        if(res.ok)toast('⚠️ Offline: ใช้ข้อมูลใน Browser');
+      }
+    }else{
+      res=authLogin(email,pass);
+    }
   }
 
-  btn.textContent=ISREG?'สมัครสมาชิก':'เข้าสู่ระบบ';btn.disabled=false;
+  btn.textContent=ISREG?'สมัครสมาชิก':'เข้าสู่ระบบ';
+  btn.disabled=false;
   if(res.ok){
     CU=res.user;
     localStorage.setItem(KSES,JSON.stringify(CU));
-    // ถ้าเชื่อม GAS ได้ ดึงข้อมูลทั้งหมดมาด้วย
-    if(url){
-      try{
-        const rd=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'getData'})});
-        const dd=await rd.json();
-        if(dd.ok){
-          dbLoad();
-          DB.members=dd.members||DB.members;
-          DB.groups=dd.groups||DB.groups;
-          DB.expenses=dd.expenses||DB.expenses;
-          dbSave();
-        }
-      }catch(e){}
-    }
     enterApp();
   }else{
-    err.textContent=res.err||'เกิดข้อผิดพลาด';
-    err.style.display='block';
+    errEl.textContent=res.err||'เกิดข้อผิดพลาด';
+    errEl.style.display='block';
   }
 }
 function doLogout(){
