@@ -403,8 +403,20 @@ const uid = p => p+'_'+Date.now()+'_'+Math.random().toString(36).substr(2,4);
 const DB_KEY = 'homesplit_db_54145';
 
 function getDB() {
-  try { return JSON.parse(localStorage.getItem(DB_KEY)||'null') || initDB(); }
-  catch(e) { return initDB(); }
+  try {
+    const raw = localStorage.getItem(DB_KEY);
+    if (!raw) return initDB();              // truly no data → init
+    const db = JSON.parse(raw);
+    if (!db || typeof db !== 'object') return initDB();
+    // Ensure required arrays exist without wiping data
+    if (!db.members)  db.members  = [];
+    if (!db.groups)   db.groups   = [];
+    if (!db.expenses) db.expenses = [];
+    return db;
+  } catch(e) {
+    console.error('getDB parse error:', e);
+    return initDB();
+  }
 }
 
 function saveDB(db) {
@@ -412,16 +424,11 @@ function saveDB(db) {
 }
 
 function initDB() {
+  // Only called when no DB exists yet — create empty skeleton
   const db = {
     version: 1,
-    members: [
-      {id:'u1',name:'คุณแม่',email:'mom@home.com',pwHash:'8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',role:'admin',c:0,createdAt:'2025-01-01T00:00:00Z'},
-      {id:'u2',name:'ลูกชาย',email:'son@home.com',pwHash:'8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',role:'member',c:1,createdAt:'2025-01-01T00:00:00Z'},
-      {id:'u3',name:'ลูกสาว',email:'daughter@home.com',pwHash:'8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',role:'member',c:2,createdAt:'2025-01-01T00:00:00Z'}
-    ],
-    groups: [
-      {id:'g1',name:'บ้าน 54/145',icon:'🏠',members:['u1','u2','u3'],createdAt:'2025-01-01T00:00:00Z'}
-    ],
+    members: [],
+    groups: [],
     expenses: []
   };
   saveDB(db);
@@ -548,7 +555,7 @@ function logout(){
 }
 
 
-async function enterApp(){
+async async function enterApp(){
   $('sl').classList.remove('active');$('sl').style.display='none';
   $('sa').style.display='';$('sa').classList.add('active');
   $('hm').textContent=thM();
@@ -1145,6 +1152,25 @@ async function refreshData(){
   if(btn){ btn.textContent='🔄'; btn.style.pointerEvents=''; }
 }
 
+
+// Seed demo users only on first-ever launch (empty DB)
+async function seedIfEmpty() {
+  const db = getDB();
+  if (db.members.length === 0) {
+    const hash = await hashPw('123456');
+    db.members = [
+      {id:'u1',name:'คุณแม่',   email:'mom@home.com',     pwHash:hash,role:'admin', c:0,createdAt:'2025-01-01T00:00:00Z'},
+      {id:'u2',name:'ลูกชาย',  email:'son@home.com',     pwHash:hash,role:'member',c:1,createdAt:'2025-01-01T00:00:00Z'},
+      {id:'u3',name:'ลูกสาว',  email:'daughter@home.com',pwHash:hash,role:'member',c:2,createdAt:'2025-01-01T00:00:00Z'}
+    ];
+    db.groups = [
+      {id:'g1',name:'บ้าน 54/145',icon:'🏠',members:['u1','u2','u3'],createdAt:'2025-01-01T00:00:00Z'}
+    ];
+    saveDB(db);
+    console.log('✅ Demo data seeded');
+  }
+}
+
 // ════════════════════════════════════
 // AUTO LOGIN + SYNC LISTENER
 // ════════════════════════════════════
@@ -1159,8 +1185,18 @@ window.addEventListener('storage', e => {
   }
 });
 
-const su=localStorage.getItem('hs');
-if(su){try{S.u=JSON.parse(su);enterApp()}catch(e){localStorage.removeItem('hs')}}
+// Init DB (seed demo if fresh install)
+seedIfEmpty().then(() => {
+  const su = localStorage.getItem('hs');
+  if (su) {
+    try {
+      S.u = JSON.parse(su);
+      enterApp();
+    } catch(e) {
+      localStorage.removeItem('hs');
+    }
+  }
+});
 </script>
 </body>
 </html>
