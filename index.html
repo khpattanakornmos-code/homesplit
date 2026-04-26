@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="HomeSplit">
 <title>HomeSplit 54/145</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{
@@ -29,11 +29,9 @@ html,body{height:100%;font-family:var(--f);background:var(--bg);color:var(--tx);
 .screen{display:none;flex-direction:column;flex:1;overflow:hidden}
 .screen.active{display:flex;animation:fu .2s ease}
 @keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-
-/* ── LOGIN ── */
 #sl{background:linear-gradient(170deg,#A8DEDE 0%,#BDE8E8 55%,#D0F0F0 100%);justify-content:center;align-items:center;padding:1.4rem}
 .l-banner{width:100%;border-radius:18px;overflow:hidden;margin-bottom:14px;box-shadow:var(--sh2);position:relative}
-.l-banner img{width:100%;height:175px;object-fit:cover;object-position:center center;display:block}
+.l-banner img{width:100%;height:175px;object-fit:cover;object-position:center;display:block}
 .l-ov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0) 30%,rgba(0,0,0,.62) 100%)}
 .l-txt{position:absolute;bottom:11px;left:13px}
 .l-txt h1{font-size:20px;font-weight:800;color:#fff;text-shadow:0 1px 5px rgba(0,0,0,.5)}
@@ -56,8 +54,6 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
 .sw{text-align:center;margin-top:.85rem;font-size:12px;color:var(--tx3)}
 .sw span{color:var(--mint);font-weight:600;cursor:pointer}
 .err-msg{font-size:12px;color:var(--red);margin-top:4px;display:none}
-
-/* ── HEADER ── */
 .hdr{background:#fff;padding:calc(var(--st)+9px) .9rem 9px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:var(--sh)}
 .hl{display:flex;align-items:center;gap:9px}
 .h-logo{width:36px;height:36px;border-radius:11px;overflow:hidden;flex-shrink:0}
@@ -66,8 +62,6 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
 .h-s{font-size:9px;color:var(--tx3);margin-top:1px}
 .ico-btn{width:34px;height:34px;border-radius:10px;background:var(--sf);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:background .15s}
 .ico-btn:active{background:var(--mpal)}
-
-/* ── NAV ── */
 .nav{background:#fff;border-top:1px solid var(--bd);padding:5px 2px calc(var(--sb)+5px);display:flex;justify-content:space-around;flex-shrink:0;box-shadow:0 -2px 12px rgba(0,0,0,.06)}
 .ni{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 8px;border-radius:11px;cursor:pointer;transition:all .15s;min-width:54px;border:none;background:transparent;font-family:var(--f)}
 .ni-i{font-size:19px;line-height:1;transition:transform .15s}
@@ -76,27 +70,19 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
 .ni.on .ni-l{color:var(--mint);font-weight:700}
 .ni.on .ni-i{transform:scale(1.1)}
 .ni:active{transform:scale(.93)}
-
-/* ── SCROLL ── */
 .sc{flex:1;overflow-y:auto;padding:11px;-webkit-overflow-scrolling:touch}
 .sc::-webkit-scrollbar{display:none}
-
-/* ── CARDS ── */
 .card{background:#fff;border-radius:var(--rl);border:1px solid var(--bd);margin-bottom:10px;box-shadow:var(--sh);overflow:hidden}
 .ch{padding:11px 14px 9px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd)}
 .ct{font-size:13px;font-weight:700}
 .cb{padding:12px 14px}
 .sl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin:3px 0 8px}
-
-/* ── BADGE ── */
 .badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:18px;font-size:10px;font-weight:600}
 .bm{background:var(--mint);color:#fff}
 .bp{background:var(--mpal);color:var(--mdk)}
 .bok{background:var(--grnbg);color:var(--grn)}
 .bw{background:var(--orabg);color:var(--ora)}
 .br{background:var(--redbg);color:var(--red)}
-
-/* ── HERO ── */
 .hero{background:var(--mint);border-radius:var(--rl);padding:14px 16px 12px;margin-bottom:11px;color:#fff;box-shadow:0 5px 20px rgba(44,198,198,.35);position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;top:-18px;right:-18px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.12)}
 .hero::after{content:'';position:absolute;bottom:-24px;right:28px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.08)}
@@ -105,16 +91,12 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
 .h-sub{font-size:10px;opacity:.75}
 .h-div{height:1px;background:rgba(255,255,255,.25);margin:9px 0}
 .h-row{display:flex;justify-content:space-between;font-size:11px;padding:2px 0;opacity:.9}
-
-/* ── STATS ── */
 .sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .scard{background:#fff;border-radius:var(--r);border:1px solid var(--bd);padding:11px 12px;box-shadow:var(--sh)}
 .sc-lb{font-size:10px;color:var(--tx3);margin-bottom:3px}
 .sc-v{font-size:20px;font-weight:800}
 .sc-v.m{color:var(--mint)}
 .sc-s{font-size:9px;color:var(--tx3);margin-top:1px}
-
-/* ── ROWS ── */
 .er{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--bd)}
 .er:last-child{border-bottom:none}
 .er-l{display:flex;align-items:center;flex:1}
@@ -126,8 +108,6 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
 .ur:last-child{border-bottom:none}
 .ur-l{display:flex;align-items:center;gap:9px}
 .ur-a{font-size:14px;font-weight:800;color:var(--mint)}
-
-/* ── SETTLEMENT CARD ── */
 .settle-card{border:1.5px solid var(--mbd);border-radius:var(--r);padding:10px 12px;margin-bottom:7px;background:linear-gradient(135deg,var(--mpal),#fff)}
 .settle-card:last-child{margin-bottom:0}
 .settle-row{display:flex;align-items:center;gap:8px}
@@ -135,57 +115,31 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
 .settle-names{flex:1}
 .settle-from{font-size:12px;font-weight:700}
 .settle-to{font-size:11px;color:var(--tx2);margin-top:1px}
-
-/* ── AV ── */
 .av{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
 .av1{background:var(--mpal);color:var(--mdk)}
 .av2{background:#EFF6FF;color:#2563EB}
 .av3{background:#FDF4FF;color:#9333EA}
 .av4{background:#FFF7ED;color:#EA580C}
 .avs{width:28px;height:28px;border-radius:9px;font-size:11px}
-
-/* ── GROUP CARD ── */
 .grp-card{background:var(--sf);border-radius:var(--r);border:1px solid var(--bd);padding:12px;margin-bottom:8px}
 .grp-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .grp-info{display:flex;align-items:center;gap:8px}
-.grp-icon{font-size:22px}
-.grp-name{font-size:13px;font-weight:700}
-.grp-meta{font-size:10px;color:var(--tx3);margin-top:1px}
-.grp-actions{display:flex;gap:5px}
 .member-chip{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--bd);border-radius:20px;padding:3px 9px 3px 5px;margin:3px 3px 0 0;font-size:11px;font-weight:500}
-
-/* ── EXPENSE FORM ── */
-.payer-chip{display:inline-flex;align-items:center;gap:6px;background:var(--mpal);border:1.5px solid var(--mbd);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--mdk);margin-bottom:8px}
 .split-row{display:flex;align-items:center;gap:7px;padding:7px 0;border-bottom:1px solid var(--bd)}
 .split-row:last-child{border-bottom:none}
-.split-lbl{font-size:12px;font-weight:500;flex:1}
 .split-inp{width:55px;padding:6px 7px;border-radius:8px;border:1.5px solid var(--bd);font-size:12px;font-family:var(--f);text-align:right;outline:none;background:#fff}
 .split-inp:focus{border-color:var(--mint)}
-.split-pct{font-size:11px;color:var(--tx3);width:10px}
 .ev-box{background:var(--mpal);border-radius:var(--r);border:1.5px solid var(--mbd);padding:11px;margin-bottom:11px}
-.ev-title{font-size:10px;font-weight:700;color:var(--mdk);margin-bottom:8px;text-transform:uppercase;letter-spacing:.3px}
 .net-box{padding:9px 11px;background:var(--mpal);border-radius:9px;border:1px solid var(--mbd);margin-top:6px}
 .net-lbl{font-size:10px;color:var(--mdk);font-weight:700;margin-bottom:1px}
 .net-v{font-size:16px;font-weight:800;color:var(--mint)}
-
-/* ── CHART ── */
-.chart-wrap{position:relative;padding:4px 0;height:200px}
-.chart-wrap canvas{max-height:200px}
-
-/* ── REPORT ── */
+.chart-wrap{position:relative;height:190px}
 .rp-hdr{background:var(--mint);border-radius:10px;padding:9px 12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .rp-m{font-size:12px;font-weight:700;color:#fff}
 .rp-t{font-size:16px;font-weight:800;color:#fff}
 .tab-bar{display:flex;background:var(--sf);border-radius:var(--r);padding:3px;margin-bottom:11px;border:1px solid var(--bd)}
 .tb{flex:1;padding:7px;border-radius:10px;border:none;font-family:var(--f);font-size:11px;font-weight:500;cursor:pointer;transition:all .18s;background:transparent;color:var(--tx3)}
 .tb.on{background:#fff;color:var(--mint);font-weight:700;box-shadow:var(--sh)}
-
-/* ── STATUS BAR ── */
-.status-bar{background:var(--sf);border-radius:9px;padding:9px 12px;margin-bottom:10px;border:1px solid var(--bd)}
-.status-progress{height:6px;background:var(--bd);border-radius:3px;margin-top:7px;overflow:hidden}
-.status-fill{height:100%;background:var(--mint);border-radius:3px;transition:width .4s ease}
-
-/* ── MODAL ── */
 .mo{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;z-index:100}
 .mo.open{display:flex}
 .ms{background:#fff;border-radius:var(--rxl) var(--rxl) 0 0;width:100%;max-width:430px;margin:0 auto;padding:0 0 calc(var(--sb)+1rem);max-height:93dvh;overflow-y:auto;animation:su .26s cubic-bezier(.34,1.56,.64,1)}
@@ -196,15 +150,13 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
 .icon-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:7px}
 .ico-opt{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;background:var(--sf);border:1.5px solid var(--bd);transition:all .15s}
 .ico-opt.sel{border-color:var(--mint);background:var(--mpal)}
-
-/* ── TOAST ── */
 .toast{position:fixed;bottom:calc(var(--sb)+76px);left:50%;transform:translateX(-50%) translateY(12px);background:#1F2937;color:#fff;padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;opacity:0;transition:all .25s;pointer-events:none;z-index:200;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* ── FAB ── */
 .fab{position:absolute;bottom:calc(var(--sb)+68px);right:13px;width:50px;height:50px;border-radius:16px;background:var(--mint);color:#fff;border:none;font-size:24px;cursor:pointer;box-shadow:0 5px 16px rgba(44,198,198,.45);display:flex;align-items:center;justify-content:center;transition:all .18s;z-index:50}
 .fab:active{transform:scale(.91);background:var(--mdk)}
-
+.info-box{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:var(--r);padding:11px 13px;margin-bottom:10px}
+.info-box-title{font-size:11px;font-weight:700;color:#1D4ED8;margin-bottom:4px}
+.info-box-text{font-size:11px;color:#3730A3;line-height:1.5}
 .div{height:1px;background:var(--bd);margin:8px 0}
 .mt8{margin-top:8px}.mt10{margin-top:10px}.mt12{margin-top:12px}
 .empty{text-align:center;padding:2rem .5rem}
@@ -226,8 +178,8 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
   <div class="l-card">
     <h2 id="a-title">เข้าสู่ระบบ</h2>
     <div id="rng" class="fl" style="display:none"><label>ชื่อ-นามสกุล</label><input type="text" class="fi" id="i-name" placeholder="กรอกชื่อของคุณ"></div>
-    <div class="fl"><label>อีเมล</label><input type="email" class="fi" id="i-email" placeholder="example@email.com"></div>
-    <div class="fl"><label>รหัสผ่าน</label><input type="password" class="fi" id="i-pass" placeholder="รหัสผ่าน 6 ตัวขึ้นไป"></div>
+    <div class="fl"><label>อีเมล</label><input type="email" class="fi" id="i-email" placeholder="example@email.com" autocomplete="email"></div>
+    <div class="fl"><label>รหัสผ่าน</label><input type="password" class="fi" id="i-pass" placeholder="รหัสผ่าน 6 ตัวขึ้นไป" autocomplete="current-password"></div>
     <div id="rcg" class="fl" style="display:none"><label>ยืนยันรหัสผ่าน</label><input type="password" class="fi" id="i-conf" placeholder="กรอกรหัสผ่านอีกครั้ง"></div>
     <div id="a-err" class="err-msg" style="margin-bottom:8px;font-size:12px"></div>
     <button class="btn btn-p" id="a-btn" onclick="doAuth()">เข้าสู่ระบบ</button>
@@ -243,9 +195,8 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
       <div><div class="h-t">HomeSplit</div><div class="h-s" id="hm">-</div></div>
     </div>
     <div style="display:flex;gap:5px">
-      <div class="ico-btn" id="grp-hdr-btn" onclick="go('groups')" title="กลุ่ม">👥</div>
-      <div class="ico-btn" onclick="refreshData()" title="รีเฟรชข้อมูล" id="refresh-btn">🔄</div>
-      <div class="ico-btn" onclick="showMo('mo-pf')">👤</div>
+      <div class="ico-btn" onclick="refreshData()" id="refresh-btn" title="รีเฟรช">🔄</div>
+      <div class="ico-btn" onclick="updateGasStatus();showMo('mo-pf')">👤</div>
     </div>
   </div>
   <div class="sc" id="mc"></div>
@@ -263,7 +214,15 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
   <div class="mb">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
       <div class="av av1" id="pf-av" style="width:50px;height:50px;border-radius:15px;font-size:17px">?</div>
-      <div><div style="font-size:15px;font-weight:700" id="pf-n">-</div><div style="font-size:11px;color:var(--tx3);margin-top:2px" id="pf-e">-</div></div>
+      <div><div style="font-size:15px;font-weight:700" id="pf-n">-</div><div style="font-size:11px;color:var(--tx3);margin-top:2px" id="pf-e">-</div><div style="font-size:10px;color:var(--tx3);margin-top:1px" id="pf-role">-</div></div>
+    </div>
+    <div class="div"></div>
+    <div style="margin-bottom:8px">
+      <div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px">การเชื่อมต่อ Google Sheets</div>
+      <div id="gas-status-box" style="background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:9px 12px;margin-bottom:8px;font-size:12px;color:var(--tx2)">
+        กำลังตรวจสอบ...
+      </div>
+      <button class="btn btn-g btn-sm" style="width:100%;margin-bottom:8px" onclick="closeMo('mo-pf');showMo('mo-setup')">⚙️ ตั้งค่า Google Apps Script URL</button>
     </div>
     <div class="div"></div>
     <button class="btn btn-r mt8" onclick="logout()">🚪 ออกจากระบบ</button>
@@ -274,15 +233,9 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
 <div class="mo" id="mo-grp" onclick="bgC(this)"><div class="ms">
   <div class="mh"></div><div class="mt-h" id="mg-title">สร้างกลุ่มใหม่</div>
   <div class="mb">
-    <div class="fl"><label>ชื่อกลุ่ม</label><input type="text" class="fi" id="mg-name" placeholder="เช่น บ้าน 54/145, ออฟฟิศ"></div>
-    <div class="fl">
-      <label>ไอคอนกลุ่ม</label>
-      <div class="icon-grid" id="grp-icon-grid"></div>
-    </div>
-    <div class="fl">
-      <label>สมาชิกในกลุ่ม (เลือกจากผู้ใช้ที่สมัครแล้ว)</label>
-      <div id="mg-members" style="margin-top:6px"></div>
-    </div>
+    <div class="fl"><label>ชื่อกลุ่ม</label><input type="text" class="fi" id="mg-name" placeholder="เช่น บ้าน 54/145"></div>
+    <div class="fl"><label>ไอคอน</label><div class="icon-grid" id="grp-icon-grid"></div></div>
+    <div class="fl"><label>เลือกสมาชิก (จากผู้ใช้ที่สมัครแล้ว)</label><div id="mg-members" style="margin-top:6px"></div></div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-g btn-sm" onclick="closeMo('mo-grp')">ยกเลิก</button>
       <button class="btn btn-p" onclick="saveGroup()">💾 บันทึกกลุ่ม</button>
@@ -294,16 +247,10 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
 <div class="mo" id="mo-exp" onclick="bgC(this)"><div class="ms">
   <div class="mh"></div><div class="mt-h" id="me-title">เพิ่มค่าใช้จ่าย</div>
   <div class="mb">
-    <div class="fl"><label>ชื่อรายการ</label><input type="text" class="fi" id="me-name" placeholder="เช่น ค่าไฟ, น้ำดื่ม 3 แพ็ค, ค่าเน็ต"></div>
-    <div class="fl">
-      <label>ไอคอน</label>
-      <div class="icon-grid" id="exp-icon-grid"></div>
-    </div>
-    <div class="fl"><label>ผู้จ่ายเงิน (คุณจ่ายไปก่อน)</label>
-      <select class="fi" id="me-payer"></select>
-    </div>
-    <div class="fl">
-      <label>มี EV Charger ในรายการนี้?</label>
+    <div class="fl"><label>ชื่อรายการ</label><input type="text" class="fi" id="me-name" placeholder="เช่น ค่าไฟ, น้ำดื่ม 3 แพ็ค"></div>
+    <div class="fl"><label>ไอคอน</label><div class="icon-grid" id="exp-icon-grid"></div></div>
+    <div class="fl"><label>ผู้จ่ายเงิน (คนที่จ่ายไปก่อน)</label><select class="fi" id="me-payer"></select></div>
+    <div class="fl"><label>มี EV Charger?</label>
       <select class="fi" id="me-hasev" onchange="toggleEV()">
         <option value="0">ไม่มี</option>
         <option value="1">มี — หักลบค่า EV อัตโนมัติ</option>
@@ -311,16 +258,16 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
     </div>
     <div id="ev-sec" style="display:none">
       <div class="ev-box">
-        <div class="ev-title">⚡ ค่า EV Charger (หักออกจากยอดรวมก่อนหาร)</div>
+        <div style="font-size:10px;font-weight:700;color:var(--mdk);margin-bottom:8px;text-transform:uppercase">⚡ EV Charger — หักก่อนหาร</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <div class="fl" style="margin-bottom:0"><label>หน่วยที่ใช้</label><input type="number" class="fi" id="me-evu" placeholder="0" min="0" step="0.1" oninput="calcNet()"></div>
           <div class="fl" style="margin-bottom:0"><label>฿ / หน่วย</label><input type="number" class="fi" id="me-evr" value="4.00" min="0" step="0.01" oninput="calcNet()"></div>
         </div>
-        <div class="fl" style="margin-bottom:0;margin-top:8px"><label>EV เป็นของใคร (รับเงินคืน)</label><select class="fi" id="me-evowner"></select></div>
+        <div class="fl" style="margin-bottom:0;margin-top:8px"><label>EV เป็นของใคร</label><select class="fi" id="me-evowner"></select></div>
       </div>
     </div>
     <div class="fl">
-      <label>ยอดรวมที่จ่ายไป (บาท)</label>
+      <label>ยอดรวมที่จ่าย (บาท)</label>
       <input type="number" class="fi" id="me-amt" placeholder="0.00" min="0" step="0.01" oninput="calcNet()">
       <div id="me-net-box" class="net-box" style="display:none">
         <div class="net-lbl">ยอดที่นำมาหาร (หลังหัก EV)</div>
@@ -328,7 +275,7 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
       </div>
     </div>
     <div class="fl">
-      <label>หารกับใคร — ใส่ % แต่ละคน (รวม = 100%)</label>
+      <label>หารกับใคร (% ต้องรวมได้ 100%)</label>
       <div id="me-split-rows" style="margin-top:6px"></div>
       <div id="pct-total-row" style="display:flex;justify-content:space-between;align-items:center;margin-top:7px;padding:7px 10px;border-radius:9px;background:var(--sf);border:1px solid var(--bd)">
         <span style="font-size:11px;color:var(--tx2);font-weight:500">รวม %</span>
@@ -355,353 +302,430 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
   </div>
 </div></div>
 
+<!-- MODAL: GAS Setup -->
+<div class="mo" id="mo-setup" onclick="bgC(this)"><div class="ms">
+  <div class="mh"></div><div class="mt-h">⚙️ ตั้งค่า Google Apps Script</div>
+  <div class="mb">
+    <div style="font-size:12px;color:var(--tx2);line-height:1.7;margin-bottom:12px">
+      ตอนนี้ข้อมูลเก็บใน Browser นี้เท่านั้น<br>
+      เพื่อให้ทุกคนในบ้านเห็นข้อมูลกัน ต้องใส่ URL ของ Google Apps Script
+    </div>
+    <div class="fl"><label>Google Apps Script URL</label><input type="url" class="fi" id="gas-url" placeholder="https://script.google.com/macros/s/.../exec"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-g btn-sm" onclick="closeMo('mo-setup')">ปิด</button>
+      <button class="btn btn-p" onclick="saveGasUrl()">💾 บันทึก URL</button>
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:var(--tx3);line-height:1.6">
+      ดูคู่มือติดตั้งใน README.md
+    </div>
+  </div>
+</div></div>
+
 <div class="toast" id="toast"></div>
 </div>
 
 <script>
-// ════════════════════════════════════
-// CONFIG
-// ════════════════════════════════════
-const CFG = { SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwPDPscFeXrOAio8FV2sfYfzgNL7oTm4P8rW7Y2Ky-gw7rHQFDyGAwDCaIcxyc3X0ricw/exec' };
+'use strict';
+
+// ══════════════════════════════════════════════════
+// CONSTANTS
+// ══════════════════════════════════════════════════
+const DB_KEY  = 'hs_db_v3';     // localStorage key for database
+const SES_KEY = 'hs_session';   // localStorage key for current user session
+const GAS_KEY = 'hs_gas_url';   // localStorage key for GAS URL
 
 const ICONS = ['🏠','⚡','💧','🌐','🏢','🛒','🍽️','🚗','💊','📦','🧹','💡','🔧','🎮','📺','🌿','🐾','🧺','☕','🧯','💰','🎓','✈️','🏋️','🎵'];
-const AVC = ['av1','av2','av3','av4'];
-const TH_MONTHS = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+const AVC   = ['av1','av2','av3','av4'];
+const MONTHS = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
 
-let S = {
-  u: null, isR: false, tab: 'dash',
-  d: { members:[], groups:[], expenses:[] },
+// ══════════════════════════════════════════════════
+// APP STATE  (runtime only — never persisted directly)
+// ══════════════════════════════════════════════════
+let APP = {
+  user: null,
+  isReg: false,
+  tab: 'dash',
   curGrpId: null,
-  editGrpId: null, editExpId: null,
-  selIcon: '🏠', selExpIcon: '💰',
-  reportTab: 'monthly', reportYear: new Date().getFullYear(),
+  editGrpId: null,
+  editExpId: null,
+  selGrpIcon: '🏠',
+  selExpIcon: '💰',
+  reportTab: 'monthly',
+  reportYear: new Date().getFullYear(),
+  // Runtime copies of DB — always re-read from DB before use
+  members: [], groups: [], expenses: [],
   charts: {}
 };
 
-// ════════════════════════════════════
-// UTILS
-// ════════════════════════════════════
-const $ = id => document.getElementById(id);
-const thM = (y,m) => { const n=new Date(); return TH_MONTHS[(m??n.getMonth())] + ' ' + ((y??n.getFullYear())+543); };
-const mkK = (y,m) => { const n=new Date(); return `${y??n.getFullYear()}-${String((m??n.getMonth()+1)).padStart(2,'0')}`; };
-const mkKNow = () => mkK();
-const thMK = mk => { const[y,mo]=mk.split('-'); return TH_MONTHS[parseInt(mo)-1]+' '+(parseInt(y)+543); };
-const fmt = n => Number(n||0).toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2});
-const ini = s => { if(!s)return'?'; const p=s.trim().split(' '); return p.length>1?(p[0][0]+p[1][0]).toUpperCase():s.substring(0,2).toUpperCase(); };
-const toast = (m,d=2600) => { const t=$('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),d); };
-const showMo = id => $(id).classList.add('open');
-const closeMo = id => $(id).classList.remove('open');
-const bgC = el => { if(el===event.target) el.classList.remove('open'); };
-const nowISO = () => new Date().toISOString();
-const uid = p => p+'_'+Date.now()+'_'+Math.random().toString(36).substr(2,4);
+// ══════════════════════════════════════════════════
+// DATABASE — ALL reads/writes go through these fns
+// ══════════════════════════════════════════════════
 
-// ════════════════════════════════════
-// SHARED DB (localStorage) + Real API
-// ════════════════════════════════════
-// ทุก User ที่ Login บนเครื่องเดียวกัน หรือผ่าน Google Apps Script จะเห็นข้อมูลกัน
-
-const DB_KEY = 'homesplit_db_54145';
-
-function getDB() {
+/** Read the full DB from localStorage. Never returns null. */
+function dbRead() {
   try {
     const raw = localStorage.getItem(DB_KEY);
-    if (!raw) return initDB();              // truly no data → init
+    if (!raw) return dbCreate();
     const db = JSON.parse(raw);
-    if (!db || typeof db !== 'object') return initDB();
-    // Ensure required arrays exist without wiping data
-    if (!db.members)  db.members  = [];
-    if (!db.groups)   db.groups   = [];
-    if (!db.expenses) db.expenses = [];
+    if (!db || typeof db !== 'object') return dbCreate();
+    db.members  = db.members  || [];
+    db.groups   = db.groups   || [];
+    db.expenses = db.expenses || [];
     return db;
   } catch(e) {
-    console.error('getDB parse error:', e);
-    return initDB();
+    console.error('dbRead error:', e);
+    return { members:[], groups:[], expenses:[] };
   }
 }
 
-function saveDB(db) {
-  localStorage.setItem(DB_KEY, JSON.stringify(db));
+/** Write the full DB to localStorage. */
+function dbWrite(db) {
+  try {
+    localStorage.setItem(DB_KEY, JSON.stringify(db));
+    return true;
+  } catch(e) {
+    console.error('dbWrite error:', e);
+    toast('⚠️ บันทึกไม่ได้ — Storage เต็ม');
+    return false;
+  }
 }
 
-function initDB() {
-  // Only called when no DB exists yet — create empty skeleton
-  const db = {
-    version: 1,
-    members: [],
-    groups: [],
-    expenses: []
-  };
-  saveDB(db);
+/** Create a fresh empty DB (first time only). */
+function dbCreate() {
+  const db = { version:3, members:[], groups:[], expenses:[] };
+  dbWrite(db);
   return db;
 }
 
-// Simple SHA-256 via SubtleCrypto (for registration)
+/** Reload APP.members/groups/expenses from DB. Call before every render. */
+function dbSync() {
+  const db = dbRead();
+  APP.members  = db.members.map(({pwHash,...u}) => u);
+  APP.groups   = JSON.parse(JSON.stringify(db.groups));
+  APP.expenses = JSON.parse(JSON.stringify(db.expenses));
+  if (!APP.curGrpId && APP.groups.length) APP.curGrpId = APP.groups[0].id;
+}
+
+// ══════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════
+
 async function hashPw(pw) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
-// Sync from GAS if configured, else use localStorage
-async function api(action, p={}) {
-  if (CFG.SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-    return apiGAS(action, p);
-  }
-  return apiLocal(action, p);
+async function authLogin(email, password) {
+  const db = dbRead();
+  const hash = await hashPw(password);
+  const u = db.members.find(m =>
+    m.email.toLowerCase() === email.toLowerCase() && m.pwHash === hash
+  );
+  if (!u) return { ok:false, error:'อีเมลหรือรหัสผ่านไม่ถูกต้อง' };
+  const { pwHash, ...safe } = u;
+  return { ok:true, user:safe };
 }
 
-async function apiGAS(action, p) {
-  try {
-    const r = await fetch(CFG.SCRIPT_URL, {
-      method:'POST', headers:{'Content-Type':'text/plain'},
-      body: JSON.stringify({action,...p})
-    });
-    return await r.json();
-  } catch(e) { return {ok:false,error:e.message}; }
+async function authRegister(name, email, password) {
+  const db = dbRead();
+  if (db.members.find(m => m.email.toLowerCase() === email.toLowerCase()))
+    return { ok:false, error:'อีเมลนี้มีในระบบแล้ว' };
+  const hash = await hashPw(password);
+  const newUser = {
+    id: genId('u'), name, email,
+    pwHash: hash,
+    role: db.members.length === 0 ? 'admin' : 'member',
+    c: db.members.length % 4,
+    createdAt: now()
+  };
+  db.members.push(newUser);
+  dbWrite(db);
+  const { pwHash, ...safe } = newUser;
+  return { ok:true, user:safe };
 }
 
-// localStorage-based shared DB: ALL users on same device share data
-// When SCRIPT_URL is set → data syncs to Google Sheets for cross-device
-async function apiLocal(action, p) {
-  const db = getDB();
-
-  if (action === 'login') {
-    const hash = await hashPw(p.password);
-    const u = db.members.find(u => u.email.toLowerCase()===p.email.toLowerCase() && u.pwHash===hash);
-    if (!u) return {ok:false,error:'อีเมลหรือรหัสผ่านไม่ถูกต้อง'};
-    const {pwHash,...safe}=u; return {ok:true,user:safe};
-  }
-
-  if (action === 'register') {
-    if (db.members.find(u=>u.email.toLowerCase()===p.email.toLowerCase()))
-      return {ok:false,error:'อีเมลนี้มีในระบบแล้ว'};
-    const hash = await hashPw(p.password);
-    const nu = {id:uid('u'),name:p.name,email:p.email,pwHash:hash,role:db.members.length===0?'admin':'member',c:db.members.length%4,createdAt:nowISO()};
-    db.members.push(nu);
-    saveDB(db);
-    const {pwHash,...safe}=nu; return {ok:true,user:safe};
-  }
-
-  if (action === 'getData') {
-    return {ok:true, members:db.members.map(({pwHash,...u})=>u), groups:db.groups, expenses:db.expenses};
-  }
-
-  if (action === 'saveGroup') {
-    const i = db.groups.findIndex(g=>g.id===p.group.id);
-    if (i>=0) db.groups[i]=p.group; else db.groups.push(p.group);
-    saveDB(db); return {ok:true};
-  }
-
-  if (action === 'deleteGroup') {
-    db.groups = db.groups.filter(g=>g.id!==p.id);
-    db.expenses = db.expenses.filter(e=>e.gid!==p.id);
-    saveDB(db); return {ok:true};
-  }
-
-  if (action === 'saveExpense') {
-    const i = db.expenses.findIndex(e=>e.id===p.expense.id);
-    if (i>=0) db.expenses[i]=p.expense; else db.expenses.push(p.expense);
-    saveDB(db); return {ok:true,expense:p.expense};
-  }
-
-  if (action === 'deleteExpense') {
-    db.expenses = db.expenses.filter(e=>e.id!==p.id);
-    saveDB(db); return {ok:true};
-  }
-
-  return {ok:false,error:'Unknown action: '+action};
+// ══════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const thM  = (y,m) => MONTHS[(m ?? new Date().getMonth())] + ' ' + ((y ?? new Date().getFullYear())+543);
+const mkK  = (y,m) => { const n=new Date(); return `${y??n.getFullYear()}-${String((m??n.getMonth()+1)).padStart(2,'0')}`; };
+const mkKNow = () => mkK();
+const thMK = mk  => { const[y,m]=mk.split('-'); return MONTHS[parseInt(m)-1]+' '+(parseInt(y)+543); };
+const fmt  = n   => Number(n||0).toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2});
+const ini  = s   => { if(!s)return'?'; const p=s.trim().split(' '); return p.length>1?(p[0][0]+p[1][0]).toUpperCase():s.substring(0,2).toUpperCase(); };
+const now  = ()  => new Date().toISOString();
+const genId= p   => p+'_'+Date.now()+'_'+Math.random().toString(36).substr(2,4);
+const showMo = id => $(id).classList.add('open');
+const closeMo= id => $(id).classList.remove('open');
+const bgC  = el  => { if(el===event.target) el.classList.remove('open'); };
+function toast(m, d=2600) {
+  const t=$('toast'); t.textContent=m; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),d);
+}
+function gasUrl() {
+  return localStorage.getItem(GAS_KEY) || '';
 }
 
-// ════════════════════════════════════
-// INIT
-
-// ════════════════════════════════════
-// ════════════════════════════════════
-// AUTH
-// ════════════════════════════════════
-function togAuth(){
-  S.isR=!S.isR;
-  $('a-title').textContent=S.isR?'สมัครสมาชิก':'เข้าสู่ระบบ';
-  $('a-btn').textContent=S.isR?'สมัครสมาชิก':'เข้าสู่ระบบ';
-  $('a-sw').innerHTML=S.isR?'มีบัญชีแล้ว? <span onclick="togAuth()">เข้าสู่ระบบ</span>':'ยังไม่มีบัญชี? <span onclick="togAuth()">สมัครสมาชิก</span>';
-  $('rng').style.display=S.isR?'':'none';
-  $('rcg').style.display=S.isR?'':'none';
-  $('a-err').style.display='none';
+// ══════════════════════════════════════════════════
+// AUTH UI
+// ══════════════════════════════════════════════════
+function togAuth() {
+  APP.isReg = !APP.isReg;
+  $('a-title').textContent = APP.isReg ? 'สมัครสมาชิก' : 'เข้าสู่ระบบ';
+  $('a-btn').textContent   = APP.isReg ? 'สมัครสมาชิก' : 'เข้าสู่ระบบ';
+  $('a-sw').innerHTML = APP.isReg
+    ? 'มีบัญชีแล้ว? <span onclick="togAuth()">เข้าสู่ระบบ</span>'
+    : 'ยังไม่มีบัญชี? <span onclick="togAuth()">สมัครสมาชิก</span>';
+  $('rng').style.display = APP.isReg ? '' : 'none';
+  $('rcg').style.display = APP.isReg ? '' : 'none';
+  $('a-err').style.display = 'none';
 }
 
-async function doAuth(){
-  const email=$('i-email').value.trim(), pass=$('i-pass').value, err=$('a-err');
-  err.style.display='none';
-  if(!email||!pass){err.textContent='กรุณากรอกข้อมูลให้ครบ';err.style.display='block';return}
-  if(pass.length<6){err.textContent='รหัสผ่านอย่างน้อย 6 ตัวอักษร';err.style.display='block';return}
-  const btn=$('a-btn');btn.textContent='⏳...';btn.disabled=true;
+async function doAuth() {
+  const email = $('i-email').value.trim();
+  const pass  = $('i-pass').value;
+  const errEl = $('a-err');
+  errEl.style.display = 'none';
+
+  if (!email || !pass) {
+    errEl.textContent = 'กรุณากรอกข้อมูลให้ครบ';
+    errEl.style.display = 'block'; return;
+  }
+  if (pass.length < 6) {
+    errEl.textContent = 'รหัสผ่านอย่างน้อย 6 ตัวอักษร';
+    errEl.style.display = 'block'; return;
+  }
+
+  const btn = $('a-btn');
+  btn.textContent = '⏳...'; btn.disabled = true;
+
   let res;
-  if(S.isR){
-    const name=$('i-name').value.trim(), conf=$('i-conf').value;
-    if(!name){err.textContent='กรุณากรอกชื่อ';err.style.display='block';btn.textContent='สมัครสมาชิก';btn.disabled=false;return}
-    if(pass!==conf){err.textContent='รหัสผ่านไม่ตรงกัน';err.style.display='block';btn.textContent='สมัครสมาชิก';btn.disabled=false;return}
-    res=await api('register',{name,email,password:pass});
+  if (APP.isReg) {
+    const name = $('i-name').value.trim();
+    const conf = $('i-conf').value;
+    if (!name) {
+      errEl.textContent = 'กรุณากรอกชื่อ';
+      errEl.style.display = 'block';
+      btn.textContent = 'สมัครสมาชิก'; btn.disabled = false; return;
+    }
+    if (pass !== conf) {
+      errEl.textContent = 'รหัสผ่านไม่ตรงกัน';
+      errEl.style.display = 'block';
+      btn.textContent = 'สมัครสมาชิก'; btn.disabled = false; return;
+    }
+    res = await authRegister(name, email, pass);
   } else {
-    res=await api('login',{email,password:pass});
+    res = await authLogin(email, pass);
   }
-  btn.textContent=S.isR?'สมัครสมาชิก':'เข้าสู่ระบบ';btn.disabled=false;
-  if(res.ok){S.u=res.user;localStorage.setItem('hs',JSON.stringify(res.user));enterApp();}
-  else{err.textContent=res.error||'เกิดข้อผิดพลาด';err.style.display='block';}
+
+  btn.textContent = APP.isReg ? 'สมัครสมาชิก' : 'เข้าสู่ระบบ';
+  btn.disabled = false;
+
+  if (res.ok) {
+    APP.user = res.user;
+    localStorage.setItem(SES_KEY, JSON.stringify(res.user));
+    enterApp();
+  } else {
+    errEl.textContent = res.error || 'เกิดข้อผิดพลาด';
+    errEl.style.display = 'block';
+  }
 }
 
-function logout(){
-  localStorage.removeItem('hs');S.u=null;closeMo('mo-pf');
-  $('sa').style.display='none';$('sa').classList.remove('active');
-  $('sl').classList.add('active');$('sl').style.display='';
+function logout() {
+  localStorage.removeItem(SES_KEY);
+  APP.user = null;
+  closeMo('mo-pf');
+  $('sa').style.display = 'none';
+  $('sa').classList.remove('active');
+  $('sl').classList.add('active');
+  $('sl').style.display = '';
 }
 
+// ══════════════════════════════════════════════════
+// APP INIT
+// ══════════════════════════════════════════════════
+function enterApp() {
+  $('sl').classList.remove('active'); $('sl').style.display = 'none';
+  $('sa').style.display = ''; $('sa').classList.add('active');
+  $('hm').textContent  = thM();
+  $('pf-n').textContent = APP.user.name;
+  $('pf-e').textContent = APP.user.email;
+  $('pf-av').textContent = ini(APP.user.name);
+  $('pf-role').textContent = APP.user.role === 'admin' ? '👑 Admin' : 'สมาชิก';
 
-async async function enterApp(){
-  $('sl').classList.remove('active');$('sl').style.display='none';
-  $('sa').style.display='';$('sa').classList.add('active');
-  $('hm').textContent=thM();
-  $('pf-n').textContent=S.u.name;$('pf-e').textContent=S.u.email;$('pf-av').textContent=ini(S.u.name);
-  const res=await api('getData',{uid:S.u.id});
-  if(res.ok){S.d.members=res.members||[];S.d.groups=res.groups||[];S.d.expenses=res.expenses||[]}
-  // auto-select first group
-  if(!S.curGrpId && S.d.groups.length) S.curGrpId=S.d.groups[0].id;
+  // Show GAS setup hint if not configured
+  if (!gasUrl()) {
+    setTimeout(() => {
+      toast('💡 กด 👤 → ตั้งค่า GAS URL เพื่อ sync ข้ามเครื่อง', 5000);
+    }, 1200);
+  }
+
+  dbSync();  // load data from localStorage into APP.*
   go('dash');
 }
 
-// ════════════════════════════════════
-// TABS
-// ════════════════════════════════════
-function go(tab){
-  S.tab=tab;
-  document.querySelectorAll('.ni').forEach(el=>el.classList.remove('on'));
-  const navEl=$(('nav-'+tab));if(navEl)navEl.classList.add('on');
-  // destroy charts
-  Object.values(S.charts).forEach(c=>{try{c.destroy()}catch(e){}});
-  S.charts={};
-  const mc=$('mc');mc.scrollTop=0;
-  const map={dash:rDash,expenses:rExpenses,groups:rGroups,report:rReport};
-  mc.innerHTML=(map[tab]||rDash)();
-  // init charts after render
-  if(tab==='dash') initDashCharts();
-  if(tab==='report') initReportCharts();
+async function refreshData() {
+  const btn = $('refresh-btn');
+  if (btn) { btn.textContent = '⏳'; btn.style.pointerEvents = 'none'; }
+
+  // If GAS configured, fetch from server first
+  if (gasUrl()) {
+    try {
+      const r = await fetch(gasUrl(), {
+        method:'POST', headers:{'Content-Type':'text/plain'},
+        body: JSON.stringify({action:'getData'})
+      });
+      const res = await r.json();
+      if (res.ok) {
+        // Merge server data into local DB
+        const db = dbRead();
+        db.members  = res.members  || db.members;
+        db.groups   = res.groups   || db.groups;
+        db.expenses = res.expenses || db.expenses;
+        dbWrite(db);
+        toast('🔄 ซิงค์จาก Server แล้ว');
+      }
+    } catch(e) { toast('⚠️ ไม่สามารถเชื่อม Server ได้'); }
+  }
+
+  dbSync();  // always reload from localStorage
+  go(APP.tab);
+  if (btn) { btn.textContent = '🔄'; btn.style.pointerEvents = ''; }
 }
 
-// ════════════════════════════════════
-// CORE CALC
-// ════════════════════════════════════
-function grpExps(gid, mk){
-  return S.d.expenses.filter(e=>e.gid===gid&&(!mk||e.monthKey===mk));
+// ══════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════
+function go(tab) {
+  APP.tab = tab;
+  document.querySelectorAll('.ni').forEach(el => el.classList.remove('on'));
+  const navEl = $('nav-'+tab);
+  if (navEl) navEl.classList.add('on');
+
+  // Destroy old charts
+  Object.values(APP.charts).forEach(c => { try { c.destroy(); } catch(e){} });
+  APP.charts = {};
+
+  // Always sync DB before render
+  dbSync();
+
+  const mc = $('mc');
+  mc.scrollTop = 0;
+  const renders = { dash:rDash, expenses:rExpenses, groups:rGroups, report:rReport };
+  mc.innerHTML = (renders[tab] || rDash)();
+
+  // Init charts after DOM is ready
+  if (tab === 'dash')   initDashCharts();
+  if (tab === 'report') initReportCharts();
 }
 
-// net[uid] = positive → others owe them; negative → they owe others
-function calcNet(exps){
-  const net={};
-  S.d.members.forEach(m=>net[m.id]=0);
-  exps.forEach(exp=>{
-    const total=exp.net||exp.amount||0;
-    // payer fronted the cash
-    net[exp.payer]=(net[exp.payer]||0)+total;
-    // EV owner gets EV amount back
-    if(exp.hasEV && exp.evOwner){
-      const evAmt=(exp.evU||0)*(exp.evR||0);
-      net[exp.evOwner]=(net[exp.evOwner]||0)+evAmt;
+// ══════════════════════════════════════════════════
+// CALCULATIONS
+// ══════════════════════════════════════════════════
+function grpExps(gid, mk) {
+  return APP.expenses.filter(e => e.gid === gid && (!mk || e.monthKey === mk));
+}
+
+function memberShare(exps, uid) {
+  return exps.reduce((sum, exp) => {
+    const sp = (exp.splits||[]).find(s => s.uid === uid);
+    return sum + (sp ? (exp.net||exp.amount||0) * (sp.pct/100) : 0);
+  }, 0);
+}
+
+function calcSettlement(exps) {
+  // net[uid] > 0 = others owe them (they overpaid)
+  // net[uid] < 0 = they owe others (they underpaid)
+  const net = {};
+  APP.members.forEach(m => net[m.id] = 0);
+
+  exps.forEach(exp => {
+    const total = exp.net || exp.amount || 0;
+    net[exp.payer] = (net[exp.payer]||0) + total;          // payer fronted cash
+    if (exp.hasEV && exp.evOwner) {                         // EV owner gets EV $ back
+      net[exp.evOwner] = (net[exp.evOwner]||0) + (exp.evU||0)*(exp.evR||0);
     }
-    // each split member owes their share of net amount
-    (exp.splits||[]).forEach(sp=>{
-      net[sp.uid]=(net[sp.uid]||0)-((exp.net||exp.amount||0)*(sp.pct/100));
+    (exp.splits||[]).forEach(sp => {                        // each member owes their share
+      net[sp.uid] = (net[sp.uid]||0) - (total * sp.pct/100);
     });
   });
-  return net;
-}
 
-function calcSettlement(exps){
-  const net=calcNet(exps);
-  const pos=[], neg=[];
-  S.d.members.forEach(m=>{
-    const v=net[m.id]||0;
-    if(v>0.5) pos.push({...m,amt:v});
-    else if(v<-0.5) neg.push({...m,amt:-v});
-  });
-  pos.sort((a,b)=>b.amt-a.amt); neg.sort((a,b)=>b.amt-a.amt);
-  const transfers=[];
-  const pc=pos.map(m=>({...m})), nc=neg.map(m=>({...m}));
-  let pi=0,ni=0;
-  while(pi<pc.length&&ni<nc.length){
-    const pay=Math.min(pc[pi].amt,nc[ni].amt);
-    if(pay>0.5) transfers.push({from:nc[ni].id,fromName:nc[ni].name,fromC:nc[ni].c,to:pc[pi].id,toName:pc[pi].name,toC:pc[pi].c,amt:pay});
-    pc[pi].amt-=pay; nc[ni].amt-=pay;
-    if(pc[pi].amt<0.5)pi++; if(nc[ni].amt<0.5)ni++;
+  // Greedy settlement: debtors pay creditors
+  const creditors = APP.members.filter(m => net[m.id] >  0.5).map(m=>({...m, amt: net[m.id]})).sort((a,b)=>b.amt-a.amt);
+  const debtors   = APP.members.filter(m => net[m.id] < -0.5).map(m=>({...m, amt:-net[m.id]})).sort((a,b)=>b.amt-a.amt);
+  const transfers = [];
+  let ci=0, di=0;
+  const cr=creditors.map(m=>({...m})), dr=debtors.map(m=>({...m}));
+  while (ci < cr.length && di < dr.length) {
+    const pay = Math.min(cr[ci].amt, dr[di].amt);
+    if (pay > 0.5) transfers.push({ from:dr[di].id, fromName:dr[di].name, fromC:dr[di].c, to:cr[ci].id, toName:cr[ci].name, toC:cr[ci].c, amt:pay });
+    cr[ci].amt -= pay; dr[di].amt -= pay;
+    if (cr[ci].amt < 0.5) ci++;
+    if (dr[di].amt < 0.5) di++;
   }
   return transfers;
 }
 
-function memberShare(exps, uid){
-  let total=0;
-  exps.forEach(exp=>{
-    const sp=(exp.splits||[]).find(s=>s.uid===uid);
-    if(sp) total+=(exp.net||exp.amount||0)*(sp.pct/100);
-  });
-  return total;
-}
-
-// ════════════════════════════════════
+// ══════════════════════════════════════════════════
 // DASHBOARD
-// ════════════════════════════════════
-function rDash(){
-  const g=S.d.groups.find(g=>g.id===S.curGrpId);
-  if(!g) return `<div class="empty"><div class="empty-i">👥</div><div class="empty-t">ยังไม่มีกลุ่ม</div><div class="empty-s">สร้างกลุ่มก่อนเพื่อเริ่มบันทึก</div></div><button class="btn btn-p mt10" onclick="go('groups')">+ สร้างกลุ่ม</button>`;
-  const mk=mkKNow(), exps=grpExps(g.id,mk);
-  const tot=exps.reduce((s,e)=>s+(e.net||e.amount||0),0);
-  const myShare=memberShare(exps,S.u.id);
-  const transfers=calcSettlement(exps);
-  const myTransfers=transfers.filter(t=>t.from===S.u.id||t.to===S.u.id);
-  const memIds=g.members||[];
+// ══════════════════════════════════════════════════
+function rDash() {
+  const g = APP.groups.find(g => g.id === APP.curGrpId);
+  if (!g) return `<div class="empty"><div class="empty-i">👥</div><div class="empty-t">ยังไม่มีกลุ่ม</div><div class="empty-s">ไปสร้างกลุ่มก่อนครับ</div></div><button class="btn btn-p mt10" onclick="go('groups')">+ สร้างกลุ่ม</button>`;
 
-  // Progress: how many members have added at least one expense this month
-  const activeMembers=new Set(exps.map(e=>e.payer));
-  const progress=memIds.length?Math.round(activeMembers.size/memIds.length*100):0;
+  const mk = mkKNow();
+  const exps = grpExps(g.id, mk);
+  const tot  = exps.reduce((s,e) => s+(e.net||e.amount||0), 0);
+  const my   = memberShare(exps, APP.user.id);
+  const transfers = calcSettlement(exps);
+  const activePayerSet = new Set(exps.map(e=>e.payer));
+  const progress = g.members.length ? Math.round(activePayerSet.size/g.members.length*100) : 0;
 
-  const grpSelect=S.d.groups.length>1?`<select onchange="S.curGrpId=this.value;go('dash')" style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:9px;color:#fff;font-family:var(--f);font-size:11px;padding:4px 8px;margin-top:6px;cursor:pointer">${S.d.groups.map(grp=>`<option value="${grp.id}" ${grp.id===S.curGrpId?'selected':''}>${grp.icon} ${grp.name}</option>`).join('')}</select>`:'';
+  const grpSel = APP.groups.length > 1 ? `<select onchange="APP.curGrpId=this.value;go('dash')" style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);border-radius:9px;color:#fff;font-family:var(--f);font-size:11px;padding:4px 8px;margin-top:6px;cursor:pointer">${APP.groups.map(gr=>`<option value="${gr.id}" ${gr.id===APP.curGrpId?'selected':''}>${gr.icon} ${gr.name}</option>`).join('')}</select>` : '';
 
-  // Per-member shares
-  const memRows=memIds.map(uid=>{
-    const m=S.d.members.find(m=>m.id===uid);if(!m)return'';
-    const share=memberShare(exps,uid);
-    const paid=exps.filter(e=>e.payer===uid).reduce((s,e)=>s+(e.net||e.amount||0),0);
-    return`<div class="ur">
+  const breakdown = g.members.map(uid => {
+    const exp = exps.find(e => (e.splits||[]).some(s=>s.uid===uid && APP.user.id===uid));
+    if (!exp) {
+      // sum all exps where user is in splits
+      const share = memberShare(exps, uid);
+      if (!share) return '';
+    }
+    const share = memberShare(exps, uid);
+    return `<div class="h-row"><span>${APP.members.find(m=>m.id===uid)?.name||uid}</span><span>฿${fmt(share)}</span></div>`;
+  }).join('');
+
+  const memberRows = g.members.map(uid => {
+    const m = APP.members.find(m=>m.id===uid); if (!m) return '';
+    const share = memberShare(exps, uid);
+    const paid  = exps.filter(e=>e.payer===uid).reduce((s,e)=>s+(e.net||e.amount||0),0);
+    return `<div class="ur">
       <div class="ur-l">
         <div class="av avs ${AVC[m.c??0]}">${ini(m.name)}</div>
-        <div><div style="font-size:12px;font-weight:700">${m.name}</div>
-        <div style="font-size:10px;color:var(--tx3)">จ่ายไป ฿${fmt(paid)}</div></div>
+        <div><div style="font-size:12px;font-weight:700">${m.name}</div><div style="font-size:10px;color:var(--tx3)">จ่ายไป ฿${fmt(paid)}</div></div>
       </div>
-      <div style="text-align:right">
-        <div class="ur-a">฿${fmt(share)}</div>
-        <div style="font-size:9px;color:var(--tx3)">ส่วนแบ่ง</div>
-      </div>
+      <div style="text-align:right"><div class="ur-a">฿${fmt(share)}</div><div style="font-size:9px;color:var(--tx3)">ส่วนแบ่ง</div></div>
     </div>`;
   }).join('');
 
-  // Settlement cards
-  const settleHTML=transfers.length===0
-    ?`<div style="text-align:center;padding:12px;color:var(--tx3);font-size:12px">✅ ไม่มียอดค้างจ่าย</div>`
-    :transfers.map(t=>`<div class="settle-card">
-      <div class="settle-row">
-        <div class="av avs ${AVC[S.d.members.find(m=>m.id===t.from)?.c??0]}">${ini(t.fromName)}</div>
-        <div class="settle-names">
-          <div class="settle-from">${t.fromName}</div>
-          <div class="settle-to">โอนให้ ${t.toName}</div>
+  const settleHTML = !transfers.length
+    ? `<div style="text-align:center;padding:12px;color:var(--tx3);font-size:12px">✅ ไม่มียอดค้างจ่ายเดือนนี้</div>`
+    : transfers.map(t=>`<div class="settle-card">
+        <div class="settle-row">
+          <div class="av avs ${AVC[APP.members.find(m=>m.id===t.from)?.c??0]}">${ini(t.fromName)}</div>
+          <div class="settle-names"><div class="settle-from">${t.fromName}</div><div class="settle-to">โอนให้ → ${t.toName}</div></div>
+          <div class="settle-amt">฿${fmt(t.amt)}</div>
         </div>
-        <div class="settle-amt">฿${fmt(t.amt)}</div>
-      </div>
-    </div>`).join('');
+      </div>`).join('');
 
-  return`
+  return `
   <div class="hero">
     <div style="display:flex;justify-content:space-between;align-items:flex-start">
       <div>
-        <div class="h-lbl">ยอดของฉัน · ${S.u.name}</div>
-        <div class="h-amt">฿${fmt(myShare)}</div>
+        <div class="h-lbl">ยอดของฉัน · ${APP.user.name}</div>
+        <div class="h-amt">฿${fmt(my)}</div>
         <div class="h-sub">${g.icon} ${g.name} · ${thM()}</div>
-        ${grpSelect}
+        ${grpSel}
       </div>
       <div style="text-align:right;position:relative;z-index:1">
         <div style="font-size:10px;opacity:.8">รวมทั้งหมด</div>
@@ -711,118 +735,82 @@ function rDash(){
     </div>
     <div class="h-div"></div>
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <div style="font-size:10px;opacity:.8">สมาชิกบันทึกแล้ว ${activeMembers.size}/${memIds.length} คน</div>
+      <div style="font-size:10px;opacity:.8">สมาชิกบันทึกแล้ว ${activePayerSet.size}/${g.members.length} คน</div>
       <div style="font-size:11px;font-weight:700">${progress}%</div>
     </div>
     <div style="height:5px;background:rgba(255,255,255,.2);border-radius:3px;margin-top:5px;overflow:hidden">
-      <div style="height:100%;background:#fff;border-radius:3px;width:${progress}%;transition:width .4s ease"></div>
+      <div style="height:100%;background:#fff;border-radius:3px;width:${progress}%;transition:width .4s"></div>
     </div>
   </div>
-
-  <div class="card">
-    <div class="ch"><div class="ct">💸 ใครต้องโอนให้ใคร</div><span class="badge bm">${thM()}</span></div>
-    <div class="cb">${settleHTML}</div>
-  </div>
-
-  <div class="card">
-    <div class="ch"><div class="ct">ส่วนแบ่งแต่ละคน</div></div>
-    <div class="cb">${memRows||'<div class="empty"><div class="empty-i">📭</div><div class="empty-t">ยังไม่มีรายการ</div></div>'}</div>
-  </div>
-
-  <div class="card">
-    <div class="ch"><div class="ct">📈 ค่าใช้จ่ายรายเดือน</div></div>
-    <div class="cb">
-      <div class="chart-wrap"><canvas id="chart-monthly"></canvas></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="ch"><div class="ct">🥧 สัดส่วนเดือนนี้</div></div>
-    <div class="cb">
-      <div class="chart-wrap" style="height:180px"><canvas id="chart-pie"></canvas></div>
-    </div>
-  </div>
-
+  <div class="card"><div class="ch"><div class="ct">💸 ใครต้องโอนให้ใคร</div><span class="badge bm">${thM()}</span></div><div class="cb">${settleHTML}</div></div>
+  <div class="card"><div class="ch"><div class="ct">ส่วนแบ่งแต่ละคน</div></div><div class="cb">${memberRows||'<div class="empty"><div class="empty-i">📭</div><div class="empty-t">ยังไม่มีรายการ</div></div>'}</div></div>
+  <div class="card"><div class="ch"><div class="ct">📈 ค่าใช้จ่าย 6 เดือนล่าสุด</div></div><div class="cb"><div class="chart-wrap"><canvas id="chart-monthly"></canvas></div></div></div>
+  <div class="card"><div class="ch"><div class="ct">🥧 สัดส่วนเดือนนี้</div></div><div class="cb"><div class="chart-wrap" style="height:170px"><canvas id="chart-pie"></canvas></div></div></div>
   <div style="height:10px"></div>`;
 }
 
-function initDashCharts(){
-  const g=S.d.groups.find(g=>g.id===S.curGrpId);if(!g)return;
+function initDashCharts() {
+  const g = APP.groups.find(g=>g.id===APP.curGrpId); if (!g) return;
+  const months = [], n = new Date();
+  for (let i=5;i>=0;i--) { const d=new Date(n.getFullYear(),n.getMonth()-i,1); months.push(mkK(d.getFullYear(),d.getMonth()+1)); }
+  const labels  = months.map(mk => thMK(mk).replace(' 25','''));
+  const totals  = months.map(mk => grpExps(g.id,mk).reduce((s,e)=>s+(e.net||e.amount||0),0));
+  const myData  = months.map(mk => memberShare(grpExps(g.id,mk), APP.user.id));
 
-  // Monthly bar chart - last 6 months
-  const months=[];const now=new Date();
-  for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);months.push(mkK(d.getFullYear(),d.getMonth()+1))}
-  const labels=months.map(mk=>thMK(mk).replace(' 25','\''));
-  const totals=months.map(mk=>grpExps(g.id,mk).reduce((s,e)=>s+(e.net||e.amount||0),0));
-  const myData=months.map(mk=>memberShare(grpExps(g.id,mk),S.u.id));
+  const cM = $('chart-monthly');
+  if (cM) APP.charts.monthly = new Chart(cM, {type:'bar',data:{labels,datasets:[
+    {label:'รวมกลุ่ม',data:totals,backgroundColor:'rgba(44,198,198,.25)',borderColor:'#2CC6C6',borderWidth:1.5,borderRadius:5},
+    {label:'ของฉัน', data:myData, backgroundColor:'rgba(44,198,198,.7)', borderColor:'#18A0A0',borderWidth:1.5,borderRadius:5}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:10}}},scales:{y:{ticks:{callback:v=>'฿'+v.toLocaleString('th-TH'),font:{size:9}},grid:{color:'#E2F4F4'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
 
-  const cMonthly=$('chart-monthly');
-  if(cMonthly){
-    S.charts.monthly=new Chart(cMonthly,{type:'bar',data:{labels,datasets:[
-      {label:'รวมทั้งกลุ่ม',data:totals,backgroundColor:'rgba(44,198,198,.25)',borderColor:'#2CC6C6',borderWidth:1.5,borderRadius:5},
-      {label:'ของฉัน',data:myData,backgroundColor:'rgba(44,198,198,.7)',borderColor:'#18A0A0',borderWidth:1.5,borderRadius:5}
-    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:10}}},scales:{y:{ticks:{callback:v=>'฿'+v.toLocaleString('th-TH'),font:{size:9}},grid:{color:'#E2F4F4'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
-  }
-
-  // Pie chart - this month by category
-  const mk=mkKNow(), exps=grpExps(g.id,mk);
-  const cPie=$('chart-pie');
-  if(cPie&&exps.length){
-    S.charts.pie=new Chart(cPie,{type:'doughnut',data:{
-      labels:exps.map(e=>e.name),
-      datasets:[{data:exps.map(e=>e.net||e.amount||0),backgroundColor:['#2CC6C6','#67E8F9','#A5F3FC','#CFFAFE','#5DD8D8','#0EA5E9','#38BDF8'],borderWidth:2,borderColor:'#fff'}]
-    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:6}}}}});
-  }
+  const mk = mkKNow(), exps = grpExps(g.id, mk);
+  const cP = $('chart-pie');
+  if (cP && exps.length) APP.charts.pie = new Chart(cP, {type:'doughnut',data:{
+    labels:exps.map(e=>e.name),
+    datasets:[{data:exps.map(e=>e.net||e.amount||0),backgroundColor:['#2CC6C6','#67E8F9','#A5F3FC','#CFFAFE','#5DD8D8','#0EA5E9','#38BDF8'],borderWidth:2,borderColor:'#fff'}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:6}}}}});
 }
 
-// ════════════════════════════════════
+// ══════════════════════════════════════════════════
 // EXPENSES PAGE
-// ════════════════════════════════════
-function rExpenses(){
-  const g=S.d.groups.find(g=>g.id===S.curGrpId);
-  if(!g) return `<div class="empty"><div class="empty-i">👥</div><div class="empty-t">เลือกกลุ่มก่อน</div></div><button class="btn btn-p mt10" onclick="go('groups')">ไปที่กลุ่ม</button>`;
-  const mk=mkKNow(), exps=grpExps(g.id,mk);
-  const tot=exps.reduce((s,e)=>s+(e.net||e.amount||0),0);
+// ══════════════════════════════════════════════════
+function rExpenses() {
+  const g = APP.groups.find(g=>g.id===APP.curGrpId);
+  if (!g) return `<div class="empty"><div class="empty-i">👥</div><div class="empty-t">เลือกกลุ่มก่อน</div></div><button class="btn btn-p mt10" onclick="go('groups')">ไปที่กลุ่ม</button>`;
 
-  const grpSelect=S.d.groups.length>1?`<select onchange="S.curGrpId=this.value;go('expenses')" style="flex:1;padding:9px 11px;border-radius:10px;border:1px solid var(--bd);font-family:var(--f);font-size:13px;background:var(--sf)">${S.d.groups.map(grp=>`<option value="${grp.id}" ${grp.id===S.curGrpId?'selected':''}>${grp.icon} ${grp.name}</option>`).join('')}</select>`:
-    `<div style="flex:1;padding:9px;font-size:13px;font-weight:700">${g.icon} ${g.name}</div>`;
+  const mk = mkKNow(), exps = grpExps(g.id, mk);
+  const tot = exps.reduce((s,e)=>s+(e.net||e.amount||0),0);
 
-  const rows=exps.map(exp=>{
-    const payer=S.d.members.find(m=>m.id===exp.payer);
-    const mysp=(exp.splits||[]).find(s=>s.uid===S.u.id);
-    const myAmt=mysp?((exp.net||exp.amount||0)*(mysp.pct/100)):0;
-    return`<div class="grp-card">
+  const grpSel = APP.groups.length>1 ? `<select onchange="APP.curGrpId=this.value;go('expenses')" style="flex:1;padding:9px 11px;border-radius:10px;border:1px solid var(--bd);font-family:var(--f);font-size:13px;background:var(--sf)">${APP.groups.map(gr=>`<option value="${gr.id}" ${gr.id===APP.curGrpId?'selected':''}>${gr.icon} ${gr.name}</option>`).join('')}</select>` : `<div style="flex:1;font-size:13px;font-weight:700">${g.icon} ${g.name}</div>`;
+
+  const rows = exps.map(exp => {
+    const payer = APP.members.find(m=>m.id===exp.payer);
+    const mysp  = (exp.splits||[]).find(s=>s.uid===APP.user.id);
+    const myAmt = mysp ? (exp.net||exp.amount||0)*(mysp.pct/100) : 0;
+    return `<div class="grp-card">
       <div class="grp-top">
         <div class="grp-info">
-          <span class="grp-icon">${exp.icon||'💰'}</span>
-          <div>
-            <div class="grp-name">${exp.name}</div>
-            <div class="grp-meta">จ่ายโดย ${payer?.name||'?'} ${exp.hasEV?'· ⚡EV':''}</div>
-          </div>
+          <span style="font-size:22px">${exp.icon||'💰'}</span>
+          <div><div style="font-size:13px;font-weight:700">${exp.name}</div><div style="font-size:10px;color:var(--tx3)">จ่ายโดย ${payer?.name||'?'}${exp.hasEV?' · ⚡EV':''}</div></div>
         </div>
-        <div style="text-align:right">
-          <div style="font-size:18px;font-weight:800;color:var(--mint)">฿${fmt(exp.net||exp.amount)}</div>
-          ${myAmt?`<div style="font-size:10px;color:var(--tx3)">ฉัน ฿${fmt(myAmt)}</div>`:''}
-        </div>
+        <div style="text-align:right"><div style="font-size:18px;font-weight:800;color:var(--mint)">฿${fmt(exp.net||exp.amount)}</div>${myAmt?`<div style="font-size:10px;color:var(--tx3)">ฉัน ฿${fmt(myAmt)}</div>`:''}</div>
       </div>
       <div style="display:flex;flex-wrap:wrap;margin-bottom:8px">
-        ${(exp.splits||[]).map(sp=>{const m=S.d.members.find(m=>m.id===sp.uid);return m?`<div class="member-chip"><div class="av avs ${AVC[m.c??0]}" style="width:18px;height:18px;border-radius:6px;font-size:8px">${ini(m.name)}</div>${m.name} ${sp.pct}%</div>`:''}).join('')}
+        ${(exp.splits||[]).map(sp=>{const m=APP.members.find(m=>m.id===sp.uid);return m?`<div class="member-chip"><div class="av avs ${AVC[m.c??0]}" style="width:18px;height:18px;border-radius:6px;font-size:8px">${ini(m.name)}</div>${m.name} ${sp.pct}%</div>`:''}).join('')}
       </div>
       ${exp.note?`<div style="font-size:11px;color:var(--tx2);margin-bottom:7px">📝 ${exp.note}</div>`:''}
       ${exp.hasEV?`<div style="font-size:10px;color:var(--mdk);margin-bottom:7px">⚡ EV หัก ${exp.evU}×${exp.evR}฿ = ฿${fmt((exp.evU||0)*(exp.evR||0))}</div>`:''}
       <div style="display:flex;gap:6px">
         <button class="btn btn-g btn-xs" style="flex:1" onclick="openEditExp('${exp.id}')">✏️ แก้ไข</button>
-        <button class="btn btn-r btn-xs" onclick="confirmDel('expense','${exp.id}','${exp.name}')">🗑️</button>
+        <button class="btn btn-r btn-xs" onclick="confirmDel('expense','${exp.id}','${exp.name.replace(/'/g,"\'")}')">🗑️</button>
       </div>
     </div>`;
   }).join('');
 
-  return`
-  <div style="display:flex;gap:7px;margin-bottom:10px;align-items:center">
-    ${grpSelect}
-  </div>
+  return `
+  <div style="display:flex;gap:7px;margin-bottom:10px;align-items:center">${grpSel}</div>
   <div style="background:var(--mint);border-radius:var(--rl);padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 14px rgba(44,198,198,.3)">
-    <div><div style="font-size:10px;color:rgba(255,255,255,.85)">รวม ${exps.length} รายการ · ${thM()}</div><div style="font-size:20px;font-weight:800;color:#fff;margin-top:1px">฿${fmt(tot)}</div></div>
+    <div><div style="font-size:10px;color:rgba(255,255,255,.85)">${exps.length} รายการ · ${thM()}</div><div style="font-size:20px;font-weight:800;color:#fff;margin-top:1px">฿${fmt(tot)}</div></div>
     <button onclick="openAddExp()" style="background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.4);border-radius:11px;padding:8px 13px;color:#fff;font-family:var(--f);font-size:12px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
   </div>
   ${rows||'<div class="empty"><div class="empty-i">📭</div><div class="empty-t">ยังไม่มีรายการเดือนนี้</div><div class="empty-s">กด + เพิ่มค่าใช้จ่าย</div></div>'}
@@ -830,89 +818,110 @@ function rExpenses(){
   <button class="fab" onclick="openAddExp()">＋</button>`;
 }
 
-// ════════════════════════════════════
+// ══════════════════════════════════════════════════
 // GROUPS PAGE
-// ════════════════════════════════════
-function rGroups(){
-  const rows=S.d.groups.map(g=>{
-    const memChips=(g.members||[]).map(uid=>{const m=S.d.members.find(m=>m.id===uid);return m?`<div class="member-chip"><div class="av avs ${AVC[m.c??0]}" style="width:18px;height:18px;border-radius:6px;font-size:8px">${ini(m.name)}</div>${m.name}<div style="font-size:9px;color:var(--tx3);margin-left:2px">${m.email}</div></div>`:''}).join('');
-    return`<div class="grp-card">
+// ══════════════════════════════════════════════════
+function rGroups() {
+  const rows = APP.groups.map(g => {
+    const chips = (g.members||[]).map(uid => {
+      const m = APP.members.find(m=>m.id===uid);
+      return m ? `<div class="member-chip"><div class="av avs ${AVC[m.c??0]}" style="width:18px;height:18px;border-radius:6px;font-size:8px">${ini(m.name)}</div><div><div style="font-size:11px;font-weight:600">${m.name}</div><div style="font-size:9px;color:var(--tx3)">${m.email}</div></div></div>` : '';
+    }).join('');
+    return `<div class="grp-card">
       <div class="grp-top">
-        <div class="grp-info"><span class="grp-icon">${g.icon}</span><div><div class="grp-name">${g.name}</div><div class="grp-meta">${g.members?.length||0} สมาชิก</div></div></div>
-        <div class="grp-actions">
+        <div class="grp-info"><span style="font-size:22px">${g.icon}</span><div><div style="font-size:13px;font-weight:700">${g.name}</div><div style="font-size:10px;color:var(--tx3)">${g.members?.length||0} สมาชิก</div></div></div>
+        <div style="display:flex;gap:5px">
           <button class="btn btn-g btn-xs" onclick="openEditGrp('${g.id}')">✏️</button>
-          <button class="btn btn-r btn-xs" onclick="confirmDel('group','${g.id}','${g.name}')">🗑️</button>
+          <button class="btn btn-r btn-xs" onclick="confirmDel('group','${g.id}','${g.name.replace(/'/g,"\'")}')">🗑️</button>
         </div>
       </div>
-      <div>${memChips}</div>
+      <div>${chips}</div>
     </div>`;
   }).join('');
 
-  return`
+  return `
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-    <div style="font-size:12px;color:var(--tx3);font-weight:700">กลุ่มทั้งหมด ${S.d.groups.length} กลุ่ม</div>
+    <div style="font-size:12px;color:var(--tx3);font-weight:700">กลุ่มทั้งหมด ${APP.groups.length} กลุ่ม</div>
     <button class="btn btn-p btn-sm" onclick="openAddGrp()">+ สร้างกลุ่ม</button>
   </div>
   ${rows||'<div class="empty"><div class="empty-i">👥</div><div class="empty-t">ยังไม่มีกลุ่ม</div><div class="empty-s">กด + สร้างกลุ่มแรก</div></div>'}
   <div style="height:20px"></div>`;
 }
 
-// ════════════════════════════════════
+// ══════════════════════════════════════════════════
 // REPORT PAGE
-// ════════════════════════════════════
-function rReport(){
-  const allMonths=[...new Set(S.d.expenses.filter(e=>e.gid===S.curGrpId).map(e=>e.monthKey))].sort().reverse();
-  const years=[...new Set(allMonths.map(mk=>mk.split('-')[0]))].sort().reverse();
-  if(!years.length) years.push(String(new Date().getFullYear()));
-  if(!S.reportYear) S.reportYear=parseInt(years[0]);
+// ══════════════════════════════════════════════════
+function rReport() {
+  const gExps = APP.expenses.filter(e=>e.gid===APP.curGrpId);
+  const allMonths = [...new Set(gExps.map(e=>e.monthKey))].sort().reverse();
+  const years = [...new Set(allMonths.map(mk=>mk.split('-')[0]))].sort().reverse();
+  if (!years.length) years.push(String(new Date().getFullYear()));
+  if (!APP.reportYear) APP.reportYear = parseInt(years[0]);
 
-  const tabHTML=`<div class="tab-bar">
-    <button class="tb ${S.reportTab==='monthly'?'on':''}" onclick="S.reportTab='monthly';go('report')">📅 รายเดือน</button>
-    <button class="tb ${S.reportTab==='yearly'?'on':''}" onclick="S.reportTab='yearly';go('report')">📆 รายปี</button>
+  const tabHTML = `<div class="tab-bar">
+    <button class="tb ${APP.reportTab==='monthly'?'on':''}" onclick="APP.reportTab='monthly';go('report')">📅 รายเดือน</button>
+    <button class="tb ${APP.reportTab==='yearly'?'on':''}"  onclick="APP.reportTab='yearly';go('report')">📆 รายปี</button>
   </div>`;
-  const yearSel=`<select class="fi" style="margin-bottom:10px;padding:9px 11px;font-size:12px" onchange="S.reportYear=parseInt(this.value);go('report')">${years.map(y=>`<option value="${y}" ${y==S.reportYear?'selected':''}>${parseInt(y)+543}</option>`).join('')}</select>`;
+  const yearSel = `<select class="fi" style="margin-bottom:10px;padding:9px 11px;font-size:12px" onchange="APP.reportYear=parseInt(this.value);go('report')">${years.map(y=>`<option value="${y}" ${y==APP.reportYear?'selected':''}>${parseInt(y)+543}</option>`).join('')}</select>`;
 
-  if(S.reportTab==='yearly') return tabHTML+yearSel+rReportYearly();
-  return tabHTML+yearSel+rReportMonthly(allMonths.filter(mk=>mk.startsWith(String(S.reportYear))));
+  if (APP.reportTab==='yearly') return tabHTML + yearSel + rReportYearly();
+  return tabHTML + yearSel + rReportMonthly(allMonths.filter(mk=>mk.startsWith(String(APP.reportYear))));
 }
 
-function rReportMonthly(months){
-  if(!months.length) return`<div class="empty"><div class="empty-i">📊</div><div class="empty-t">ไม่มีข้อมูลปีนี้</div></div>`;
-  return months.map(mk=>{
-    const exps=grpExps(S.curGrpId,mk);
-    const tot=exps.reduce((s,e)=>s+(e.net||e.amount||0),0);
-    const transfers=calcSettlement(exps);
-    const lbl=thMK(mk);
-    const memIds=(S.d.groups.find(g=>g.id===S.curGrpId)?.members)||[];
-    return`<div class="card" style="margin-bottom:10px"><div class="cb">
-      <div class="rp-hdr"><div class="rp-m">📅 ${lbl}</div><div class="rp-t">฿${fmt(tot)}</div></div>
-      <div class="sl">รายการค่าใช้จ่าย</div>
-      ${exps.map(e=>`<div class="er">
-        <div class="er-l"><span class="er-ic">${e.icon||'💰'}</span>
-          <div><div class="er-n">${e.name}</div>
-          <div class="er-sp">${(e.splits||[]).map(sp=>{const m=S.d.members.find(m=>m.id===sp.uid);return(m?.name||'?')+' '+sp.pct+'%'}).join(' · ')}</div>
-          ${e.hasEV?`<div class="er-sp">⚡ EV หัก ${e.evU}×${e.evR}฿</div>`:''}
-          </div>
-        </div>
-        <div style="text-align:right"><div class="er-a">฿${fmt(e.net||e.amount)}</div><div style="font-size:9px;color:var(--tx3)">จ่ายโดย ${S.d.members.find(m=>m.id===e.payer)?.name||'?'}</div></div>
-      </div>`).join('')}
-      <div class="div"></div>
-      <div class="sl">ส่วนแบ่งต่อคน</div>
-      ${memIds.map(uid=>{const m=S.d.members.find(m=>m.id===uid);if(!m)return'';const share=memberShare(exps,uid);return`<div class="ur"><div class="ur-l"><div class="av avs ${AVC[m.c??0]}">${ini(m.name)}</div><span style="font-size:12px;font-weight:600">${m.name}</span></div><div class="ur-a">฿${fmt(share)}</div></div>`}).join('')}
-      ${transfers.length?`<div class="div"></div><div class="sl">ใครโอนให้ใคร</div>${transfers.map(t=>`<div class="settle-card" style="margin-bottom:6px"><div class="settle-row"><div class="settle-names"><div class="settle-from">${t.fromName}</div><div class="settle-to">→ ${t.toName}</div></div><div class="settle-amt">฿${fmt(t.amt)}</div></div></div>`).join('')}`:''}
-      <button onclick="exportMonthPDF('${mk}','${lbl}')" style="display:flex;align-items:center;justify-content:center;gap:7px;background:var(--mint);color:#fff;border:none;border-radius:var(--r);padding:11px;width:100%;margin-top:10px;font-family:var(--f);font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(44,198,198,.3)">⬇️ Download PDF — ${lbl}</button>
-    </div></div>`;
-  }).join('')+'<div style="height:10px"></div>';
+function rReportMonthly(months) {
+  if (!months.length) return `<div class="empty"><div class="empty-i">📊</div><div class="empty-t">ไม่มีข้อมูลปีนี้</div></div>`;
+  return months.map(mk => renderMonthBlock(mk)).join('') + '<div style="height:10px"></div>';
 }
 
-function rReportYearly(){
-  const yr=String(S.reportYear);
-  const exps=S.d.expenses.filter(e=>e.gid===S.curGrpId&&e.monthKey.startsWith(yr));
-  const tot=exps.reduce((s,e)=>s+(e.net||e.amount||0),0);
-  const byMonth={};exps.forEach(e=>{if(!byMonth[e.monthKey])byMonth[e.monthKey]=0;byMonth[e.monthKey]+=(e.net||e.amount||0)});
-  const transfers=calcSettlement(exps);
-  const memIds=(S.d.groups.find(g=>g.id===S.curGrpId)?.members)||[];
-  return`
+function renderMonthBlock(mk) {
+  const g = APP.groups.find(g=>g.id===APP.curGrpId);
+  const exps = grpExps(APP.curGrpId, mk);
+  const tot  = exps.reduce((s,e)=>s+(e.net||e.amount||0),0);
+  const transfers = calcSettlement(exps);
+  const lbl = thMK(mk);
+
+  const expRows = exps.map(e=>`<div class="er">
+    <div class="er-l"><span class="er-ic">${e.icon||'💰'}</span>
+      <div><div class="er-n">${e.name}</div>
+      <div class="er-sp">${(e.splits||[]).map(sp=>{const m=APP.members.find(m=>m.id===sp.uid);return(m?.name||'?')+' '+sp.pct+'%'}).join(' · ')}</div>
+      ${e.hasEV?`<div class="er-sp">⚡ EV หัก ${e.evU}×${e.evR}฿</div>`:''}
+      </div>
+    </div>
+    <div style="text-align:right"><div class="er-a">฿${fmt(e.net||e.amount)}</div><div style="font-size:9px;color:var(--tx3)">${APP.members.find(m=>m.id===e.payer)?.name||'?'}</div></div>
+  </div>`).join('');
+
+  const memRows = (g?.members||[]).map(uid=>{
+    const m = APP.members.find(m=>m.id===uid); if (!m) return '';
+    return `<div class="ur"><div class="ur-l"><div class="av avs ${AVC[m.c??0]}">${ini(m.name)}</div><span style="font-size:12px;font-weight:600">${m.name}</span></div><div class="ur-a">฿${fmt(memberShare(exps,uid))}</div></div>`;
+  }).join('');
+
+  const tRows = transfers.map(t=>`<div class="settle-card" style="margin-bottom:6px"><div class="settle-row"><div class="settle-names"><div class="settle-from">${t.fromName}</div><div class="settle-to">→ ${t.toName}</div></div><div class="settle-amt">฿${fmt(t.amt)}</div></div></div>`).join('');
+
+  return `<div class="card" style="margin-bottom:10px"><div class="cb">
+    <div class="rp-hdr"><div class="rp-m">📅 ${lbl}</div><div class="rp-t">฿${fmt(tot)}</div></div>
+    <div class="sl">รายการ</div>${expRows}
+    <div class="div"></div>
+    <div class="sl">ส่วนแบ่งต่อคน</div>${memRows}
+    ${transfers.length?`<div class="div"></div><div class="sl">ใครโอนให้ใคร</div>${tRows}`:''}
+    <button onclick="exportMonthPDF('${mk}','${lbl}')" style="display:flex;align-items:center;justify-content:center;gap:7px;background:var(--mint);color:#fff;border:none;border-radius:var(--r);padding:11px;width:100%;margin-top:10px;font-family:var(--f);font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(44,198,198,.3)">⬇️ Download PDF — ${lbl}</button>
+  </div></div>`;
+}
+
+function rReportYearly() {
+  const yr = String(APP.reportYear);
+  const exps = APP.expenses.filter(e=>e.gid===APP.curGrpId&&e.monthKey.startsWith(yr));
+  const tot  = exps.reduce((s,e)=>s+(e.net||e.amount||0),0);
+  const g    = APP.groups.find(g=>g.id===APP.curGrpId);
+  const byMonth = {};
+  exps.forEach(e=>{if(!byMonth[e.monthKey])byMonth[e.monthKey]=0; byMonth[e.monthKey]+=(e.net||e.amount||0);});
+  const transfers = calcSettlement(exps);
+
+  const memRows = (g?.members||[]).map(uid=>{
+    const m=APP.members.find(m=>m.id===uid); if(!m) return '';
+    return `<div class="ur"><div class="ur-l"><div class="av avs ${AVC[m.c??0]}">${ini(m.name)}</div><span style="font-size:12px;font-weight:600">${m.name}</span></div><div class="ur-a">฿${fmt(memberShare(exps,uid))}</div></div>`;
+  }).join('');
+
+  return `
   <div style="background:linear-gradient(135deg,#18A0A0,var(--mint));border-radius:var(--rl);padding:13px 15px;margin-bottom:10px;color:#fff;box-shadow:0 4px 14px rgba(44,198,198,.3)">
     <div style="font-size:11px;opacity:.8">สรุปปี ${parseInt(yr)+543}</div>
     <div style="font-size:26px;font-weight:800;margin-top:2px">฿${fmt(tot)}</div>
@@ -922,281 +931,331 @@ function rReportYearly(){
   <div class="card"><div class="ch"><div class="ct">ยอดแต่ละเดือน</div></div><div class="cb">
     ${Object.entries(byMonth).sort(([a],[b])=>a.localeCompare(b)).map(([mk,v])=>`<div class="er"><div class="er-l"><div class="er-n">${thMK(mk)}</div></div><div class="er-a">฿${fmt(v)}</div></div>`).join('')}
   </div></div>
-  <div class="card"><div class="ch"><div class="ct">ส่วนแบ่งรวมต่อคน (ทั้งปี)</div></div><div class="cb">
-    ${memIds.map(uid=>{const m=S.d.members.find(m=>m.id===uid);if(!m)return'';return`<div class="ur"><div class="ur-l"><div class="av avs ${AVC[m.c??0]}">${ini(m.name)}</div><span style="font-size:12px;font-weight:600">${m.name}</span></div><div class="ur-a">฿${fmt(memberShare(exps,uid))}</div></div>`}).join('')}
-  </div></div>
-  ${transfers.length?`<div class="card"><div class="ch"><div class="ct">💸 ยอดค้างชำระ (ทั้งปี)</div></div><div class="cb">${transfers.map(t=>`<div class="settle-card"><div class="settle-row"><div class="settle-names"><div class="settle-from">${t.fromName}</div><div class="settle-to">→ ${t.toName}</div></div><div class="settle-amt">฿${fmt(t.amt)}</div></div></div>`).join('')}</div></div>`:''}
+  <div class="card"><div class="ch"><div class="ct">ส่วนแบ่งต่อคน (ทั้งปี)</div></div><div class="cb">${memRows}</div></div>
+  ${transfers.length?`<div class="card"><div class="ch"><div class="ct">💸 ยอดค้างชำระ</div></div><div class="cb">${transfers.map(t=>`<div class="settle-card"><div class="settle-row"><div class="settle-names"><div class="settle-from">${t.fromName}</div><div class="settle-to">→ ${t.toName}</div></div><div class="settle-amt">฿${fmt(t.amt)}</div></div></div>`).join('')}</div></div>`:''}
   <button onclick="exportYearPDF('${yr}')" style="display:flex;align-items:center;justify-content:center;gap:7px;background:var(--mint);color:#fff;border:none;border-radius:var(--r);padding:12px;width:100%;margin-bottom:12px;font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(44,198,198,.3)">⬇️ Download PDF รายปี ${parseInt(yr)+543}</button>`;
 }
 
-function initReportCharts(){
-  if(S.reportTab!=='yearly')return;
-  const yr=String(S.reportYear);
-  const months=[];const now=new Date();
-  for(let m=1;m<=12;m++) months.push(`${yr}-${String(m).padStart(2,'0')}`);
-  const labels=months.map(mk=>TH_MONTHS[parseInt(mk.split('-')[1])-1].substring(0,3));
-  const data=months.map(mk=>grpExps(S.curGrpId,mk).reduce((s,e)=>s+(e.net||e.amount||0),0));
-  const el=$('chart-year');
-  if(el) S.charts.year=new Chart(el,{type:'bar',data:{labels,datasets:[{label:`ปี ${parseInt(yr)+543}`,data,backgroundColor:'rgba(44,198,198,.35)',borderColor:'#2CC6C6',borderWidth:1.5,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'฿'+v.toLocaleString('th-TH'),font:{size:9}},grid:{color:'#E2F4F4'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
+function initReportCharts() {
+  if (APP.reportTab !== 'yearly') return;
+  const yr = String(APP.reportYear);
+  const months = [], labels = [];
+  for (let m=1;m<=12;m++) { months.push(`${yr}-${String(m).padStart(2,'0')}`); labels.push(MONTHS[m-1].substring(0,3)); }
+  const data = months.map(mk => grpExps(APP.curGrpId,mk).reduce((s,e)=>s+(e.net||e.amount||0),0));
+  const el = $('chart-year');
+  if (el) APP.charts.year = new Chart(el,{type:'bar',data:{labels,datasets:[{label:`ปี ${parseInt(yr)+543}`,data,backgroundColor:'rgba(44,198,198,.35)',borderColor:'#2CC6C6',borderWidth:1.5,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'฿'+v.toLocaleString('th-TH'),font:{size:9}},grid:{color:'#E2F4F4'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
 }
 
-// ════════════════════════════════════
+// ══════════════════════════════════════════════════
 // GROUP MODAL
-// ════════════════════════════════════
-function openAddGrp(){S.editGrpId=null;S.selIcon='🏠';$('mg-title').textContent='สร้างกลุ่มใหม่';$('mg-name').value='';renderGrpIconGrid();renderGrpMembers(null);showMo('mo-grp')}
-function openEditGrp(id){const g=S.d.groups.find(g=>g.id===id);if(!g)return;S.editGrpId=id;S.selIcon=g.icon||'🏠';$('mg-title').textContent='แก้ไข '+g.name;$('mg-name').value=g.name;renderGrpIconGrid();renderGrpMembers(g);showMo('mo-grp')}
-function renderGrpIconGrid(){$('grp-icon-grid').innerHTML=ICONS.map(ic=>`<div class="ico-opt ${ic===S.selIcon?'sel':''}" onclick="S.selIcon='${ic}';renderGrpIconGrid()">${ic}</div>`).join('')}
-function renderGrpMembers(g){
-  $('mg-members').innerHTML=S.d.members.map((m,i)=>{
-    const checked=g?g.members?.includes(m.id):true;
-    return`<div style="display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--bd)">
-      <input type="checkbox" id="gm-${m.id}" ${checked?'checked':''} style="width:16px;height:16px;accent-color:var(--mint)">
+// ══════════════════════════════════════════════════
+function openAddGrp() {
+  APP.editGrpId=null; APP.selGrpIcon='🏠';
+  $('mg-title').textContent='สร้างกลุ่มใหม่'; $('mg-name').value='';
+  renderGrpIcons(); renderGrpMembers(null); showMo('mo-grp');
+}
+function openEditGrp(id) {
+  const g=APP.groups.find(g=>g.id===id); if(!g) return;
+  APP.editGrpId=id; APP.selGrpIcon=g.icon||'🏠';
+  $('mg-title').textContent='แก้ไข '+g.name; $('mg-name').value=g.name;
+  renderGrpIcons(); renderGrpMembers(g); showMo('mo-grp');
+}
+function renderGrpIcons() {
+  $('grp-icon-grid').innerHTML=ICONS.map(ic=>`<div class="ico-opt ${ic===APP.selGrpIcon?'sel':''}" onclick="APP.selGrpIcon='${ic}';renderGrpIcons()">${ic}</div>`).join('');
+}
+function renderGrpMembers(g) {
+  $('mg-members').innerHTML = APP.members.map((m,i)=>`
+    <div style="display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--bd)">
+      <input type="checkbox" id="gm-${m.id}" ${!g||g.members?.includes(m.id)?'checked':''} style="width:16px;height:16px;accent-color:var(--mint)">
       <div class="av avs ${AVC[m.c??i%4]}">${ini(m.name)}</div>
       <div style="flex:1"><div style="font-size:12px;font-weight:700">${m.name}</div><div style="font-size:10px;color:var(--tx3)">${m.email}</div></div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
-async function saveGroup(){
-  const name=$('mg-name').value.trim();
-  if(!name){toast('❌ กรุณากรอกชื่อกลุ่ม');return}
-  const members=S.d.members.filter(m=>$('gm-'+m.id)?.checked).map(m=>m.id);
-  if(!members.length){toast('❌ เลือกสมาชิกอย่างน้อย 1 คน');return}
-  const group={id:S.editGrpId||uid('g'),name,icon:S.selIcon,members,createdAt:nowISO()};
-  const res=await api('saveGroup',{group});
-  if(res.ok){const i=S.d.groups.findIndex(g=>g.id===group.id);if(i>=0)S.d.groups[i]=group;else S.d.groups.push(group);if(!S.curGrpId)S.curGrpId=group.id;closeMo('mo-grp');toast('✅ บันทึกกลุ่มสำเร็จ');go('groups')}
-  else toast('❌ '+res.error);
+function saveGroup() {
+  const name = $('mg-name').value.trim();
+  if (!name) { toast('❌ กรุณากรอกชื่อกลุ่ม'); return; }
+  const members = APP.members.filter(m=>$('gm-'+m.id)?.checked).map(m=>m.id);
+  if (!members.length) { toast('❌ เลือกสมาชิกอย่างน้อย 1 คน'); return; }
+
+  const group = { id:APP.editGrpId||genId('g'), name, icon:APP.selGrpIcon, members, createdAt:now() };
+
+  // Write directly to DB
+  const db = dbRead();
+  const i = db.groups.findIndex(g=>g.id===group.id);
+  if (i>=0) db.groups[i]=group; else db.groups.push(group);
+  dbWrite(db);
+
+  if (!APP.curGrpId) APP.curGrpId = group.id;
+  closeMo('mo-grp'); toast('✅ บันทึกกลุ่มสำเร็จ'); go('groups');
 }
 
-// ════════════════════════════════════
+// ══════════════════════════════════════════════════
 // EXPENSE MODAL
-// ════════════════════════════════════
-function openAddExp(){
-  const g=S.d.groups.find(g=>g.id===S.curGrpId);if(!g){toast('❌ เลือกกลุ่มก่อน');go('groups');return}
-  S.editExpId=null;S.selExpIcon='💰';
+// ══════════════════════════════════════════════════
+function openAddExp() {
+  const g = APP.groups.find(g=>g.id===APP.curGrpId);
+  if (!g) { toast('❌ เลือกกลุ่มก่อน'); go('groups'); return; }
+  APP.editExpId=null; APP.selExpIcon='💰';
   $('me-title').textContent='เพิ่มค่าใช้จ่าย';
-  $('me-name').value='';$('me-amt').value='';$('me-note').value='';$('me-evu').value='';$('me-evr').value='4.00';
-  $('me-hasev').value='0';$('ev-sec').style.display='none';$('me-net-box').style.display='none';
-  renderExpIconGrid();
-  renderPayerSelect(S.u.id);
-  renderSplitRows(g,null);
+  $('me-name').value=''; $('me-amt').value=''; $('me-note').value='';
+  $('me-evu').value=''; $('me-evr').value='4.00';
+  $('me-hasev').value='0'; $('ev-sec').style.display='none'; $('me-net-box').style.display='none';
+  renderExpIcons(); renderPayerSel(APP.user.id); renderSplits(g,null);
   showMo('mo-exp');
 }
-function openEditExp(id){
-  const exp=S.d.expenses.find(e=>e.id===id);if(!exp)return;
-  const g=S.d.groups.find(g=>g.id===exp.gid);if(!g)return;
-  S.editExpId=id;S.selExpIcon=exp.icon||'💰';
+function openEditExp(id) {
+  const exp = APP.expenses.find(e=>e.id===id); if (!exp) return;
+  const g   = APP.groups.find(g=>g.id===exp.gid); if (!g) return;
+  APP.editExpId=id; APP.selExpIcon=exp.icon||'💰';
   $('me-title').textContent='แก้ไขรายการ';
-  $('me-name').value=exp.name||'';$('me-amt').value=exp.amount||'';$('me-note').value=exp.note||'';
-  $('me-evu').value=exp.evU||'';$('me-evr').value=exp.evR||4;
-  $('me-hasev').value=exp.hasEV?'1':'0';
-  $('ev-sec').style.display=exp.hasEV?'':'none';
-  renderExpIconGrid();
-  renderPayerSelect(exp.payer);
-  renderEVOwnerSelect(exp.evOwner,g);
-  renderSplitRows(g,exp.splits);
-  calcNet_();
+  $('me-name').value=exp.name||''; $('me-amt').value=exp.amount||''; $('me-note').value=exp.note||'';
+  $('me-evu').value=exp.evU||''; $('me-evr').value=exp.evR||4;
+  $('me-hasev').value=exp.hasEV?'1':'0'; $('ev-sec').style.display=exp.hasEV?'':'none';
+  renderExpIcons(); renderPayerSel(exp.payer); renderEVOwnerSel(exp.evOwner,g); renderSplits(g,exp.splits); calcNet();
   showMo('mo-exp');
 }
-function renderExpIconGrid(){$('exp-icon-grid').innerHTML=ICONS.map(ic=>`<div class="ico-opt ${ic===S.selExpIcon?'sel':''}" onclick="S.selExpIcon='${ic}';renderExpIconGrid()">${ic}</div>`).join('')}
-function renderPayerSelect(selId){
-  const g=S.d.groups.find(g=>g.id===S.curGrpId);if(!g)return;
-  $('me-payer').innerHTML=(g.members||[]).map(uid=>{const m=S.d.members.find(m=>m.id===uid);return m?`<option value="${m.id}" ${m.id===selId?'selected':''}>${ini(m.name)} ${m.name}</option>`:''}).join('');
+function renderExpIcons() {
+  $('exp-icon-grid').innerHTML=ICONS.map(ic=>`<div class="ico-opt ${ic===APP.selExpIcon?'sel':''}" onclick="APP.selExpIcon='${ic}';renderExpIcons()">${ic}</div>`).join('');
 }
-function renderEVOwnerSelect(selId,g){
-  const sel=$('me-evowner');if(!sel)return;
-  sel.innerHTML=(g.members||[]).map(uid=>{const m=S.d.members.find(m=>m.id===uid);return m?`<option value="${m.id}" ${m.id===selId?'selected':''}>${m.name} (EV ของเขา)</option>`:''}).join('');
+function renderPayerSel(selId) {
+  const g=APP.groups.find(g=>g.id===APP.curGrpId); if(!g) return;
+  $('me-payer').innerHTML=(g.members||[]).map(uid=>{const m=APP.members.find(m=>m.id===uid);return m?`<option value="${m.id}" ${m.id===selId?'selected':''}>${ini(m.name)} ${m.name}</option>`:''}).join('');
 }
-function renderSplitRows(g,existingSplits){
-  const eq=Math.floor(100/g.members.length), rem=100-(eq*g.members.length);
+function renderEVOwnerSel(selId,g) {
+  const sel=$('me-evowner'); if(!sel) return;
+  sel.innerHTML=(g.members||[]).map(uid=>{const m=APP.members.find(m=>m.id===uid);return m?`<option value="${m.id}" ${m.id===selId?'selected':''}>${m.name}</option>`:''}).join('');
+}
+function renderSplits(g, existing) {
+  const n=g.members.length, base=Math.floor(100/n), rem=100-(base*n);
   $('me-split-rows').innerHTML=(g.members||[]).map((uid,i)=>{
-    const m=S.d.members.find(m=>m.id===uid);if(!m)return'';
-    const ex=existingSplits?.find(s=>s.uid===uid);
-    const pct=ex?ex.pct:(eq+(i===0?rem:0));
-    return`<div class="split-row">
+    const m=APP.members.find(m=>m.id===uid); if(!m) return '';
+    const ex=existing?.find(s=>s.uid===uid);
+    const pct=ex?ex.pct:(base+(i===0?rem:0));
+    return `<div class="split-row">
       <div class="av avs ${AVC[m.c??0]}" style="width:26px;height:26px;border-radius:8px;font-size:10px">${ini(m.name)}</div>
-      <span class="split-lbl">${m.name}</span>
-      <input type="number" class="split-inp" id="sp-${m.id}" value="${pct}" min="0" max="100" step="1" oninput="updatePctTotal()">
-      <span class="split-pct">%</span>
+      <span style="font-size:12px;font-weight:500;flex:1">${m.name}</span>
+      <input type="number" class="split-inp" id="sp-${m.id}" value="${pct}" min="0" max="100" step="1" oninput="updPctTotal()">
+      <span style="font-size:11px;color:var(--tx3);width:10px">%</span>
     </div>`;
   }).join('');
-  updatePctTotal();
+  updPctTotal();
 }
-function updatePctTotal(){
-  const g=S.d.groups.find(g=>g.id===S.curGrpId);if(!g)return;
+function updPctTotal() {
+  const g=APP.groups.find(g=>g.id===APP.curGrpId); if(!g) return;
   const tot=(g.members||[]).reduce((s,uid)=>s+(parseInt($('sp-'+uid)?.value)||0),0);
-  const el=$('pct-total');if(!el)return;
-  el.textContent=tot+'%';el.style.color=tot===100?'var(--grn)':tot>100?'var(--red)':'var(--ora)';
+  const el=$('pct-total'); if(!el) return;
+  el.textContent=tot+'%';
+  el.style.color=tot===100?'var(--grn)':tot>100?'var(--red)':'var(--ora)';
 }
-function toggleEV(){
-  const hasEV=$('me-hasev').value==='1';
-  $('ev-sec').style.display=hasEV?'':'none';
-  if(!hasEV)$('me-net-box').style.display='none';
-  const g=S.d.groups.find(g=>g.id===S.curGrpId);
-  if(hasEV&&g) renderEVOwnerSelect(S.u.id,g);
-  calcNet_();
+function toggleEV() {
+  const has=$('me-hasev').value==='1';
+  $('ev-sec').style.display=has?'':'none';
+  if (!has) $('me-net-box').style.display='none';
+  const g=APP.groups.find(g=>g.id===APP.curGrpId);
+  if (has && g) renderEVOwnerSel(APP.user.id,g);
+  calcNet();
 }
-function calcNet_(){
-  if($('me-hasev').value!=='1'){$('me-net-box').style.display='none';return}
-  const amt=parseFloat($('me-amt')?.value)||0;
-  const ev=parseFloat($('me-evu')?.value)||0;
-  const rate=parseFloat($('me-evr')?.value)||4;
-  const net=Math.max(0,amt-(ev*rate));
-  $('me-net-v').textContent='฿'+fmt(net);
+function calcNet() {
+  if ($('me-hasev').value!=='1') { $('me-net-box').style.display='none'; return; }
+  const amt=parseFloat($('me-amt')?.value)||0, ev=parseFloat($('me-evu')?.value)||0, rate=parseFloat($('me-evr')?.value)||4;
+  $('me-net-v').textContent='฿'+fmt(Math.max(0,amt-(ev*rate)));
   $('me-net-box').style.display=amt>0?'':'none';
 }
-async function saveExpense(){
-  const name=$('me-name').value.trim();
-  const amount=parseFloat($('me-amt').value);
-  if(!name){toast('❌ กรุณากรอกชื่อรายการ');return}
-  if(!amount||amount<=0){toast('❌ กรุณากรอกยอดเงิน');return}
-  const g=S.d.groups.find(g=>g.id===S.curGrpId);if(!g){toast('❌ ไม่พบกลุ่ม');return}
+function saveExpense() {
+  const name=($('me-name')?.value||'').trim();
+  const amount=parseFloat($('me-amt')?.value);
+  if (!name)         { toast('❌ กรุณากรอกชื่อรายการ'); return; }
+  if (!amount||amount<=0) { toast('❌ กรุณากรอกยอดเงิน'); return; }
+
+  const g=APP.groups.find(g=>g.id===APP.curGrpId);
+  if (!g) { toast('❌ ไม่พบกลุ่ม'); return; }
+
   const hasEV=$('me-hasev').value==='1';
-  const evU=hasEV?(parseFloat($('me-evu').value)||0):0;
-  const evR=hasEV?(parseFloat($('me-evr').value)||4):0;
-  const evOwner=hasEV?$('me-evowner')?.value:null;
+  const evU=hasEV?(parseFloat($('me-evu')?.value)||0):0;
+  const evR=hasEV?(parseFloat($('me-evr')?.value)||4):0;
+  const evOwner=hasEV?($('me-evowner')?.value||null):null;
   const net=hasEV?Math.max(0,amount-(evU*evR)):amount;
   const splits=(g.members||[]).map(uid=>({uid,pct:parseInt($('sp-'+uid)?.value)||0}));
   const tot=splits.reduce((s,sp)=>s+sp.pct,0);
-  if(Math.abs(tot-100)>1){toast(`❌ % รวมต้องได้ 100% (ตอนนี้ ${tot}%)`);return}
-  const expense={id:S.editExpId||uid('e'),gid:S.curGrpId,monthKey:mkKNow(),name,icon:S.selExpIcon,payer:$('me-payer').value,amount,hasEV,evU,evR,evOwner,net,splits,note:$('me-note').value.trim(),at:nowISO()};
-  const res=await api('saveExpense',{expense});
-  if(res.ok){const i=S.d.expenses.findIndex(e=>e.id===expense.id);if(i>=0)S.d.expenses[i]=expense;else S.d.expenses.push(expense);closeMo('mo-exp');toast('✅ บันทึกสำเร็จ');go(S.tab)}
-  else toast('❌ '+res.error);
+  if (Math.abs(tot-100)>1) { toast(`❌ % รวมต้องได้ 100% (ตอนนี้ ${tot}%)`); return; }
+
+  const expense = {
+    id: APP.editExpId||genId('e'),
+    gid: APP.curGrpId, monthKey: mkKNow(),
+    name, icon: APP.selExpIcon,
+    payer: $('me-payer')?.value||APP.user.id,
+    amount, hasEV, evU, evR, evOwner, net,
+    splits, note: ($('me-note')?.value||'').trim(),
+    at: now()
+  };
+
+  // Write directly to DB
+  const db = dbRead();
+  const i = db.expenses.findIndex(e=>e.id===expense.id);
+  if (i>=0) db.expenses[i]=expense; else db.expenses.push(expense);
+  const ok = dbWrite(db);
+
+  if (ok) { closeMo('mo-exp'); toast('✅ บันทึกสำเร็จ'); go(APP.tab); }
 }
 
-// ════════════════════════════════════
+// ══════════════════════════════════════════════════
 // DELETE
-// ════════════════════════════════════
-function confirmDel(type,id,name){
+// ══════════════════════════════════════════════════
+function confirmDel(type,id,name) {
   $('del-msg').textContent=`ต้องการลบ "${name}" หรือไม่?`;
   $('del-btn').onclick=()=>doDelete(type,id);
   showMo('mo-del');
 }
-async function doDelete(type,id){
-  const action=type==='group'?'deleteGroup':'deleteExpense';
-  const res=await api(action,{id});
-  if(res.ok){
-    if(type==='group'){S.d.groups=S.d.groups.filter(g=>g.id!==id);if(S.curGrpId===id)S.curGrpId=S.d.groups[0]?.id||null}
-    else S.d.expenses=S.d.expenses.filter(e=>e.id!==id);
-    closeMo('mo-del');toast('🗑️ ลบสำเร็จ');go(S.tab);
-  } else toast('❌ '+res.error);
+function doDelete(type,id) {
+  const db=dbRead();
+  if (type==='group') {
+    db.groups   = db.groups.filter(g=>g.id!==id);
+    db.expenses = db.expenses.filter(e=>e.gid!==id);
+    if (APP.curGrpId===id) APP.curGrpId=db.groups[0]?.id||null;
+  } else {
+    db.expenses = db.expenses.filter(e=>e.id!==id);
+  }
+  dbWrite(db);
+  closeMo('mo-del'); toast('🗑️ ลบสำเร็จ'); go(APP.tab);
 }
 
-// ════════════════════════════════════
-// PDF EXPORT
-// ════════════════════════════════════
-function pHead(t,s){return`<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><title>${t}</title><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet"><style>body{font-family:'IBM Plex Sans Thai',sans-serif;max-width:720px;margin:32px auto;color:#111827;padding:0 20px;font-size:13px}h1{color:#18A0A0;font-size:20px;font-weight:800;margin-bottom:3px}.sub{color:#6B7280;font-size:11px;margin-bottom:20px}h2{font-size:13px;font-weight:700;margin:18px 0 7px}table{width:100%;border-collapse:collapse;margin-bottom:14px}th{background:#2CC6C6;color:#fff;padding:9px 12px;text-align:left;font-size:11px;font-weight:700}td{padding:8px 12px;border-bottom:1px solid #E6F8F8;font-size:11px}.tot td{font-weight:700;background:#E6F8F8;color:#18A0A0}.uc{border:1.5px solid #B8E8E8;border-radius:10px;margin-bottom:10px;overflow:hidden}.uh{background:#2CC6C6;color:#fff;padding:9px 13px;font-weight:700;font-size:12px}.us{background:#E6F8F8;padding:9px 13px;font-weight:800;color:#18A0A0;font-size:14px}.tr{border:1px solid #B8E8E8;border-radius:8px;padding:9px 13px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}.tr-i{font-size:11px}.tr-a{font-size:15px;font-weight:800;color:#18A0A0}@media print{button{display:none}}</style></head><body><h1>🏠 HomeSplit — ${t}</h1><div class="sub">${s} · ${new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'})}</div>`}
+// ══════════════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════════════
+function saveGasUrl() {
+  const url = ($('gas-url')?.value || '').trim();
+  if (!url) { toast('❌ กรุณากรอก URL'); return; }
+  if (!url.startsWith('https://script.google.com/macros/')) {
+    toast('❌ URL ต้องเป็น script.google.com เท่านั้น'); return;
+  }
+  localStorage.setItem(GAS_KEY, url);
+  toast('✅ บันทึก URL แล้ว — กด 🔄 เพื่อ sync ข้อมูล');
+  updateGasStatus();
+  closeMo('mo-setup');
+}
 
-function exportMonthPDF(mk, lbl){
-  const exps=grpExps(S.curGrpId,mk);
+function clearGasUrl() {
+  localStorage.removeItem(GAS_KEY);
+  if ($('gas-url')) $('gas-url').value = '';
+  toast('🗑️ ลบ URL แล้ว — ใช้ข้อมูลใน Browser เท่านั้น');
+  updateGasStatus();
+  closeMo('mo-setup');
+}
+
+async function testGasUrl() {
+  const url = ($('gas-url')?.value || '').trim();
+  if (!url) { toast('❌ กรุณากรอก URL ก่อน'); return; }
+  const el = $('gas-test-result');
+  el.style.display = 'block';
+  el.style.background = '#FFF7ED'; el.style.border = '1px solid #FED7AA';
+  el.style.color = '#C2410C'; el.textContent = '⏳ กำลังทดสอบ...';
+  try {
+    const r = await fetch(url, {method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify({action:'ping'})});
+    const res = await r.json();
+    if (res.ok || res.status === 'ok' || res.pong) {
+      el.style.background='#F0FDF4'; el.style.border='1px solid #BBF7D0'; el.style.color='#15803D';
+      el.textContent = '✅ เชื่อมต่อสำเร็จ! พร้อมใช้งาน';
+    } else {
+      el.style.background='#FEF2F2'; el.style.border='1px solid #FECACA'; el.style.color='#DC2626';
+      el.textContent = '⚠️ Server ตอบกลับแต่อาจมีปัญหา: ' + (res.error||JSON.stringify(res));
+    }
+  } catch(e) {
+    el.style.background='#FEF2F2'; el.style.border='1px solid #FECACA'; el.style.color='#DC2626';
+    el.textContent = '❌ เชื่อมต่อไม่ได้: ' + e.message;
+  }
+}
+
+function updateGasStatus() {
+  const url = gasUrl();
+  // Profile modal status box
+  const box = $('gas-status-box');
+  if (box) {
+    if (url) {
+      box.style.background = '#F0FDF4'; box.style.border = '1px solid #BBF7D0';
+      box.style.color = '#15803D';
+      const short = url.length > 50 ? url.substring(0,47)+'...' : url;
+      box.innerHTML = '✅ เชื่อมต่อแล้ว<br><span style="font-size:10px;opacity:.8">' + short + '</span>';
+    } else {
+      box.style.background = '#FFF7ED'; box.style.border = '1px solid #FED7AA';
+      box.style.color = '#C2410C';
+      box.innerHTML = '⚠️ ยังไม่ได้ตั้งค่า — ข้อมูลอยู่ใน Browser เครื่องนี้เท่านั้น<br><span style="font-size:10px;opacity:.8">กด "ตั้งค่า Google Apps Script" เพื่อ sync ข้ามเครื่อง</span>';
+    }
+  }
+  // Setup modal
+  const dispBox = $('gas-current-display');
+  const dispUrl = $('gas-current-url');
+  const clearBtn = $('gas-clear-btn');
+  const urlInput = $('gas-url');
+  if (dispBox) dispBox.style.display = url ? '' : 'none';
+  if (dispUrl) dispUrl.textContent = url || '';
+  if (clearBtn) clearBtn.style.display = url ? '' : 'none';
+  if (urlInput && !urlInput.value && url) urlInput.value = url;
+}
+
+// ══════════════════════════════════════════════════
+// PDF EXPORT
+// ══════════════════════════════════════════════════
+function pHead(t,s){return`<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><title>${t}</title><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet"><style>body{font-family:'IBM Plex Sans Thai',sans-serif;max-width:720px;margin:32px auto;color:#111827;padding:0 20px;font-size:13px}h1{color:#18A0A0;font-size:20px;font-weight:800;margin-bottom:3px}.sub{color:#6B7280;font-size:11px;margin-bottom:20px}h2{font-size:13px;font-weight:700;margin:18px 0 7px}table{width:100%;border-collapse:collapse;margin-bottom:14px}th{background:#2CC6C6;color:#fff;padding:9px 12px;text-align:left;font-size:11px;font-weight:700}td{padding:8px 12px;border-bottom:1px solid #E6F8F8;font-size:11px}.tot td{font-weight:700;background:#E6F8F8;color:#18A0A0}.uc{border:1.5px solid #B8E8E8;border-radius:10px;margin-bottom:10px;overflow:hidden}.uh{background:#2CC6C6;color:#fff;padding:9px 13px;font-weight:700;font-size:12px}.us{background:#E6F8F8;padding:9px 13px;font-weight:800;color:#18A0A0;font-size:14px}.tr{border:1px solid #B8E8E8;border-radius:8px;padding:9px 13px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}.tr-a{font-size:15px;font-weight:800;color:#18A0A0}@media print{button{display:none}}</style></head><body><h1>🏠 HomeSplit — ${t}</h1><div class="sub">${s} · ${new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'})}</div>`}
+
+function exportMonthPDF(mk,lbl){
+  const g=APP.groups.find(g=>g.id===APP.curGrpId);
+  const exps=grpExps(APP.curGrpId,mk);
   const tot=exps.reduce((s,e)=>s+(e.net||e.amount||0),0);
-  const g=S.d.groups.find(g=>g.id===S.curGrpId);
-  const memIds=g?.members||[];
   const transfers=calcSettlement(exps);
   const w=window.open('','_blank');
-  const memShares=memIds.map(uid=>{
-    const m=S.d.members.find(m=>m.id===uid);if(!m)return'';
+  const memShares=(g?.members||[]).map(uid=>{
+    const m=APP.members.find(m=>m.id===uid);if(!m)return'';
     const share=memberShare(exps,uid);
     const items=exps.filter(e=>(e.splits||[]).some(s=>s.uid===uid)).map(e=>{const sp=(e.splits||[]).find(s=>s.uid===uid);return{n:e.name,ic:e.icon||'💰',p:sp?.pct||0,s:(e.net||e.amount||0)*(sp?.pct||0)/100}});
     return`<div class="uc"><div class="uh">👤 ${m.name}</div><table style="margin:0"><tbody>${items.map(i=>`<tr><td>${i.ic} ${i.n}</td><td>${i.p}%</td><td style="text-align:right;font-weight:600">฿${fmt(i.s)}</td></tr>`).join('')}</tbody></table><div class="us">รวม: ฿${fmt(share)}</div></div>`;
   }).join('');
-  w.document.write(pHead(`รายงานเดือน ${lbl}`,`${g?.icon||''} ${g?.name||''} · ${lbl}`)+`
-  <h2>รายการค่าใช้จ่าย</h2>
-  <table><thead><tr><th>รายการ</th><th>ยอดรวม (฿)</th><th>ผู้จ่าย</th><th>หมายเหตุ</th></tr></thead><tbody>
-  ${exps.map(e=>`<tr><td>${e.icon||''} ${e.name}</td><td>฿${fmt(e.net||e.amount)}</td><td>${S.d.members.find(m=>m.id===e.payer)?.name||'?'}</td><td>${e.note||'-'}</td></tr>`).join('')}
-  <tr class="tot"><td>รวม</td><td>฿${fmt(tot)}</td><td colspan="2"></td></tr></tbody></table>
-  <h2>ส่วนแบ่งต่อคน</h2>${memShares}
-  ${transfers.length?`<h2>💸 ใครโอนให้ใคร</h2>${transfers.map(t=>`<div class="tr"><div class="tr-i"><strong>${t.fromName}</strong> → <strong>${t.toName}</strong></div><div class="tr-a">฿${fmt(t.amt)}</div></div>`).join('')}`:''}<br>
-  <button onclick="window.print()" style="background:#2CC6C6;color:#fff;border:none;padding:11px 24px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">🖨️ พิมพ์ / บันทึก PDF</button></body></html>`);
-  w.document.close();toast('📄 เปิด PDF แล้ว');
+  w.document.write(pHead(`รายงานเดือน ${lbl}`,`${g?.icon||''} ${g?.name||''} · ${lbl}`)+`<h2>รายการค่าใช้จ่าย</h2><table><thead><tr><th>รายการ</th><th>ยอดรวม (฿)</th><th>ผู้จ่าย</th><th>หมายเหตุ</th></tr></thead><tbody>${exps.map(e=>`<tr><td>${e.icon||''} ${e.name}</td><td>฿${fmt(e.net||e.amount)}</td><td>${APP.members.find(m=>m.id===e.payer)?.name||'?'}</td><td>${e.note||'-'}</td></tr>`).join('')}<tr class="tot"><td>รวม</td><td>฿${fmt(tot)}</td><td colspan="2"></td></tr></tbody></table><h2>ส่วนแบ่งต่อคน</h2>${memShares}${transfers.length?`<h2>💸 ใครโอนให้ใคร</h2>${transfers.map(t=>`<div class="tr"><div>${t.fromName} → ${t.toName}</div><div class="tr-a">฿${fmt(t.amt)}</div></div>`).join('')}`:''}<br><button onclick="window.print()" style="background:#2CC6C6;color:#fff;border:none;padding:11px 24px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer">🖨️ พิมพ์ / บันทึก PDF</button></body></html>`);
+  w.document.close(); toast('📄 เปิด PDF แล้ว');
 }
 
 function exportYearPDF(yr){
-  const exps=S.d.expenses.filter(e=>e.gid===S.curGrpId&&e.monthKey.startsWith(yr));
+  const g=APP.groups.find(g=>g.id===APP.curGrpId);
+  const exps=APP.expenses.filter(e=>e.gid===APP.curGrpId&&e.monthKey.startsWith(yr));
   const tot=exps.reduce((s,e)=>s+(e.net||e.amount||0),0);
-  const g=S.d.groups.find(g=>g.id===S.curGrpId);
-  const memIds=g?.members||[];
   const byMonth={};exps.forEach(e=>{if(!byMonth[e.monthKey])byMonth[e.monthKey]=0;byMonth[e.monthKey]+=(e.net||e.amount||0)});
   const transfers=calcSettlement(exps);
   const w=window.open('','_blank');
-  w.document.write(pHead(`รายงานปี ${parseInt(yr)+543}`,`${g?.icon||''} ${g?.name||''} · ปี ${parseInt(yr)+543}`)+`
-  <h2>สรุปรายเดือน</h2>
-  <table><thead><tr><th>เดือน</th><th>ยอดรวม (฿)</th></tr></thead><tbody>
-  ${Object.entries(byMonth).sort(([a],[b])=>a.localeCompare(b)).map(([mk,v])=>`<tr><td>${thMK(mk)}</td><td>฿${fmt(v)}</td></tr>`).join('')}
-  <tr class="tot"><td>รวมทั้งปี</td><td>฿${fmt(tot)}</td></tr></tbody></table>
-  <h2>ส่วนแบ่งรวมต่อคน (ทั้งปี)</h2>
-  <table><thead><tr><th>ชื่อ</th><th>ยอดรวม (฿)</th></tr></thead><tbody>
-  ${memIds.map(uid=>{const m=S.d.members.find(m=>m.id===uid);if(!m)return'';return`<tr><td>👤 ${m.name}</td><td style="font-weight:700;color:#18A0A0">฿${fmt(memberShare(exps,uid))}</td></tr>`}).join('')}
-  </tbody></table>
-  ${transfers.length?`<h2>💸 ยอดค้างชำระรวม</h2>${transfers.map(t=>`<div class="tr"><div class="tr-i"><strong>${t.fromName}</strong> → <strong>${t.toName}</strong></div><div class="tr-a">฿${fmt(t.amt)}</div></div>`).join('')}`:''}<br>
-  <button onclick="window.print()" style="background:#2CC6C6;color:#fff;border:none;padding:11px 24px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">🖨️ พิมพ์ / บันทึก PDF</button></body></html>`);
-  w.document.close();toast('📄 เปิด PDF รายปีแล้ว');
+  w.document.write(pHead(`รายงานปี ${parseInt(yr)+543}`,`${g?.icon||''} ${g?.name||''} · ปี ${parseInt(yr)+543}`)+`<h2>สรุปรายเดือน</h2><table><thead><tr><th>เดือน</th><th>ยอดรวม (฿)</th></tr></thead><tbody>${Object.entries(byMonth).sort(([a],[b])=>a.localeCompare(b)).map(([mk,v])=>`<tr><td>${thMK(mk)}</td><td>฿${fmt(v)}</td></tr>`).join('')}<tr class="tot"><td>รวมทั้งปี</td><td>฿${fmt(tot)}</td></tr></tbody></table><h2>ส่วนแบ่งต่อคน (ทั้งปี)</h2><table><thead><tr><th>ชื่อ</th><th>ยอดรวม (฿)</th></tr></thead><tbody>${(g?.members||[]).map(uid=>{const m=APP.members.find(m=>m.id===uid);return m?`<tr><td>👤 ${m.name}</td><td style="font-weight:700;color:#18A0A0">฿${fmt(memberShare(exps,uid))}</td></tr>`:''}).join('')}</tbody></table>${transfers.length?`<h2>💸 ยอดค้างชำระ (ทั้งปี)</h2>${transfers.map(t=>`<div class="tr"><div>${t.fromName} → ${t.toName}</div><div class="tr-a">฿${fmt(t.amt)}</div></div>`).join('')}`:''}<br><button onclick="window.print()" style="background:#2CC6C6;color:#fff;border:none;padding:11px 24px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer">🖨️ พิมพ์ / บันทึก PDF</button></body></html>`);
+  w.document.close(); toast('📄 เปิด PDF รายปีแล้ว');
 }
 
-
-// ════════════════════════════════════
-// REFRESH / SYNC DATA
-// ════════════════════════════════════
-async function refreshData(){
-  const btn = document.getElementById('refresh-btn');
-  if(btn){ btn.textContent='⏳'; btn.style.pointerEvents='none'; }
-  const res = await api('getData',{uid:S.u?.id});
-  if(res.ok){
-    S.d.members=res.members||[];
-    S.d.groups=res.groups||[];
-    S.d.expenses=res.expenses||[];
-    if(!S.curGrpId && S.d.groups.length) S.curGrpId=S.d.groups[0].id;
-    go(S.tab);
-    toast('🔄 อัปเดตข้อมูลแล้ว');
-  }
-  if(btn){ btn.textContent='🔄'; btn.style.pointerEvents=''; }
-}
-
-
-// Seed demo users only on first-ever launch (empty DB)
-async function seedIfEmpty() {
-  const db = getDB();
-  if (db.members.length === 0) {
-    const hash = await hashPw('123456');
-    db.members = [
-      {id:'u1',name:'คุณแม่',   email:'mom@home.com',     pwHash:hash,role:'admin', c:0,createdAt:'2025-01-01T00:00:00Z'},
-      {id:'u2',name:'ลูกชาย',  email:'son@home.com',     pwHash:hash,role:'member',c:1,createdAt:'2025-01-01T00:00:00Z'},
-      {id:'u3',name:'ลูกสาว',  email:'daughter@home.com',pwHash:hash,role:'member',c:2,createdAt:'2025-01-01T00:00:00Z'}
-    ];
-    db.groups = [
-      {id:'g1',name:'บ้าน 54/145',icon:'🏠',members:['u1','u2','u3'],createdAt:'2025-01-01T00:00:00Z'}
-    ];
-    saveDB(db);
-    console.log('✅ Demo data seeded');
-  }
-}
-
-// ════════════════════════════════════
-// AUTO LOGIN + SYNC LISTENER
-// ════════════════════════════════════
-
-// Listen for storage changes from OTHER tabs/users on same browser
+// ══════════════════════════════════════════════════
+// CROSS-TAB SYNC
+// ══════════════════════════════════════════════════
 window.addEventListener('storage', e => {
-  if (e.key === DB_KEY && S.u) {
-    // Another tab updated the DB — reload data silently
-    api('getData',{}).then(res=>{
-      if(res.ok){ S.d.members=res.members||[]; S.d.groups=res.groups||[]; S.d.expenses=res.expenses||[]; go(S.tab); }
-    });
+  if (e.key === DB_KEY && APP.user) {
+    dbSync();
+    go(APP.tab);
+    toast('🔄 ข้อมูลอัปเดตแล้ว');
   }
 });
 
-// Init DB (seed demo if fresh install)
-seedIfEmpty().then(() => {
-  const su = localStorage.getItem('hs');
-  if (su) {
+// ══════════════════════════════════════════════════
+// STARTUP — restore session
+// ══════════════════════════════════════════════════
+(function init() {
+  const raw = localStorage.getItem(SES_KEY);
+  if (raw) {
     try {
-      S.u = JSON.parse(su);
-      enterApp();
-    } catch(e) {
-      localStorage.removeItem('hs');
-    }
+      APP.user = JSON.parse(raw);
+      // Verify user still exists in DB
+      const db = dbRead();
+      const still = db.members.find(m => m.id === APP.user.id);
+      if (still) {
+        const {pwHash,...safe} = still;
+        APP.user = safe;
+        enterApp();
+        return;
+      }
+    } catch(e) {}
+    localStorage.removeItem(SES_KEY);
   }
-});
+})();
 </script>
 </body>
 </html>
