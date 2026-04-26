@@ -330,6 +330,17 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
 // ══════════════════════════════════════════════════
 // CONSTANTS
 // ══════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+// ⚙️  ตั้งค่าตรงนี้ — ใส่ URL จาก Google Apps Script
+// ══════════════════════════════════════════════════
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPDPscFeXrOAio8FV2sfYfzgNL7oTm4P8rW7Y2Ky-gw7rHQFDyGAwDCaIcxyc3X0ricw/exec';
+// วิธีหา URL:
+//   1. เปิด script.google.com → วางโค้ดจาก Code.gs
+//   2. แก้ SHEET_ID → Run setupSheets() → Deploy → Web App
+//   3. Copy URL แล้ววางระหว่าง '' ด้านบน
+//   ตัวอย่าง: const SCRIPT_URL = 'https://script.google.com/macros/s/XXXXX/exec';
+// ══════════════════════════════════════════════════
+
 const DB_KEY  = 'hs_db_v3';     // localStorage key for database
 const SES_KEY = 'hs_session';   // localStorage key for current user session
 const GAS_KEY = 'hs_gas_url';   // localStorage key for GAS URL
@@ -464,7 +475,8 @@ function toast(m, d=2600) {
   setTimeout(()=>t.classList.remove('show'),d);
 }
 function gasUrl() {
-  return localStorage.getItem(GAS_KEY) || '';
+  // ใช้ SCRIPT_URL ที่ hardcode ไว้ก่อน ถ้าไม่มีค่อยดูใน localStorage
+  return SCRIPT_URL || localStorage.getItem(GAS_KEY) || '';
 }
 
 // ══════════════════════════════════════════════════
