@@ -195,6 +195,9 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
     <div id="aerr" class="emsg" style="margin-bottom:8px;font-size:12px"></div>
     <button class="btn bp" id="abtn" onclick="doAuth()">เข้าสู่ระบบ</button>
     <div class="sw" id="asw">ยังไม่มีบัญชี? <span onclick="togAuth()">สมัครสมาชิก</span></div>
+    <div style="margin-top:12px;text-align:center">
+      <span onclick="resetAll()" style="font-size:10px;color:var(--tx3);cursor:pointer;text-decoration:underline">ล้างข้อมูล / แก้ปัญหา Login ไม่ได้</span>
+    </div>
   </div>
 </div>
 
@@ -374,11 +377,27 @@ let CHARTS={};
 function dbLoad(){
   try{
     const r=localStorage.getItem(KDB);
-    if(!r){DB={v:3,members:[],groups:[],expenses:[]};dbSave();return;}
-    DB=JSON.parse(r);
-    if(!DB||typeof DB!=='object'){DB={v:3,members:[],groups:[],expenses:[]};dbSave();return;}
-    DB.members=DB.members||[];DB.groups=DB.groups||[];DB.expenses=DB.expenses||[];
-  }catch(e){DB={v:3,members:[],groups:[],expenses:[]};dbSave();}
+    if(!r){
+      // ยังไม่มีข้อมูลเลย — สร้าง DB ใหม่
+      DB={v:3,members:[],groups:[],expenses:[]};
+      dbSave();
+      return;
+    }
+    const parsed=JSON.parse(r);
+    if(!parsed||typeof parsed!=='object'){
+      // ข้อมูลเสีย แต่ไม่ reset ทิ้ง — ใช้ที่มีอยู่ถ้ามี
+      if(!DB)DB={v:3,members:[],groups:[],expenses:[]};
+      return;
+    }
+    DB=parsed;
+    DB.members=DB.members||[];
+    DB.groups=DB.groups||[];
+    DB.expenses=DB.expenses||[];
+  }catch(e){
+    console.error('dbLoad error:',e);
+    // parse error — อย่า reset ข้อมูล ให้ใช้ที่มีอยู่ใน memory
+    if(!DB)DB={v:3,members:[],groups:[],expenses:[]};
+  }
 }
 function dbSave(){
   try{localStorage.setItem(KDB,JSON.stringify(DB));}
@@ -399,17 +418,35 @@ async function sha(s){
 async function authLogin(email,pw){
   dbLoad();
   const h=await sha(pw);
+  console.log('[Login] email:',email,'members in DB:',DB.members.length);
   const m=DB.members.find(m=>m.email.toLowerCase()===email.toLowerCase()&&m.pwHash===h);
-  if(!m)return{ok:false,err:'อีเมลหรือรหัสผ่านไม่ถูกต้อง'};
-  const{pwHash,...s}=m;return{ok:true,user:s};
+  if(!m){
+    // ตรวจว่า email มีในระบบหรือเปล่า
+    const exists=DB.members.find(m=>m.email.toLowerCase()===email.toLowerCase());
+    if(exists){
+      console.log('[Login] Email found but password wrong');
+      return{ok:false,err:'รหัสผ่านไม่ถูกต้อง'};
+    }
+    console.log('[Login] Email not found');
+    return{ok:false,err:'ไม่พบบัญชีนี้ในระบบ กรุณาสมัครสมาชิกก่อน'};
+  }
+  const{pwHash,...s}=m;
+  console.log('[Login] Success:',s.name);
+  return{ok:true,user:s};
 }
 async function authReg(name,email,pw){
   dbLoad();
+  console.log('[Register] email:',email,'members before:',DB.members.length);
   if(DB.members.find(m=>m.email.toLowerCase()===email.toLowerCase()))
     return{ok:false,err:'อีเมลนี้มีในระบบแล้ว'};
   const h=await sha(pw);
   const nu={id:uid('u'),name,email,pwHash:h,role:DB.members.length===0?'admin':'member',c:DB.members.length%4,at:now()};
-  DB.members.push(nu);dbSave();
+  DB.members.push(nu);
+  dbSave();
+  console.log('[Register] Saved. members now:',DB.members.length);
+  // Verify save worked
+  const verify=localStorage.getItem(KDB);
+  console.log('[Register] localStorage size:',verify?verify.length:0,'chars');
   const{pwHash,...s}=nu;return{ok:true,user:s};
 }
 
@@ -433,6 +470,14 @@ function toast(msg,ms=2600){const t=$('toast');t.textContent=msg;t.classList.add
 // ║  AUTH UI                                         ║
 // ╚══════════════════════════════════════════════════╝
 let ISREG=false;
+
+// รีเซ็ต session เมื่อ login ไม่ได้ (ไม่ลบข้อมูล DB)
+function resetAll(){
+  if(!confirm('ล้าง session เพื่อแก้ปัญหา Login?\n(ข้อมูลกลุ่มและรายการยังอยู่)')){ return; }
+  localStorage.removeItem(KSES);
+  alert('ล้าง session แล้ว กรุณา Login ใหม่');
+  location.reload();
+}
 function togAuth(){
   ISREG=!ISREG;
   $('at').textContent=ISREG?'สมัครสมาชิก':'เข้าสู่ระบบ';
@@ -847,11 +892,21 @@ window.addEventListener('storage',e=>{
   try{
     const ses=JSON.parse(raw);
     dbLoad();
+    console.log('[Startup] Session found for:',ses.email,'DB members:',DB.members.length);
     const found=DB.members.find(m=>m.id===ses.id);
-    if(!found){localStorage.removeItem(KSES);return;}
+    if(!found){
+      console.log('[Startup] User not in DB anymore, clearing session');
+      localStorage.removeItem(KSES);
+      return;
+    }
     const{pwHash,...safe}=found;
-    CU=safe;enterApp();
-  }catch(e){localStorage.removeItem(KSES);}
+    CU=safe;
+    console.log('[Startup] Auto-login:',safe.name);
+    enterApp();
+  }catch(e){
+    console.error('[Startup] Error:',e);
+    localStorage.removeItem(KSES);
+  }
 })();
 </script>
 </body>
