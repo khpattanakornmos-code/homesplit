@@ -244,6 +244,7 @@ select.fi{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csv
     </div>
     <div style="display:flex;gap:5px">
       <div class="ico-btn" id="grp-hdr-btn" onclick="go('groups')" title="กลุ่ม">👥</div>
+      <div class="ico-btn" onclick="refreshData()" title="รีเฟรชข้อมูล" id="refresh-btn">🔄</div>
       <div class="ico-btn" onclick="showMo('mo-pf')">👤</div>
     </div>
   </div>
@@ -395,51 +396,118 @@ const nowISO = () => new Date().toISOString();
 const uid = p => p+'_'+Date.now()+'_'+Math.random().toString(36).substr(2,4);
 
 // ════════════════════════════════════
-// MOCK DATA
+// SHARED DB (localStorage) + Real API
 // ════════════════════════════════════
-const MU = [
-  {id:'u1',name:'คุณแม่',email:'mom@home.com',pw:'123456',role:'admin',c:0},
-  {id:'u2',name:'ลูกชาย',email:'son@home.com',pw:'123456',role:'member',c:1},
-  {id:'u3',name:'ลูกสาว',email:'daughter@home.com',pw:'123456',role:'member',c:2}
-];
-const MG = [
-  {id:'g1',name:'บ้าน 54/145',icon:'🏠',members:['u1','u2','u3'],createdAt:'2025-01-01'}
-];
-const mk0 = mkKNow(), mk1 = '2025-04';
-const ME = [
-  {id:'e1',gid:'g1',monthKey:mk0,name:'ค่าไฟ',icon:'⚡',payer:'u1',amount:3200,hasEV:true,evU:45,evR:4,evOwner:'u2',net:3020,splits:[{uid:'u1',pct:40},{uid:'u2',pct:35},{uid:'u3',pct:25}],note:'',at:nowISO()},
-  {id:'e2',gid:'g1',monthKey:mk0,name:'ค่าน้ำ',icon:'💧',payer:'u1',amount:480,hasEV:false,evU:0,evR:0,evOwner:null,net:480,splits:[{uid:'u1',pct:34},{uid:'u2',pct:33},{uid:'u3',pct:33}],note:'',at:nowISO()},
-  {id:'e3',gid:'g1',monthKey:mk0,name:'ค่าเน็ต True',icon:'🌐',payer:'u2',amount:590,hasEV:false,evU:0,evR:0,evOwner:null,net:590,splits:[{uid:'u1',pct:33},{uid:'u2',pct:34},{uid:'u3',pct:33}],note:'True 1Gbps',at:nowISO()},
-  {id:'e4',gid:'g1',monthKey:mk0,name:'ค่าส่วนกลาง',icon:'🏢',payer:'u1',amount:800,hasEV:false,evU:0,evR:0,evOwner:null,net:800,splits:[{uid:'u1',pct:50},{uid:'u2',pct:25},{uid:'u3',pct:25}],note:'',at:nowISO()},
-  {id:'e5',gid:'g1',monthKey:mk0,name:'น้ำดื่ม 3 แพ็ค',icon:'🛒',payer:'u3',amount:120,hasEV:false,evU:0,evR:0,evOwner:null,net:120,splits:[{uid:'u1',pct:34},{uid:'u2',pct:33},{uid:'u3',pct:33}],note:'',at:nowISO()},
-  {id:'e6',gid:'g1',monthKey:mk0,name:'ถุงดำ+น้ำยา',icon:'🧹',payer:'u3',amount:250,hasEV:false,evU:0,evR:0,evOwner:null,net:250,splits:[{uid:'u1',pct:34},{uid:'u2',pct:33},{uid:'u3',pct:33}],note:'',at:nowISO()},
-  // prev month
-  {id:'p1',gid:'g1',monthKey:mk1,name:'ค่าไฟ',icon:'⚡',payer:'u1',amount:2980,hasEV:true,evU:30,evR:4,evOwner:'u2',net:2860,splits:[{uid:'u1',pct:40},{uid:'u2',pct:35},{uid:'u3',pct:25}],note:'',at:'2025-04-30T10:00:00Z'},
-  {id:'p2',gid:'g1',monthKey:mk1,name:'ค่าน้ำ',icon:'💧',payer:'u1',amount:450,hasEV:false,evU:0,evR:0,evOwner:null,net:450,splits:[{uid:'u1',pct:34},{uid:'u2',pct:33},{uid:'u3',pct:33}],note:'',at:'2025-04-30T10:00:00Z'},
-  {id:'p3',gid:'g1',monthKey:mk1,name:'ค่าเน็ต',icon:'🌐',payer:'u2',amount:590,hasEV:false,evU:0,evR:0,evOwner:null,net:590,splits:[{uid:'u1',pct:33},{uid:'u2',pct:34},{uid:'u3',pct:33}],note:'',at:'2025-04-30T10:00:00Z'},
-  {id:'p4',gid:'g1',monthKey:mk1,name:'ค่าส่วนกลาง',icon:'🏢',payer:'u1',amount:800,hasEV:false,evU:0,evR:0,evOwner:null,net:800,splits:[{uid:'u1',pct:50},{uid:'u2',pct:25},{uid:'u3',pct:25}],note:'',at:'2025-04-30T10:00:00Z'},
-  {id:'p5',gid:'g1',monthKey:mk1,name:'ของใช้',icon:'🛒',payer:'u3',amount:380,hasEV:false,evU:0,evR:0,evOwner:null,net:380,splits:[{uid:'u1',pct:34},{uid:'u2',pct:33},{uid:'u3',pct:33}],note:'',at:'2025-04-30T10:00:00Z'}
-];
+// ทุก User ที่ Login บนเครื่องเดียวกัน หรือผ่าน Google Apps Script จะเห็นข้อมูลกัน
 
-function mock(action, p) {
-  if(action==='login'){const u=MU.find(u=>u.email===p.email&&u.pw===p.password);return u?{ok:true,user:{id:u.id,name:u.name,email:u.email,role:u.role,c:u.c}}:{ok:false,error:'อีเมลหรือรหัสผ่านไม่ถูกต้อง'}}
-  if(action==='register'){if(MU.find(u=>u.email===p.email))return{ok:false,error:'อีเมลนี้มีในระบบแล้ว'};const nu={id:uid('u'),name:p.name,email:p.email,role:'member',c:MU.length%4};MU.push({...nu,pw:p.password});return{ok:true,user:nu}}
-  if(action==='getData')return{ok:true,members:MU.map(({pw,...u})=>u),groups:JSON.parse(JSON.stringify(MG)),expenses:[...ME]};
-  if(action==='saveGroup'){const i=MG.findIndex(g=>g.id===p.group.id);if(i>=0)MG[i]=p.group;else MG.push(p.group);return{ok:true}}
-  if(action==='deleteGroup'){const i=MG.findIndex(g=>g.id===p.id);if(i>=0)MG.splice(i,1);return{ok:true}}
-  if(action==='saveExpense'){const i=ME.findIndex(e=>e.id===p.expense.id);if(i>=0)ME[i]=p.expense;else ME.push(p.expense);return{ok:true,expense:p.expense}}
-  if(action==='deleteExpense'){const i=ME.findIndex(e=>e.id===p.id);if(i>=0)ME.splice(i,1);return{ok:true}}
-  return{ok:false,error:'unknown'};
+const DB_KEY = 'homesplit_db_54145';
+
+function getDB() {
+  try { return JSON.parse(localStorage.getItem(DB_KEY)||'null') || initDB(); }
+  catch(e) { return initDB(); }
 }
 
+function saveDB(db) {
+  localStorage.setItem(DB_KEY, JSON.stringify(db));
+}
+
+function initDB() {
+  const db = {
+    version: 1,
+    members: [
+      {id:'u1',name:'คุณแม่',email:'mom@home.com',pwHash:'8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',role:'admin',c:0,createdAt:'2025-01-01T00:00:00Z'},
+      {id:'u2',name:'ลูกชาย',email:'son@home.com',pwHash:'8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',role:'member',c:1,createdAt:'2025-01-01T00:00:00Z'},
+      {id:'u3',name:'ลูกสาว',email:'daughter@home.com',pwHash:'8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',role:'member',c:2,createdAt:'2025-01-01T00:00:00Z'}
+    ],
+    groups: [
+      {id:'g1',name:'บ้าน 54/145',icon:'🏠',members:['u1','u2','u3'],createdAt:'2025-01-01T00:00:00Z'}
+    ],
+    expenses: []
+  };
+  saveDB(db);
+  return db;
+}
+
+// Simple SHA-256 via SubtleCrypto (for registration)
+async function hashPw(pw) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// Sync from GAS if configured, else use localStorage
 async function api(action, p={}) {
-  if(CFG.SCRIPT_URL==='YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') return mock(action,p);
+  if (CFG.SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+    return apiGAS(action, p);
+  }
+  return apiLocal(action, p);
+}
+
+async function apiGAS(action, p) {
   try {
-    const r = await fetch(CFG.SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action,...p})});
+    const r = await fetch(CFG.SCRIPT_URL, {
+      method:'POST', headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({action,...p})
+    });
     return await r.json();
   } catch(e) { return {ok:false,error:e.message}; }
 }
 
+// localStorage-based shared DB: ALL users on same device share data
+// When SCRIPT_URL is set → data syncs to Google Sheets for cross-device
+async function apiLocal(action, p) {
+  const db = getDB();
+
+  if (action === 'login') {
+    const hash = await hashPw(p.password);
+    const u = db.members.find(u => u.email.toLowerCase()===p.email.toLowerCase() && u.pwHash===hash);
+    if (!u) return {ok:false,error:'อีเมลหรือรหัสผ่านไม่ถูกต้อง'};
+    const {pwHash,...safe}=u; return {ok:true,user:safe};
+  }
+
+  if (action === 'register') {
+    if (db.members.find(u=>u.email.toLowerCase()===p.email.toLowerCase()))
+      return {ok:false,error:'อีเมลนี้มีในระบบแล้ว'};
+    const hash = await hashPw(p.password);
+    const nu = {id:uid('u'),name:p.name,email:p.email,pwHash:hash,role:db.members.length===0?'admin':'member',c:db.members.length%4,createdAt:nowISO()};
+    db.members.push(nu);
+    saveDB(db);
+    const {pwHash,...safe}=nu; return {ok:true,user:safe};
+  }
+
+  if (action === 'getData') {
+    return {ok:true, members:db.members.map(({pwHash,...u})=>u), groups:db.groups, expenses:db.expenses};
+  }
+
+  if (action === 'saveGroup') {
+    const i = db.groups.findIndex(g=>g.id===p.group.id);
+    if (i>=0) db.groups[i]=p.group; else db.groups.push(p.group);
+    saveDB(db); return {ok:true};
+  }
+
+  if (action === 'deleteGroup') {
+    db.groups = db.groups.filter(g=>g.id!==p.id);
+    db.expenses = db.expenses.filter(e=>e.gid!==p.id);
+    saveDB(db); return {ok:true};
+  }
+
+  if (action === 'saveExpense') {
+    const i = db.expenses.findIndex(e=>e.id===p.expense.id);
+    if (i>=0) db.expenses[i]=p.expense; else db.expenses.push(p.expense);
+    saveDB(db); return {ok:true,expense:p.expense};
+  }
+
+  if (action === 'deleteExpense') {
+    db.expenses = db.expenses.filter(e=>e.id!==p.id);
+    saveDB(db); return {ok:true};
+  }
+
+  return {ok:false,error:'Unknown action: '+action};
+}
+
+// ════════════════════════════════════
+// INIT
+
+// ════════════════════════════════════
 // ════════════════════════════════════
 // AUTH
 // ════════════════════════════════════
@@ -452,6 +520,7 @@ function togAuth(){
   $('rcg').style.display=S.isR?'':'none';
   $('a-err').style.display='none';
 }
+
 async function doAuth(){
   const email=$('i-email').value.trim(), pass=$('i-pass').value, err=$('a-err');
   err.style.display='none';
@@ -464,16 +533,21 @@ async function doAuth(){
     if(!name){err.textContent='กรุณากรอกชื่อ';err.style.display='block';btn.textContent='สมัครสมาชิก';btn.disabled=false;return}
     if(pass!==conf){err.textContent='รหัสผ่านไม่ตรงกัน';err.style.display='block';btn.textContent='สมัครสมาชิก';btn.disabled=false;return}
     res=await api('register',{name,email,password:pass});
-  } else res=await api('login',{email,password:pass});
+  } else {
+    res=await api('login',{email,password:pass});
+  }
   btn.textContent=S.isR?'สมัครสมาชิก':'เข้าสู่ระบบ';btn.disabled=false;
-  if(res.ok){S.u=res.user;localStorage.setItem('hs',JSON.stringify(res.user));enterApp()}
-  else{err.textContent=res.error||'เกิดข้อผิดพลาด';err.style.display='block'}
+  if(res.ok){S.u=res.user;localStorage.setItem('hs',JSON.stringify(res.user));enterApp();}
+  else{err.textContent=res.error||'เกิดข้อผิดพลาด';err.style.display='block';}
 }
-function logout(){localStorage.removeItem('hs');S.u=null;closeMo('mo-pf');$('sa').style.display='none';$('sa').classList.remove('active');$('sl').classList.add('active');$('sl').style.display=''}
 
-// ════════════════════════════════════
-// INIT
-// ════════════════════════════════════
+function logout(){
+  localStorage.removeItem('hs');S.u=null;closeMo('mo-pf');
+  $('sa').style.display='none';$('sa').classList.remove('active');
+  $('sl').classList.add('active');$('sl').style.display='';
+}
+
+
 async function enterApp(){
   $('sl').classList.remove('active');$('sl').style.display='none';
   $('sa').style.display='';$('sa').classList.add('active');
@@ -1052,9 +1126,39 @@ function exportYearPDF(yr){
   w.document.close();toast('📄 เปิด PDF รายปีแล้ว');
 }
 
+
 // ════════════════════════════════════
-// AUTO LOGIN
+// REFRESH / SYNC DATA
 // ════════════════════════════════════
+async function refreshData(){
+  const btn = document.getElementById('refresh-btn');
+  if(btn){ btn.textContent='⏳'; btn.style.pointerEvents='none'; }
+  const res = await api('getData',{uid:S.u?.id});
+  if(res.ok){
+    S.d.members=res.members||[];
+    S.d.groups=res.groups||[];
+    S.d.expenses=res.expenses||[];
+    if(!S.curGrpId && S.d.groups.length) S.curGrpId=S.d.groups[0].id;
+    go(S.tab);
+    toast('🔄 อัปเดตข้อมูลแล้ว');
+  }
+  if(btn){ btn.textContent='🔄'; btn.style.pointerEvents=''; }
+}
+
+// ════════════════════════════════════
+// AUTO LOGIN + SYNC LISTENER
+// ════════════════════════════════════
+
+// Listen for storage changes from OTHER tabs/users on same browser
+window.addEventListener('storage', e => {
+  if (e.key === DB_KEY && S.u) {
+    // Another tab updated the DB — reload data silently
+    api('getData',{}).then(res=>{
+      if(res.ok){ S.d.members=res.members||[]; S.d.groups=res.groups||[]; S.d.expenses=res.expenses||[]; go(S.tab); }
+    });
+  }
+});
+
 const su=localStorage.getItem('hs');
 if(su){try{S.u=JSON.parse(su);enterApp()}catch(e){localStorage.removeItem('hs')}}
 </script>
