@@ -490,7 +490,7 @@ async function doAuth(){
   if(res.ok){
     CU=res.user;
     localStorage.setItem(KSES,JSON.stringify(CU));
-    enterApp();
+    await enterApp();
   }else{
     errEl.textContent=res.err||'เกิดข้อผิดพลาด';
     errEl.style.display='block';
@@ -516,11 +516,20 @@ async function debugConn(){
 }
 
 // ════ APP ════
-function enterApp(){
+async function enterApp(){
   $('sl').classList.remove('active');$('sl').style.display='none';
   $('sa').style.display='';$('sa').classList.add('active');
   $('hm').textContent=thM();
   dbLoad();
+
+  // ถ้ามี GAS URL → sync ข้อมูลก่อน render เสมอ
+  if(gasUrl()){
+    var mc=$('mc');
+    if(mc)mc.innerHTML='<div style="text-align:center;padding:3rem 1rem"><div style="font-size:32px;margin-bottom:12px">⏳</div><div style="font-size:14px;color:var(--tx2);font-weight:600">กำลังโหลดข้อมูลจาก Server...</div></div>';
+    var ok=await syncFromGAS();
+    if(ok)toast('🔄 โหลดข้อมูลล่าสุดแล้ว');
+  }
+
   if(!CGRP&&DB.groups.length)CGRP=DB.groups[0].id;
   go('dash');
   if(!gasUrl())setTimeout(function(){toast('💡 กด 👤 → ตั้งค่า GAS URL เพื่อ sync ข้ามเครื่อง',5000);},1000);
@@ -840,14 +849,15 @@ function pdfYr(yr){
 window.addEventListener('storage',function(e){if(e.key===KDB&&CU){dbLoad();go(CTAB);toast('🔄 ข้อมูลอัปเดตจากแท็บอื่น');}});
 
 // ════ STARTUP ════
-(function(){
+(async function(){
   var raw=localStorage.getItem(KSES);if(!raw)return;
   try{
     var ses=JSON.parse(raw);dbLoad();
     var found=null;for(var i=0;i<DB.members.length;i++){if(DB.members[i].id===ses.id){found=DB.members[i];break;}}
     if(!found){localStorage.removeItem(KSES);return;}
     var u={};Object.keys(found).forEach(function(k){if(k!=='pwHash')u[k]=found[k];});
-    CU=u;enterApp();
+    CU=u;
+    await enterApp();
   }catch(e){localStorage.removeItem(KSES);}
 })();
 
