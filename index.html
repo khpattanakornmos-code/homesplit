@@ -1,7 +1,11 @@
 <!DOCTYPE html>
+<!-- HomeSplit v5 Build: 2026-04-27 14:53 -->
 <html lang="th">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -468,6 +472,9 @@ select.fi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 
 
 
+
+
+
 // ════════════════════════════════════════
 //  ⚙️  CONFIG — แก้ตรงนี้
 // ════════════════════════════════════════
@@ -485,7 +492,7 @@ const THM   = ['มกราคม','กุมภาพันธ์','มีน�
 let CU=null,DB=null,CGRP=null,CTAB='dash';
 let EGRP=null,EEXP=null,SGICO='🏠',SEICO='💰';
 let RTAB='monthly',RYEAR=new Date().getFullYear(),RMON='';
-let CHARTS={},ISREG=false,SAVING=false; // SAVING ป้องกัน double-submit
+let CHARTS={},ISREG=false,SAVING=false,FILTER_USER=''; // SAVING ป้องกัน double-submit
 
 // ════ DB ════
 function dbLoad(){
@@ -882,27 +889,93 @@ function initDash(){
 function rExps(){
   var g=grps().find(function(x){return x.id===CGRP;});
   if(!g)return '<div class="empty"><div class="ei">👥</div><div class="et">เลือกกลุ่มก่อน</div></div><button class="btn bp mt12" onclick="go(\'groups\')">ไปที่กลุ่ม</button>';
-  var mk=mkNow(),ex=gexps(g.id,mk),am=mems();
+  var mk=mkNow();
+  var allEx=gexps(g.id,mk);
+  var am=mems();
+
+  // ── Filter bar ──
+  var filterBar='<div style="display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch">';
+  filterBar+='<button onclick="FILTER_USER=\'\';go(\'expenses\')" style="flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid '+(FILTER_USER===''?'var(--mint)':'var(--bd)')+';background:'+(FILTER_USER===''?'var(--mint)':'#fff')+';color:'+(FILTER_USER===''?'#fff':'var(--tx2)')+';font-family:var(--f);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap">ทั้งหมด</button>';
+  (g.members||[]).forEach(function(uid){
+    var m=am.find(function(x){return x.id===uid;});
+    if(!m)return;
+    var isMe=uid===CU.id;
+    var isSel=FILTER_USER===uid;
+    filterBar+='<button onclick="FILTER_USER=\''+uid+'\';go(\'expenses\')" style="flex-shrink:0;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;border:1.5px solid '+(isSel?'var(--mint)':'var(--bd)')+';background:'+(isSel?'var(--mint)':'#fff')+';color:'+(isSel?'#fff':'var(--tx2)')+';font-family:var(--f);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap">';
+    filterBar+='<span style="display:inline-flex;width:20px;height:20px;border-radius:6px;background:'+(isSel?'rgba(255,255,255,.3)':'var(--mpal)')+';color:'+(isSel?'#fff':'var(--mdk)')+';font-size:10px;font-weight:800;align-items:center;justify-content:center">'+ini(m.name)+'</span>';
+    filterBar+=m.name+(isMe?' (ฉัน)':'')+'</button>';
+  });
+  filterBar+='</div>';
+
+  // ── Apply filter ──
+  var ex=FILTER_USER?allEx.filter(function(e){return e.payer===FILTER_USER;}):allEx;
+
   var tot=ex.reduce(function(s,e){return s+(e.net||e.amount||0);},0);
+  var allTot=allEx.reduce(function(s,e){return s+(e.net||e.amount||0);},0);
+
+  // ── Group selector ──
   var gsel='';
-  if(grps().length>1){gsel='<select onchange="CGRP=this.value;go(\'expenses\')" style="flex:1;padding:9px 11px;border-radius:10px;border:1px solid var(--bd);font-family:var(--f);font-size:13px;background:var(--sf)">';grps().forEach(function(gr){gsel+='<option value="'+gr.id+'"'+(gr.id===CGRP?' selected':'')+'>'+gr.icon+' '+gr.name+'</option>';});gsel+='</select>';}
-  else gsel='<div style="flex:1;font-size:13px;font-weight:700">'+g.icon+' '+g.name+'</div>';
+  if(grps().length>1){
+    gsel='<select onchange="CGRP=this.value;FILTER_USER=\'\';go(\'expenses\')" style="flex:1;padding:9px 11px;border-radius:10px;border:1px solid var(--bd);font-family:var(--f);font-size:13px;background:var(--sf)">';
+    grps().forEach(function(gr){gsel+='<option value="'+gr.id+'"'+(gr.id===CGRP?' selected':'')+'>'+gr.icon+' '+gr.name+'</option>';});
+    gsel+='</select>';
+  }
+
+  // ── Summary bar ──
+  var filterLabel=FILTER_USER?(am.find(function(m){return m.id===FILTER_USER;})||{name:'?'}).name:'ทุกคน';
+  var summaryBar='<div style="background:var(--mint);border-radius:var(--rl);padding:13px 15px;margin-bottom:12px;box-shadow:0 4px 14px rgba(44,198,198,.3)">';
+  summaryBar+='<div style="display:flex;justify-content:space-between;align-items:center">';
+  summaryBar+='<div>';
+  summaryBar+='<div style="font-size:10px;color:rgba(255,255,255,.85)">'+ex.length+' รายการ · '+filterLabel+' · '+thM()+'</div>';
+  summaryBar+='<div style="font-size:22px;font-weight:800;color:#fff;margin-top:1px">฿'+fmt(tot)+'</div>';
+  if(FILTER_USER){summaryBar+='<div style="font-size:10px;color:rgba(255,255,255,.75);margin-top:1px">รวมทั้งกลุ่ม ฿'+fmt(allTot)+'</div>';}
+  summaryBar+='</div>';
+  summaryBar+='<button onclick="openAddExp()" style="background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.4);border-radius:12px;padding:9px 14px;color:#fff;font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;min-height:42px">+ เพิ่ม</button>';
+  summaryBar+='</div></div>';
+
+  // ── Expense rows ──
   var rows='';
   ex.forEach(function(e){
-    var py=null;for(var i=0;i<am.length;i++){if(am[i].id===e.payer){py=am[i];break;}}
+    var py=null;for(var k=0;k<am.length;k++){if(am[k].id===e.payer){py=am[k];break;}}
     var ms2=null;(e.splits||[]).forEach(function(s){if(s.uid===CU.id)ms2=s;});
     var ma=ms2?(e.net||e.amount||0)*ms2.pct/100:0;
-    var chips='';(e.splits||[]).forEach(function(s){var m=null;for(var i=0;i<am.length;i++){if(am[i].id===s.uid){m=am[i];break;}}if(m)chips+='<div class="mchip"><div class="av avs '+AVC[m.c||0]+'" style="width:18px;height:18px;border-radius:6px;font-size:8px">'+ini(m.name)+'</div>'+m.name+' '+s.pct+'%</div>';});
-    rows+='<div class="icard"><div class="itop"><div class="iinfo"><span style="font-size:22px">'+e.icon+'</span><div><div style="font-size:13px;font-weight:700">'+e.name+'</div><div style="font-size:10px;color:var(--tx3)">จ่ายโดย '+(py?py.name:'?')+(e.hasEV?' · ⚡EV':'')+'</div></div></div><div style="text-align:right"><div style="font-size:18px;font-weight:800;color:var(--mint)">฿'+fmt(e.net||e.amount)+'</div>'+(ma?'<div style="font-size:10px;color:var(--tx3)">ฉัน ฿'+fmt(ma)+'</div>':'')+'</div></div>'
-      +'<div style="display:flex;flex-wrap:wrap;margin-bottom:8px">'+chips+'</div>'
-      +(e.note?'<div style="font-size:11px;color:var(--tx2);margin-bottom:7px">📝 '+e.note+'</div>':'')
-      +(e.hasEV?'<div style="font-size:10px;color:var(--mdk);margin-bottom:7px">⚡ EV หัก '+e.evU+'×'+e.evR+'฿ = ฿'+fmt((e.evU||0)*(e.evR||0))+'</div>':'')
-      +'<div style="display:flex;gap:6px"><button class="btn bg bxs" style="flex:1" onclick="openEditExp(\''+e.id+'\')">✏️ แก้ไข</button><button class="btn br bxs" onclick="askDel(\'expense\',\''+e.id+'\',\''+encNm(e.name)+'\')">🗑️</button></div></div>';
+    var isMyExp=e.payer===CU.id;
+    var chips='';
+    (e.splits||[]).forEach(function(s){
+      var m=null;for(var k=0;k<am.length;k++){if(am[k].id===s.uid){m=am[k];break;}}
+      if(m)chips+='<div class="mchip"><div class="av avs '+AVC[m.c||0]+'" style="width:20px;height:20px;border-radius:6px;font-size:9px">'+ini(m.name)+'</div>'+m.name+' '+s.pct+'%</div>';
+    });
+    rows+='<div class="icard" style="'+(isMyExp?'border-left:3px solid var(--mint);':'border-left:3px solid var(--bd);')+'">';
+    // ถ้าไม่ใช่ของฉัน — แสดง badge "ของ ..."
+    if(!isMyExp&&!FILTER_USER){
+      rows+='<div style="font-size:10px;font-weight:700;color:var(--tx3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px">รายการของ '+( py?py.name:'?')+'</div>';
+    }
+    rows+='<div class="itop">';
+    rows+='<div class="iinfo"><span style="font-size:24px">'+e.icon+'</span>';
+    rows+='<div><div style="font-size:14px;font-weight:700">'+e.name+'</div>';
+    rows+='<div style="font-size:11px;color:var(--tx3)">จ่ายโดย '+(py?py.name:'?')+(e.hasEV?' · ⚡EV':'')+'</div></div></div>';
+    rows+='<div style="text-align:right">';
+    rows+='<div style="font-size:20px;font-weight:800;color:var(--mint)">฿'+fmt(e.net||e.amount)+'</div>';
+    if(ma)rows+='<div style="font-size:11px;color:var(--tx3)">ฉัน ฿'+fmt(ma)+'</div>';
+    rows+='</div></div>';
+    rows+='<div style="display:flex;flex-wrap:wrap;margin-bottom:10px">'+chips+'</div>';
+    if(e.note)rows+='<div style="font-size:11px;color:var(--tx2);margin-bottom:8px">📝 '+e.note+'</div>';
+    if(e.hasEV)rows+='<div style="font-size:11px;color:var(--mdk);margin-bottom:8px">⚡ EV หัก '+e.evU+'×'+e.evR+'฿ = ฿'+fmt((e.evU||0)*(e.evR||0))+'</div>';
+    rows+='<div style="display:flex;gap:8px">';
+    rows+='<button class="btn bg bxs" style="flex:1" onclick="openEditExp(\''+e.id+'\')">✏️ แก้ไข</button>';
+    rows+='<button class="btn br bxs" onclick="askDel(\'expense\',\''+e.id+'\',\''+encNm(e.name)+'\')">🗑️</button>';
+    rows+='</div></div>';
   });
-  return '<div style="display:flex;gap:7px;margin-bottom:10px;align-items:center">'+gsel+'</div>'
-    +'<div style="background:var(--mint);border-radius:var(--rl);padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 14px rgba(44,198,198,.3)"><div><div style="font-size:10px;color:rgba(255,255,255,.85)">'+ex.length+' รายการ · '+thM()+'</div><div style="font-size:20px;font-weight:800;color:#fff;margin-top:1px">฿'+fmt(tot)+'</div></div><button onclick="openAddExp()" style="background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.4);border-radius:11px;padding:8px 13px;color:#fff;font-family:var(--f);font-size:12px;font-weight:700;cursor:pointer">+ เพิ่ม</button></div>'
-    +(rows||'<div class="empty"><div class="ei">📭</div><div class="et">ยังไม่มีรายการ</div><div class="es">กด + เพิ่มค่าใช้จ่าย</div></div>')
-    +'<div style="height:20px"></div><button class="fab" onclick="openAddExp()">＋</button>';
+
+  var emptyMsg=FILTER_USER
+    ?'<div class="empty"><div class="ei">📭</div><div class="et">ยังไม่มีรายการของ '+filterLabel+'</div><div class="es">กด + เพิ่มค่าใช้จ่าย</div></div>'
+    :'<div class="empty"><div class="ei">📭</div><div class="et">ยังไม่มีรายการเดือนนี้</div><div class="es">กด + เพิ่มค่าใช้จ่าย</div></div>';
+
+  return (gsel?'<div style="display:flex;gap:7px;margin-bottom:10px;align-items:center">'+gsel+'</div>':'')
+    +filterBar+summaryBar
+    +(rows||emptyMsg)
+    +'<div style="height:24px"></div>'
+    +'<button class="fab" onclick="openAddExp()">＋</button>';
 }
 
 // ════ GROUPS PAGE ════
@@ -1105,7 +1178,7 @@ async function doDel(type,id){
   closeMo('mdel');toast('🗑️ ลบสำเร็จ');go(CTAB);
 }
 // ════ PDF ════
-function ph(t,s){return '<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><title>'+t+'</title><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet"><style>body{font-family:"IBM Plex Sans Thai",sans-serif;max-width:720px;margin:32px auto;color:#111827;padding:0 20px;font-size:13px}h1{color:#18A0A0;font-size:20px;font-weight:800;margin-bottom:3px}.sub{color:#6B7280;font-size:11px;margin-bottom:20px}h2{font-size:13px;font-weight:700;margin:18px 0 7px}table{width:100%;border-collapse:collapse;margin-bottom:14px}th{background:#2CC6C6;color:#fff;padding:9px 12px;text-align:left;font-size:11px;font-weight:700}td{padding:8px 12px;border-bottom:1px solid #E6F8F8;font-size:11px}.tt td{font-weight:700;background:#E6F8F8;color:#18A0A0}.uc{border:1.5px solid #B8E8E8;border-radius:10px;margin-bottom:10px;overflow:hidden}.uh{background:#2CC6C6;color:#fff;padding:9px 13px;font-weight:700;font-size:12px}.us{background:#E6F8F8;padding:9px 13px;font-weight:800;color:#18A0A0;font-size:14px}.tr{border:1px solid #B8E8E8;border-radius:8px;padding:9px 13px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}.tra{font-size:15px;font-weight:800;color:#18A0A0}@media print{button{display:none}}</style></head><body><h1>🏠 HomeSplit — '+t+'</h1><div class="sub">'+s+' · '+new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'})+'</div>';}
+function ph(t,s){return '<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><title>'+t+'</title><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet"><style>body{font-family:"IBM Plex Sans Thai",sans-serif;max-width:720px;margin:32px auto;color:#111827;padding:0 20px;font-size:13px}h1{color:#18A0A0;font-size:20px;font-weight:800;margin-bottom:3px}.sub{color:#6B7280;font-size:11px;margin-bottom:20px}h2{font-size:13px;font-weight:700;margin:18px 0 7px}table{width:100%;border-collapse:collapse;margin-bottom:14px}th{background:#2CC6C6;color:#fff;padding:9px 12px;text-align:left;font-size:11px;font-weight:700}td{padding:8px 12px;border-bottom:1px solid #E6F8F8;font-size:11px}.tt td{font-weight:700;background:#E6F8F8;color:#18A0A0}.uc{border:1.5px solid #B8E8E8;border-radius:10px;margin-bottom:10px;overflow:hidden}.uh{background:#2CC6C6;color:#fff;padding:9px 13px;font-weight:700;font-size:12px}.us{background:#E6F8F8;padding:9px 13px;font-weight:800;color:#18A0A0;font-size:14px}.tr{border:1px solid #B8E8E8;border-radius:8px;padding:9px 13px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}.tra{font-size:15px;font-weight:800;color:#18A0A0}@media print{button{display:none}}</style></head><body><h1>HomeSplit &mdash; '+t+'</h1><div class="sub">'+s+' &middot; '+new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'})+'</div>';}
 function pdfMon(mk,lbl){
   var g=grps().find(function(x){return x.id===CGRP;});var ex=gexps(CGRP,mk);var am=mems();
   var tot=ex.reduce(function(s,e){return s+(e.net||e.amount||0);},0);var T=settle(ex);
@@ -1185,6 +1258,9 @@ window.addEventListener('storage',function(e){if(e.key===KDB&&CU){dbLoad();go(CT
     localStorage.removeItem(KSES);
   }
 })();
+
+
+
 
 </script>
 </body>
