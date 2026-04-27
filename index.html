@@ -299,10 +299,11 @@ select.fi{-webkit-appearance:none}
 </div>
 <script>
 
+
 // ════════════════════════════════════════
 //  ⚙️  CONFIG — แก้ตรงนี้
 // ════════════════════════════════════════
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOHsaQ9AiwCZ2ND6bUoS8f87OzXfxckc4xbL6LRfA8Ek82yW5-WkZlmtbUDl3uPYLi-g/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOT6Ay0238NA76_PDpYDPN8hBr8TEWnQp0dwVR6ZK_Ek4mD5WE8FnZ0G5_I740LxV4IQ/exec';
 // วาง URL ระหว่าง '' เช่น:
 // const SCRIPT_URL = 'https://script.google.com/macros/s/ABC.../exec';
 
@@ -380,10 +381,17 @@ async function gasPost(action,body){
 }
 
 function normMonthKey(e){
+  // เชื่อ monthKey ที่มีอยู่แล้วเสมอ ถ้า format YYYY-MM ถูกต้อง
   var mk=String((e&&e.monthKey)||'').trim();
   if(/^\d{4}-\d{2}$/.test(mk))return mk;
-  var at=(e&&e.at)?new Date(e.at):new Date();
-  if(isNaN(at.getTime()))at=new Date();
+  // fallback: ใช้ at field
+  var at=null;
+  if(e&&e.at){
+    // Google Sheet อาจส่ง Date object มาเป็น string หรือ timestamp
+    var d=new Date(e.at);
+    if(!isNaN(d.getTime()))at=d;
+  }
+  if(!at)at=new Date();
   return at.getFullYear()+'-'+String(at.getMonth()+1).padStart(2,'0');
 }
 function normExpense(e){
@@ -397,7 +405,11 @@ function normExpense(e){
   var hasEV=(e.hasEV===true||e.hasEV==='true');
   var net=parseFloat(e.net);
   if(isNaN(net)||net<=0)net=hasEV?Math.max(0,amount-(evU*evR)):amount;
-  return Object.assign({},e,{monthKey:normMonthKey(e),amount:amount,hasEV:hasEV,evU:evU,evR:evR,evOwner:e.evOwner||'',net:net,splits:sp,note:e.note||'',icon:e.icon||'💰'});
+  // แปลง at เป็น ISO string เสมอ (Google Sheet ส่งมาเป็น Date object)
+  var atStr=e.at;
+  if(atStr instanceof Date){atStr=atStr.toISOString();}
+  else if(atStr&&typeof atStr!=='string'){atStr=new Date(atStr).toISOString();}
+  return Object.assign({},e,{monthKey:normMonthKey(e),amount:amount,hasEV:hasEV,evU:evU,evR:evR,evOwner:e.evOwner||'',net:net,splits:sp,note:e.note||'',icon:e.icon||'💰',at:atStr||e.at});
 }
 function setReportYearFromData(){
   var years={};
@@ -430,14 +442,19 @@ async function syncFromGAS(){
   });
 
   // รวมข้อมูล local ที่อาจยังไม่ได้ Sync ขึ้น GAS เพื่อไม่ให้หายหลัง Login ใหม่
+  // ใช้ข้อมูลจาก GAS เป็นหลัก (GAS คือ source of truth)
+  // เพิ่มข้อมูล local ที่ยังไม่ได้ sync ขึ้น GAS
   var gasGroups=res.groups||[];
-  var gasExpenses=(res.expenses||[]).map(normExpense);
+  var gasExpenses=res.expenses||[];
+
+  // Push local groups ที่ GAS ยังไม่มี
   (DB.groups||[]).forEach(function(lg){
     var found=gasGroups.find(function(g){return g.id===lg.id;});
     if(!found){gasGroups.push(lg); if(gasUrl())gasPost('saveGroup',{group:lg});}
   });
+
+  // Push local expenses ที่ GAS ยังไม่มี (ไม่ normalize ซ้ำ)
   (DB.expenses||[]).forEach(function(le){
-    le=normExpense(le);
     var found=gasExpenses.find(function(e){return e.id===le.id;});
     if(!found){gasExpenses.push(le); if(gasUrl())gasPost('saveExpense',{expense:le});}
   });
@@ -939,6 +956,7 @@ window.addEventListener('storage',function(e){if(e.key===KDB&&CU){dbLoad();go(CT
     await enterApp();
   }catch(e){localStorage.removeItem(KSES);}
 })();
+
 
 </script>
 </body>
