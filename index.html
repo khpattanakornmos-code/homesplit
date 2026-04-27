@@ -302,7 +302,7 @@ select.fi{-webkit-appearance:none}
 // ════════════════════════════════════════
 //  ⚙️  CONFIG — แก้ตรงนี้
 // ════════════════════════════════════════
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxjEPlgoyjwkPdRqtrw5DSMkaLgokJgj8_ZI9NCDukRPGVc5oFJ2o4YjaUChcS8mFYloA/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOHsaQ9AiwCZ2ND6bUoS8f87OzXfxckc4xbL6LRfA8Ek82yW5-WkZlmtbUDl3uPYLi-g/exec';
 // วาง URL ระหว่าง '' เช่น:
 // const SCRIPT_URL = 'https://script.google.com/macros/s/ABC.../exec';
 
@@ -379,6 +379,33 @@ async function gasPost(action,body){
   }catch(e){return null;}
 }
 
+function normMonthKey(e){
+  var mk=String((e&&e.monthKey)||'').trim();
+  if(/^\d{4}-\d{2}$/.test(mk))return mk;
+  var at=(e&&e.at)?new Date(e.at):new Date();
+  if(isNaN(at.getTime()))at=new Date();
+  return at.getFullYear()+'-'+String(at.getMonth()+1).padStart(2,'0');
+}
+function normExpense(e){
+  e=e||{};
+  var sp=e.splits||[];
+  if(typeof sp==='string'){try{sp=JSON.parse(sp||'[]');}catch(_){sp=[];}}
+  if(!Array.isArray(sp))sp=[];
+  var amount=parseFloat(e.amount)||0;
+  var evU=parseFloat(e.evU)||0;
+  var evR=parseFloat(e.evR)||0;
+  var hasEV=(e.hasEV===true||e.hasEV==='true');
+  var net=parseFloat(e.net);
+  if(isNaN(net)||net<=0)net=hasEV?Math.max(0,amount-(evU*evR)):amount;
+  return Object.assign({},e,{monthKey:normMonthKey(e),amount:amount,hasEV:hasEV,evU:evU,evR:evR,evOwner:e.evOwner||'',net:net,splits:sp,note:e.note||'',icon:e.icon||'💰'});
+}
+function setReportYearFromData(){
+  var years={};
+  exps().forEach(function(e){if(e.gid===CGRP&&e.monthKey){years[String(e.monthKey).split('-')[0]]=1;}});
+  var ys=Object.keys(years).sort();
+  if(ys.length&&ys.indexOf(String(RYEAR))<0)RYEAR=parseInt(ys[ys.length-1]);
+}
+
 // ════ SYNC from GAS → local ════
 async function syncFromGAS(){
   var res=await gasPost('getData');
@@ -404,12 +431,13 @@ async function syncFromGAS(){
 
   // รวมข้อมูล local ที่อาจยังไม่ได้ Sync ขึ้น GAS เพื่อไม่ให้หายหลัง Login ใหม่
   var gasGroups=res.groups||[];
-  var gasExpenses=res.expenses||[];
+  var gasExpenses=(res.expenses||[]).map(normExpense);
   (DB.groups||[]).forEach(function(lg){
     var found=gasGroups.find(function(g){return g.id===lg.id;});
     if(!found){gasGroups.push(lg); if(gasUrl())gasPost('saveGroup',{group:lg});}
   });
   (DB.expenses||[]).forEach(function(le){
+    le=normExpense(le);
     var found=gasExpenses.find(function(e){return e.id===le.id;});
     if(!found){gasExpenses.push(le); if(gasUrl())gasPost('saveExpense',{expense:le});}
   });
@@ -557,6 +585,7 @@ async function enterApp(){
   }
 
   if(!CGRP&&DB.groups.length)CGRP=DB.groups[0].id;
+  setReportYearFromData();
   go('dash');
   if(!gasUrl())setTimeout(function(){toast('💡 กด 👤 → ตั้งค่า GAS URL เพื่อ sync ข้ามเครื่อง',5000);},1000);
 }
@@ -634,6 +663,7 @@ function go(tab){
   var ni=$('nav-'+tab);if(ni)ni.classList.add('on');
   Object.values(CHARTS).forEach(function(c){try{c.destroy();}catch(e){}});CHARTS={};
   dbLoad();if(!CGRP&&DB.groups.length)CGRP=DB.groups[0].id;
+  setReportYearFromData();
   var mc=$('mc');if(!mc)return;mc.scrollTop=0;
   var R={dash:rDash,expenses:rExps,groups:rGrps,report:rRpt};
   mc.innerHTML=(R[tab]||rDash)();
@@ -740,6 +770,7 @@ function rGrps(){
 
 // ════ REPORT ════
 function rRpt(){
+  setReportYearFromData();
   var all=exps().filter(function(e){return e.gid===CGRP;});
   var seen={};var mons=[];all.forEach(function(e){if(!seen[e.monthKey]){seen[e.monthKey]=1;mons.push(e.monthKey);}});mons.sort().reverse();
   var sy={};var yrs=[];mons.forEach(function(mk){var y=mk.split('-')[0];if(!sy[y]){sy[y]=1;yrs.push(y);}});
@@ -850,7 +881,7 @@ async function saveExp(){
   var splits=(g.members||[]).map(function(uid){return{uid:uid,pct:parseInt($('sp'+uid)&&$('sp'+uid).value)||0};});
   var tot=splits.reduce(function(s,sp){return s+sp.pct;},0);
   if(Math.abs(tot-100)>1){toast('❌ % รวมต้องได้ 100% (ตอนนี้ '+tot+'%)');return;}
-  var exp={id:EEXP||genId('e'),gid:CGRP,monthKey:mkNow(),name:name,icon:SEICO,payer:$('mepayer').value||CU.id,amount:amount,hasEV:hev,evU:eu,evR:er,evOwner:eown,net:net,splits:splits,note:($('menote').value||'').trim(),at:now()};
+  var exp=normExpense({id:EEXP||genId('e'),gid:CGRP,monthKey:mkNow(),name:name,icon:SEICO,payer:$('mepayer').value||CU.id,amount:amount,hasEV:hev,evU:eu,evR:er,evOwner:eown,net:net,splits:splits,note:($('menote').value||'').trim(),at:now()});
   var i=DB.expenses.findIndex(function(x){return x.id===exp.id;});
   if(i>=0)DB.expenses[i]=exp;else DB.expenses.push(exp);
   dbSave();
