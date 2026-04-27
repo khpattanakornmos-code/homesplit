@@ -382,15 +382,31 @@ async function gasPost(action,body){
 // ════ SYNC from GAS → local ════
 async function syncFromGAS(){
   var res=await gasPost('getData');
-  if(!res||!res.ok)return false;
-  var lm=DB.members;
-  DB.members=res.members.map(function(m){
-    var loc=null;for(var i=0;i<lm.length;i++){if(lm[i].id===m.id){loc=lm[i];break;}}
+  if(!res||!res.ok){
+    console.log('[Sync] GAS returned error:', res);
+    return false;
+  }
+
+  console.log('[Sync] Got data - members:'+res.members.length+' groups:'+res.groups.length+' expenses:'+res.expenses.length);
+
+  // รักษา pwHash ของ local members ไว้เสมอ
+  var lm=DB.members||[];
+  var newMembers=(res.members||[]).map(function(m){
+    var loc=null;
+    for(var i=0;i<lm.length;i++){if(lm[i].id===m.id){loc=lm[i];break;}}
     return loc?Object.assign({},m,{pwHash:loc.pwHash}):m;
   });
-  DB.groups=res.groups||[];
-  DB.expenses=res.expenses||[];
+  // เพิ่ม local members ที่ GAS ยังไม่มี (เช่น สมัครแบบ offline)
+  lm.forEach(function(lmem){
+    var inGAS=newMembers.find(function(m){return m.id===lmem.id;});
+    if(!inGAS)newMembers.push(lmem);
+  });
+
+  DB.members  = newMembers;
+  DB.groups   = res.groups   || [];
+  DB.expenses = res.expenses || [];
   dbSave();
+  console.log('[Sync] Done. DB now - members:'+DB.members.length+' groups:'+DB.groups.length+' expenses:'+DB.expenses.length);
   return true;
 }
 
@@ -574,16 +590,30 @@ function saveGas(){
 function delGas(){localStorage.removeItem(KGAS);if($('gasinp'))$('gasinp').value='';if($('gasdelbtn'))$('gasdelbtn').style.display='none';toast('🗑️ ลบ URL');closeMo('mgas');}
 async function testGas(){
   var url=($('gasinp').value||'').trim();
-  if(!url){toast('❌ กรุณากรอก URL');return;}
-  var el=$('gastestmsg');el.style.display='block';
+  if(!url){toast('กรุณากรอก URL');return;}
+  var el=$('gastestmsg');
+  el.style.display='block';
   el.style.cssText='display:block;padding:8px 11px;border-radius:9px;font-size:12px;margin-bottom:10px;background:var(--obg);border:1px solid #FED7AA;color:#C2410C';
-  el.textContent='⏳ กำลังทดสอบ...';
+  el.textContent='กำลังทดสอบ...';
   try{
     var r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'ping'})});
     var j=await r.json();
-    if(j.ok||j.pong){el.style.cssText='display:block;padding:8px 11px;border-radius:9px;font-size:12px;margin-bottom:10px;background:var(--gbg);border:1px solid #BBF7D0;color:var(--grn)';el.textContent='✅ เชื่อมต่อสำเร็จ! v'+j.version;}
-    else{el.style.cssText='display:block;padding:8px 11px;border-radius:9px;font-size:12px;margin-bottom:10px;background:var(--rbg);border:1px solid #FECACA;color:var(--red)';el.textContent='⚠️ '+JSON.stringify(j);}
-  }catch(e){el.style.cssText='display:block;padding:8px 11px;border-radius:9px;font-size:12px;margin-bottom:10px;background:var(--rbg);border:1px solid #FECACA;color:var(--red)';el.textContent='❌ '+String(e);}
+    if(j.ok||j.pong){
+      var r2=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'getData'})});
+      var j2=await r2.json();
+      var info='OK GAS v'+j.version;
+      if(j2.ok){info+=' | Users:'+(j2.members||[]).length+' Groups:'+(j2.groups||[]).length+' Expenses:'+(j2.expenses||[]).length;}
+      else{info+=' | getData error: '+(j2.error||'?');}
+      el.style.cssText='display:block;padding:8px 11px;border-radius:9px;font-size:12px;margin-bottom:10px;background:var(--gbg);border:1px solid #BBF7D0;color:var(--grn)';
+      el.textContent=info;
+    }else{
+      el.style.cssText='display:block;padding:8px 11px;border-radius:9px;font-size:12px;margin-bottom:10px;background:var(--rbg);border:1px solid #FECACA;color:var(--red)';
+      el.textContent='Error: '+JSON.stringify(j);
+    }
+  }catch(e){
+    el.style.cssText='display:block;padding:8px 11px;border-radius:9px;font-size:12px;margin-bottom:10px;background:var(--rbg);border:1px solid #FECACA;color:var(--red)';
+    el.textContent='Network error: '+String(e);
+  }
 }
 
 // ════ NAVIGATION ════
@@ -762,7 +792,8 @@ function saveGrp(){
   var i=DB.groups.findIndex(function(x){return x.id===grp.id;});
   if(i>=0)DB.groups[i]=grp;else DB.groups.push(grp);
   dbSave();if(!CGRP)CGRP=grp.id;
-  gasPost('saveGroup',{group:grp});
+  // Sync to GAS (fire and forget — local DB already saved)
+  if(gasUrl()){gasPost('saveGroup',{group:grp});}
   closeMo('mgrp');toast('✅ บันทึกกลุ่มสำเร็จ');go('groups');
 }
 
@@ -811,7 +842,7 @@ function saveExp(){
   var i=DB.expenses.findIndex(function(x){return x.id===exp.id;});
   if(i>=0)DB.expenses[i]=exp;else DB.expenses.push(exp);
   dbSave();
-  gasPost('saveExpense',{expense:exp});
+  if(gasUrl()){gasPost('saveExpense',{expense:exp});}
   closeMo('mexp');toast('✅ บันทึกสำเร็จ');go(CTAB);
 }
 
@@ -821,7 +852,7 @@ function doDel(type,id){
   if(type==='group'){DB.groups=DB.groups.filter(function(x){return x.id!==id;});DB.expenses=DB.expenses.filter(function(x){return x.gid!==id;});if(CGRP===id)CGRP=DB.groups[0]?DB.groups[0].id:null;}
   else DB.expenses=DB.expenses.filter(function(x){return x.id!==id;});
   dbSave();
-  gasPost(type==='group'?'deleteGroup':'deleteExpense',{id:id});
+  if(gasUrl()){gasPost(type==='group'?'deleteGroup':'deleteExpense',{id:id});}
   closeMo('mdel');toast('🗑️ ลบสำเร็จ');go(CTAB);
 }
 
