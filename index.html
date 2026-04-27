@@ -406,6 +406,7 @@ select.fi{-webkit-appearance:none}
 
 
 
+
 // ════════════════════════════════════════
 //  ⚙️  CONFIG — แก้ตรงนี้
 // ════════════════════════════════════════
@@ -516,42 +517,18 @@ function setReportYearFromData(){
 // ════ SYNC from GAS → local ════
 async function syncFromGAS(){
   var res=await gasPost('getData');
-  if(!res||!res.ok){
-    console.log('[Sync] GAS returned error:', res);
-    return false;
-  }
+  if(!res||!res.ok)return false;
 
-  console.log('[Sync] Got data - members:'+res.members.length+' groups:'+res.groups.length+' expenses:'+res.expenses.length);
-
-  // รักษา pwHash ของ local members ไว้เสมอ
+  // GAS = source of truth เสมอ
+  // ไม่ push local ขึ้น GAS (ป้องกันข้อมูลเก่าใน browser รั่วขึ้น Sheet)
   var lm=DB.members||[];
-  var newMembers=(res.members||[]).map(function(m){
+  DB.members=(res.members||[]).map(function(m){
     var loc=null;
     for(var i=0;i<lm.length;i++){if(lm[i].id===m.id){loc=lm[i];break;}}
     return loc?Object.assign({},m,{pwHash:loc.pwHash}):m;
   });
-  // เพิ่ม local members ที่ GAS ยังไม่มี (เช่น สมัครแบบ offline)
-  lm.forEach(function(lmem){
-    var inGAS=newMembers.find(function(m){return m.id===lmem.id;});
-    if(!inGAS)newMembers.push(lmem);
-  });
-
-  // รวมข้อมูล local ที่อาจยังไม่ได้ Sync ขึ้น GAS เพื่อไม่ให้หายหลัง Login ใหม่
-  var gasGroups=res.groups||[];
-  var gasExpenses=(res.expenses||[]).map(normExpense);
-  (DB.groups||[]).forEach(function(lg){
-    var found=gasGroups.find(function(g){return g.id===lg.id;});
-    if(!found){gasGroups.push(lg); if(gasUrl())gasPost('saveGroup',{group:lg});}
-  });
-  (DB.expenses||[]).forEach(function(le){
-    le=normExpense(le);
-    var found=gasExpenses.find(function(e){return e.id===le.id;});
-    if(!found){gasExpenses.push(le); if(gasUrl())gasPost('saveExpense',{expense:le});}
-  });
-
-  DB.members  = newMembers;
-  DB.groups   = gasGroups;
-  DB.expenses = gasExpenses;
+  DB.groups=(res.groups||[]);
+  DB.expenses=(res.expenses||[]).map(normExpense);
   dbSave();
   return true;
 }
@@ -659,7 +636,9 @@ async function doAuth(){
 }
 
 function doLogout(){
-  localStorage.removeItem(KSES);CU=null;
+  localStorage.removeItem(KSES);
+  localStorage.removeItem(KDB);
+  CU=null; DB=null; CGRP=null;
   closeMo('mpf');
   $('sa').style.display='none';$('sa').classList.remove('active');
   $('sl').classList.add('active');$('sl').style.display='';
@@ -1089,21 +1068,62 @@ window.addEventListener('storage',function(e){if(e.key===KDB&&CU){dbLoad();go(CT
 
 // ════ STARTUP ════
 (async function(){
-  var raw=localStorage.getItem(KSES);if(!raw)return;
+  var raw=localStorage.getItem(KSES);
+  if(!raw)return;
   try{
-    var ses=JSON.parse(raw);dbLoad();
-    var found=null;for(var i=0;i<DB.members.length;i++){if(DB.members[i].id===ses.id){found=DB.members[i];break;}}
-    if(!found){localStorage.removeItem(KSES);return;}
-    var u={};Object.keys(found).forEach(function(k){if(k!=='pwHash')u[k]=found[k];});
+    var ses=JSON.parse(raw);
+    dbLoad();
+
+    if(gasUrl()){
+      // ── มี GAS URL: ต้อง verify กับ Sheet จริงก่อนเสมอ ──
+      var gd=await gasPost('getData');
+      if(gd&&gd.ok){
+        // Sheet มีข้อมูล: ตรวจว่า user ยังอยู่ใน Sheet ไหม
+        var inGAS=(gd.members||[]).find(function(m){return m.id===ses.id;});
+        if(!inGAS){
+          // User ไม่อยู่ใน Sheet → clear ทุกอย่าง ไม่ auto-login
+          localStorage.removeItem(KSES);
+          localStorage.removeItem(KDB);
+          DB=null;
+          return;
+        }
+        // อัปเดต local DB จาก GAS (GAS = source of truth)
+        var lm=DB.members||[];
+        DB.members=(gd.members||[]).map(function(m){
+          var loc=null;
+          for(var i=0;i<lm.length;i++){if(lm[i].id===m.id){loc=lm[i];break;}}
+          return loc?Object.assign({},m,{pwHash:loc.pwHash}):m;
+        });
+        DB.groups=gd.groups||[];
+        DB.expenses=(gd.expenses||[]).map(normExpense);
+        dbSave();
+      } else {
+        // GAS error/offline: verify local เท่านั้น ไม่ push
+        var found=null;
+        for(var i=0;i<DB.members.length;i++){if(DB.members[i].id===ses.id){found=DB.members[i];break;}}
+        if(!found){localStorage.removeItem(KSES);return;}
+      }
+    } else {
+      // ── ไม่มี GAS URL: verify local เท่านั้น ──
+      var found2=null;
+      for(var i=0;i<DB.members.length;i++){if(DB.members[i].id===ses.id){found2=DB.members[i];break;}}
+      if(!found2){localStorage.removeItem(KSES);return;}
+    }
+
+    // หา user ล่าสุดใน DB
+    var current=null;
+    for(var i=0;i<DB.members.length;i++){if(DB.members[i].id===ses.id){current=DB.members[i];break;}}
+    if(!current){localStorage.removeItem(KSES);return;}
+
+    var u={};
+    Object.keys(current).forEach(function(k){if(k!=='pwHash')u[k]=current[k];});
     CU=u;
     await enterApp();
-  }catch(e){localStorage.removeItem(KSES);}
+  }catch(e){
+    console.error('[Startup] Error:',e);
+    localStorage.removeItem(KSES);
+  }
 })();
-
-
-
-
-
 </script>
 </body>
 </html>
