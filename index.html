@@ -538,6 +538,7 @@ function openPf(){
 }
 
 async function doRefresh(){
+  if(!CU){toast('กรุณา Login ก่อน');return;}
   var btn=$('rfbtn');btn.textContent='⏳';btn.style.pointerEvents='none';
   dbLoad();
   var ok=await syncFromGAS();
@@ -578,12 +579,13 @@ async function testGas(){
 
 // ════ NAVIGATION ════
 function go(tab){
+  if(!CU)return; // ยังไม่ได้ login อย่า render
   CTAB=tab;
   document.querySelectorAll('.ni').forEach(function(el){el.classList.remove('on');});
   var ni=$('nav-'+tab);if(ni)ni.classList.add('on');
   Object.values(CHARTS).forEach(function(c){try{c.destroy();}catch(e){}});CHARTS={};
   dbLoad();if(!CGRP&&DB.groups.length)CGRP=DB.groups[0].id;
-  var mc=$('mc');mc.scrollTop=0;
+  var mc=$('mc');if(!mc)return;mc.scrollTop=0;
   var R={dash:rDash,expenses:rExps,groups:rGrps,report:rRpt};
   mc.innerHTML=(R[tab]||rDash)();
   if(tab==='dash')initDash();
@@ -616,6 +618,7 @@ function settle(earr){
 
 // ════ DASHBOARD ════
 function rDash(){
+  if(!CU)return '<div class="empty"><div class="ei">🔐</div><div class="et">กรุณาเข้าสู่ระบบ</div></div>';
   var g=grps().find(function(x){return x.id===CGRP;});
   if(!g)return '<div class="empty"><div class="ei">👥</div><div class="et">ยังไม่มีกลุ่ม</div><div class="es">สร้างกลุ่มก่อนครับ</div></div><button class="btn bp mt12" onclick="go(\'groups\')">+ สร้างกลุ่ม</button>';
   var mk=mkNow(),ex=gexps(g.id,mk),am=mems();
