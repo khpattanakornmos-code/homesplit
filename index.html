@@ -66,7 +66,7 @@ select.fi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 .emsg{font-size:12px;color:var(--red);margin-top:5px;display:none}
 
 /* HEADER */
-.hdr{background:#fff;padding:calc(var(--st)+10px) 1rem 10px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:var(--sh)}
+.hdr{background:#fff;padding:calc(var(--st)+12px) 1rem 11px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:var(--sh);min-height:calc(var(--st)+62px)}
 .hl{display:flex;align-items:center;gap:10px}
 .hlogo{width:38px;height:38px;border-radius:12px;overflow:hidden;flex-shrink:0}
 .hlogo img{width:100%;height:100%;object-fit:cover;object-position:center}
@@ -77,7 +77,7 @@ select.fi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 .ibt:active{background:var(--mpal);transform:scale(.93)}
 
 /* NAV — 60px height, 44pt+ per tab */
-.nav{background:#fff;border-top:1px solid var(--bd);padding:6px 4px calc(var(--sb)+6px);display:flex;justify-content:space-around;flex-shrink:0;box-shadow:0 -2px 14px rgba(0,0,0,.06)}
+.nav{background:#fff;border-top:1px solid var(--bd);padding:8px 4px calc(var(--sb)+8px);display:flex;justify-content:space-around;flex-shrink:0;box-shadow:0 -2px 14px rgba(0,0,0,.06)}
 .ni{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 10px;border-radius:14px;cursor:pointer;transition:all .15s;min-width:60px;min-height:52px;justify-content:center;border:none;background:transparent;font-family:var(--f);-webkit-tap-highlight-color:transparent}
 .nii{font-size:22px;line-height:1;transition:transform .15s}
 .nil{font-size:10px;font-weight:500;color:var(--tx3);margin-top:1px}
@@ -209,6 +209,15 @@ select.fi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 *{-webkit-backface-visibility:hidden}
 /* Better tap areas */
 .ni,.ibt{touch-action:manipulation}
+
+/* Dynamic Island / Notch safe area — ensures header never overlaps */
+@supports(padding: max(0px)){
+  .hdr{padding-top:max(12px,calc(env(safe-area-inset-top,0px)+12px))!important;}
+  .nav{padding-bottom:max(8px,calc(env(safe-area-inset-bottom,0px)+8px))!important;}
+  .ms{padding-bottom:max(1.5rem,calc(env(safe-area-inset-bottom,0px)+1.5rem))!important;}
+  .toast{bottom:max(82px,calc(env(safe-area-inset-bottom,0px)+82px))!important;}
+  .fab{bottom:max(76px,calc(env(safe-area-inset-bottom,0px)+76px))!important;}
+}
 </style>
 </head>
 <body>
@@ -465,6 +474,7 @@ select.fi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 <div class="toast" id="toast"></div>
 </div>
 <script>
+
 
 
 
@@ -830,22 +840,49 @@ function go(tab){
 function gexps(gid,mk){return exps().filter(function(e){return e.gid===gid&&(!mk||e.monthKey===mk);});}
 function mshare(earr,uid){return earr.reduce(function(s,e){var sp=null;(e.splits||[]).forEach(function(x){if(x.uid===uid)sp=x;});return s+(sp?(e.net||e.amount||0)*sp.pct/100:0);},0);}
 function settle(earr){
-  var net={};mems().forEach(function(m){net[m.id]=0;});
+  // init net จาก mems() ก่อน
+  var net={};
+  mems().forEach(function(m){net[m.id]=0;});
+
+  // คำนวณ net จาก expenses
   earr.forEach(function(e){
     var tot=e.net||e.amount||0;
     net[e.payer]=(net[e.payer]||0)+tot;
     if(e.hasEV&&e.evOwner)net[e.evOwner]=(net[e.evOwner]||0)+(e.evU||0)*(e.evR||0);
     (e.splits||[]).forEach(function(s){net[s.uid]=(net[s.uid]||0)-tot*s.pct/100;});
   });
+
+  // สร้าง pos/neg จาก ALL keys ใน net (ไม่จำกัดแค่ mems())
+  // เพื่อครอบคลุม member ที่อาจยังไม่ sync ใน local DB
+  var am=mems();
+  function getMember(uid){
+    var m=null;for(var i=0;i<am.length;i++){if(am[i].id===uid){m=am[i];break;}}
+    return m||{id:uid,name:uid.substring(0,4),c:0};
+  }
+
   var pos=[],neg=[];
-  mems().forEach(function(m){if(net[m.id]>0.5)pos.push(Object.assign({},m,{a:net[m.id]}));else if(net[m.id]<-0.5)neg.push(Object.assign({},m,{a:-net[m.id]}));});
-  pos.sort(function(a,b){return b.a-a.a;});neg.sort(function(a,b){return b.a-a.a;});
+  Object.keys(net).forEach(function(uid){
+    var v=net[uid];
+    var m=getMember(uid);
+    if(v>0.5)pos.push(Object.assign({},m,{a:v}));
+    else if(v<-0.5)neg.push(Object.assign({},m,{a:-v}));
+  });
+  pos.sort(function(a,b){return b.a-a.a;});
+  neg.sort(function(a,b){return b.a-a.a;});
+
   var T=[],ci=0,di=0;
-  var cr=pos.map(function(m){return Object.assign({},m);}),dr=neg.map(function(m){return Object.assign({},m);});
+  var cr=pos.map(function(m){return Object.assign({},m);}),
+      dr=neg.map(function(m){return Object.assign({},m);});
   while(ci<cr.length&&di<dr.length){
     var p=Math.min(cr[ci].a,dr[di].a);
-    if(p>0.5)T.push({from:dr[di].id,fn:dr[di].name,fc:dr[di].c,to:cr[ci].id,tn:cr[ci].name,tc:cr[ci].c,amt:p});
-    cr[ci].a-=p;dr[di].a-=p;if(cr[ci].a<0.5)ci++;if(dr[di].a<0.5)di++;
+    if(p>0.5)T.push({
+      from:dr[di].id,fn:dr[di].name,fc:dr[di].c||0,
+      to:cr[ci].id,tn:cr[ci].name,tc:cr[ci].c||0,
+      amt:Math.round(p*100)/100
+    });
+    cr[ci].a-=p;dr[di].a-=p;
+    if(cr[ci].a<0.5)ci++;
+    if(dr[di].a<0.5)di++;
   }
   return T;
 }
@@ -1258,6 +1295,7 @@ window.addEventListener('storage',function(e){if(e.key===KDB&&CU){dbLoad();go(CT
     localStorage.removeItem(KSES);
   }
 })();
+
 
 
 
