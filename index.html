@@ -300,10 +300,11 @@ select.fi{-webkit-appearance:none}
 <script>
 
 
+
 // ════════════════════════════════════════
 //  ⚙️  CONFIG — แก้ตรงนี้
 // ════════════════════════════════════════
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOT6Ay0238NA76_PDpYDPN8hBr8TEWnQp0dwVR6ZK_Ek4mD5WE8FnZ0G5_I740LxV4IQ/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpBs2PckZkefPJKhcskWi7vsHMunfbnsOoh3wT4sWO5puGd6JkSMYcq6yd87JlNfgrQA/exec';
 // วาง URL ระหว่าง '' เช่น:
 // const SCRIPT_URL = 'https://script.google.com/macros/s/ABC.../exec';
 
@@ -396,6 +397,12 @@ function normMonthKey(e){
 }
 function normExpense(e){
   e=e||{};
+  // แปลง at เป็น ISO string ก่อน (Google Sheet ส่ง Date object มา)
+  var atStr=e.at;
+  if(atStr instanceof Date){atStr=atStr.toISOString();}
+  else if(atStr&&typeof atStr!=='string'){try{atStr=new Date(atStr).toISOString();}catch(_){atStr='';}}
+  // ใส่ at ที่แปลงแล้วก่อน normMonthKey จะได้ใช้ค่าที่ถูก
+  var e2=Object.assign({},e,{at:atStr});
   var sp=e.splits||[];
   if(typeof sp==='string'){try{sp=JSON.parse(sp||'[]');}catch(_){sp=[];}}
   if(!Array.isArray(sp))sp=[];
@@ -405,11 +412,7 @@ function normExpense(e){
   var hasEV=(e.hasEV===true||e.hasEV==='true');
   var net=parseFloat(e.net);
   if(isNaN(net)||net<=0)net=hasEV?Math.max(0,amount-(evU*evR)):amount;
-  // แปลง at เป็น ISO string เสมอ (Google Sheet ส่งมาเป็น Date object)
-  var atStr=e.at;
-  if(atStr instanceof Date){atStr=atStr.toISOString();}
-  else if(atStr&&typeof atStr!=='string'){atStr=new Date(atStr).toISOString();}
-  return Object.assign({},e,{monthKey:normMonthKey(e),amount:amount,hasEV:hasEV,evU:evU,evR:evR,evOwner:e.evOwner||'',net:net,splits:sp,note:e.note||'',icon:e.icon||'💰',at:atStr||e.at});
+  return Object.assign({},e2,{monthKey:normMonthKey(e2),amount:amount,hasEV:hasEV,evU:evU,evR:evR,evOwner:e.evOwner||'',net:net,splits:sp,note:e.note||'',icon:e.icon||'💰'});
 }
 function setReportYearFromData(){
   var years={};
@@ -956,6 +959,7 @@ window.addEventListener('storage',function(e){if(e.key===KDB&&CU){dbLoad();go(CT
     await enterApp();
   }catch(e){localStorage.removeItem(KSES);}
 })();
+
 
 
 </script>
