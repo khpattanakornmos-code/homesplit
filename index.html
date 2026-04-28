@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- HomeSplit v5 Build: iPhone Full Frame Layout Fix -->
+<!-- HomeSplit v5 Build: 2026-04-27 14:53 -->
 <html lang="th">
 <head>
 <meta charset="UTF-8">
@@ -245,6 +245,98 @@ select.fi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 .fab{bottom: max(80px, calc(var(--safe-bot) + 80px)) !important;}
 /* Toast */
 .toast{bottom: max(90px, calc(var(--safe-bot) + 90px)) !important;}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   UI ONLY PATCH — iPhone full-frame header/bottom balance
+   แก้เฉพาะ Layout/UI ไม่แตะ JavaScript, Login, API, Data
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --ui-safe-top: env(safe-area-inset-top, 0px);
+  --ui-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --ui-safe-left: env(safe-area-inset-left, 0px);
+  --ui-safe-right: env(safe-area-inset-right, 0px);
+}
+html,body{
+  width:100%;
+  min-height:100%;
+  background:var(--bg) !important;
+}
+body{
+  margin:0 !important;
+  padding:0 !important;
+}
+#app{
+  width:100% !important;
+  max-width:none !important;
+  height:100svh !important;
+  min-height:100dvh !important;
+  margin:0 !important;
+  background:var(--bg) !important;
+}
+.screen.active{
+  min-height:0;
+}
+.hdr{
+  width:100% !important;
+  margin:0 !important;
+  border-radius:0 0 28px 28px !important;
+  padding-top:max(14px, calc(var(--ui-safe-top) + 10px)) !important;
+  padding-bottom:14px !important;
+  padding-left:max(14px, calc(var(--ui-safe-left) + 14px)) !important;
+  padding-right:max(14px, calc(var(--ui-safe-right) + 14px)) !important;
+  min-height:max(82px, calc(var(--ui-safe-top) + 64px)) !important;
+  box-shadow:0 4px 18px rgba(0,0,0,.055) !important;
+  border-bottom:1px solid rgba(178,224,224,.65) !important;
+  flex-shrink:0 !important;
+}
+.sc{
+  padding-top:14px !important;
+  padding-left:max(14px, calc(var(--ui-safe-left) + 14px)) !important;
+  padding-right:max(14px, calc(var(--ui-safe-right) + 14px)) !important;
+  padding-bottom:18px !important;
+}
+.nav{
+  width:100% !important;
+  margin:0 !important;
+  border-radius:28px 28px 0 0 !important;
+  padding-top:10px !important;
+  padding-bottom:max(10px, calc(var(--ui-safe-bottom) + 8px)) !important;
+  padding-left:max(8px, calc(var(--ui-safe-left) + 8px)) !important;
+  padding-right:max(8px, calc(var(--ui-safe-right) + 8px)) !important;
+  box-shadow:0 -4px 18px rgba(0,0,0,.07) !important;
+  border-top:1px solid rgba(178,224,224,.65) !important;
+  flex-shrink:0 !important;
+}
+.ni{
+  min-width:64px !important;
+  min-height:56px !important;
+  border-radius:20px !important;
+}
+.fab{
+  bottom:max(86px, calc(var(--ui-safe-bottom) + 86px)) !important;
+}
+.toast{
+  bottom:max(96px, calc(var(--ui-safe-bottom) + 96px)) !important;
+}
+.mo{
+  padding-left:var(--ui-safe-left);
+  padding-right:var(--ui-safe-right);
+}
+.ms{
+  width:100% !important;
+  max-width:none !important;
+  border-radius:28px 28px 0 0 !important;
+  padding-bottom:max(1.25rem, calc(var(--ui-safe-bottom) + 1.25rem)) !important;
+}
+@media (min-width:431px){
+  #app{
+    max-width:430px !important;
+    margin:0 auto !important;
+  }
+  .ms{max-width:430px !important;}
+}
+
 </style>
 </head>
 <body>
@@ -1268,115 +1360,7 @@ async function doDel(type,id){
   closeMo('mdel');toast('🗑️ ลบสำเร็จ');go(CTAB);
 }
 // ════ PDF ════
-function ph(t,s){return '<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><title>'+t+'</title><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet"><style>body{font-family:"IBM Plex Sans Thai",sans-serif;max-width:720px;margin:32px auto;color:#111827;padding:0 20px;font-size:13px}h1{color:#18A0A0;font-size:20px;font-weight:800;margin-bottom:3px}.sub{color:#6B7280;font-size:11px;margin-bottom:20px}h2{font-size:13px;font-weight:700;margin:18px 0 7px}table{width:100%;border-collapse:collapse;margin-bottom:14px}th{background:#2CC6C6;color:#fff;padding:9px 12px;text-align:left;font-size:11px;font-weight:700}td{padding:8px 12px;border-bottom:1px solid #E6F8F8;font-size:11px}.tt td{font-weight:700;background:#E6F8F8;color:#18A0A0}.uc{border:1.5px solid #B8E8E8;border-radius:10px;margin-bottom:10px;overflow:hidden}.uh{background:#2CC6C6;color:#fff;padding:9px 13px;font-weight:700;font-size:12px}.us{background:#E6F8F8;padding:9px 13px;font-weight:800;color:#18A0A0;font-size:14px}.tr{border:1px solid #B8E8E8;border-radius:8px;padding:9px 13px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}.tra{font-size:15px;font-weight:800;color:#18A0A0}@media print{button{display:none}}
-
-/* =========================================================
-   iPhone Full Frame Layout Fix — 13 to 17 Pro Max
-   ปรับเฉพาะ Layout: Header / Bottom Nav / Safe Area
-   ไม่เปลี่ยน logic หรือข้อมูลส่วนอื่น
-   ========================================================= */
-:root{
-  --iphone-top: env(safe-area-inset-top, 0px);
-  --iphone-bottom: env(safe-area-inset-bottom, 0px);
-  --iphone-left: env(safe-area-inset-left, 0px);
-  --iphone-right: env(safe-area-inset-right, 0px);
-  --bottom-nav-h: 96px;
-}
-html,body{
-  width:100%;
-  min-height:100%;
-  background:var(--bg);
-  overflow:hidden;
-}
-#app{
-  width:100vw !important;
-  max-width:none !important;
-  height:100dvh !important;
-  margin:0 !important;
-  border-radius:0 !important;
-  background:var(--bg);
-}
-.screen.active{
-  width:100%;
-  min-width:0;
-}
-/* Header เต็มกรอบบนของ iPhone และเว้น Dynamic Island */
-.hdr{
-  width:100% !important;
-  margin:0 !important;
-  position:relative;
-  z-index:60;
-  border-radius:0 0 30px 30px !important;
-  padding-top:calc(var(--iphone-top) + 12px) !important;
-  padding-bottom:14px !important;
-  padding-left:max(18px, calc(var(--iphone-left) + 18px)) !important;
-  padding-right:max(18px, calc(var(--iphone-right) + 18px)) !important;
-  min-height:calc(var(--iphone-top) + 76px) !important;
-  box-shadow:0 8px 24px rgba(0,0,0,.07) !important;
-  border-bottom:1px solid rgba(178,224,224,.65) !important;
-}
-.hdr .hl{min-width:0;flex:1;}
-.hdr .ht{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.hdr > div:last-child{display:flex;gap:8px;flex-shrink:0;}
-/* เนื้อหาชิดกรอบมือถือแต่ยังมี breathing space */
-.sc{
-  width:100%;
-  padding-left:max(14px, calc(var(--iphone-left) + 14px)) !important;
-  padding-right:max(14px, calc(var(--iphone-right) + 14px)) !important;
-  padding-top:14px !important;
-  padding-bottom:calc(var(--bottom-nav-h) + var(--iphone-bottom) + 22px) !important;
-}
-/* Bottom Nav เต็มกรอบล่าง โค้งตามมุม iPhone และไม่เหลือแถบว่าง */
-.nav{
-  position:fixed !important;
-  left:0 !important;
-  right:0 !important;
-  bottom:0 !important;
-  width:100vw !important;
-  max-width:none !important;
-  margin:0 !important;
-  z-index:80 !important;
-  border-radius:30px 30px 0 0 !important;
-  padding-top:10px !important;
-  padding-bottom:calc(var(--iphone-bottom) + 8px) !important;
-  padding-left:max(10px, calc(var(--iphone-left) + 10px)) !important;
-  padding-right:max(10px, calc(var(--iphone-right) + 10px)) !important;
-  min-height:calc(var(--bottom-nav-h) + var(--iphone-bottom)) !important;
-  box-shadow:0 -8px 28px rgba(0,0,0,.10) !important;
-  border-top:1px solid rgba(178,224,224,.65) !important;
-}
-.nav .ni{
-  flex:1;
-  max-width:120px;
-  min-width:0 !important;
-}
-.fab{
-  bottom:calc(var(--bottom-nav-h) + var(--iphone-bottom) + 16px) !important;
-}
-.toast{
-  bottom:calc(var(--bottom-nav-h) + var(--iphone-bottom) + 22px) !important;
-}
-.mo{
-  padding-left:var(--iphone-left);
-  padding-right:var(--iphone-right);
-}
-.ms{
-  width:100% !important;
-  max-width:none !important;
-  border-radius:30px 30px 0 0 !important;
-  padding-bottom:calc(var(--iphone-bottom) + 18px) !important;
-}
-@media (min-width: 431px){
-  .hero,.card,.tbar,.rphdr{max-width:100%;}
-}
-@media (max-width: 390px){
-  .hdr{padding-left:14px !important;padding-right:14px !important;}
-  .ibt{width:38px;height:38px;}
-  .hlogo{width:36px;height:36px;}
-  .ht{font-size:15px;}
-  .nav{border-radius:26px 26px 0 0 !important;}
-}
-</style></head><body><h1>HomeSplit &mdash; '+t+'</h1><div class="sub">'+s+' &middot; '+new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'})+'</div>';}
+function ph(t,s){return '<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><title>'+t+'</title><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet"><style>body{font-family:"IBM Plex Sans Thai",sans-serif;max-width:720px;margin:32px auto;color:#111827;padding:0 20px;font-size:13px}h1{color:#18A0A0;font-size:20px;font-weight:800;margin-bottom:3px}.sub{color:#6B7280;font-size:11px;margin-bottom:20px}h2{font-size:13px;font-weight:700;margin:18px 0 7px}table{width:100%;border-collapse:collapse;margin-bottom:14px}th{background:#2CC6C6;color:#fff;padding:9px 12px;text-align:left;font-size:11px;font-weight:700}td{padding:8px 12px;border-bottom:1px solid #E6F8F8;font-size:11px}.tt td{font-weight:700;background:#E6F8F8;color:#18A0A0}.uc{border:1.5px solid #B8E8E8;border-radius:10px;margin-bottom:10px;overflow:hidden}.uh{background:#2CC6C6;color:#fff;padding:9px 13px;font-weight:700;font-size:12px}.us{background:#E6F8F8;padding:9px 13px;font-weight:800;color:#18A0A0;font-size:14px}.tr{border:1px solid #B8E8E8;border-radius:8px;padding:9px 13px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}.tra{font-size:15px;font-weight:800;color:#18A0A0}@media print{button{display:none}}</style></head><body><h1>HomeSplit &mdash; '+t+'</h1><div class="sub">'+s+' &middot; '+new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'})+'</div>';}
 function pdfMon(mk,lbl){
   var g=grps().find(function(x){return x.id===CGRP;});var ex=gexps(CGRP,mk);var am=mems();
   var tot=ex.reduce(function(s,e){return s+(e.net||e.amount||0);},0);var T=settle(ex);
